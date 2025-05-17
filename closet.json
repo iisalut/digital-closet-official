@@ -1,10 +1,20 @@
 {
-  "name": "closet-app-official",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "private": true
+    "hi": [
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic",
+            "type": "Dress",
+            "color": "Green",
+            "season": "Spring",
+            "occasion": "Formal",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2046.heic",
+            "type": "Top",
+            "color": "Black",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
+        }
+    ]
 }
