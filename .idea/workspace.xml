@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e56c2fe9-63a0-497d-9a38-810ecd77bec0" name="Changes" comment="add attributes to clothes">
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/closet.json" beforeDir="false" afterPath="$PROJECT_DIR$/closet.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/users.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,20 +22,25 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "iisalut"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;iisalut&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/iisalut/digital-closet-official.git",
-    "accountId": "14dc3d05-155b-4fe5-bef9-f3b0feadd9ec"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/iisalut/digital-closet-official.git&quot;,
+    &quot;accountId&quot;: &quot;14dc3d05-155b-4fe5-bef9-f3b0feadd9ec&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -48,7 +55,7 @@
     "Python.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/json-logging",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -76,6 +83,7 @@
       <workItem from="1747074282081" duration="14438000" />
       <workItem from="1747252588498" duration="13317000" />
       <workItem from="1747440121693" duration="2044000" />
+      <workItem from="1747442771123" duration="9546000" />
     </task>
     <task id="LOCAL-00001" summary="add attributes to clothes">
       <option name="closed" value="true" />
@@ -114,9 +122,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add attributes to clothes" />
-    <option name="LAST_COMMIT_MESSAGE" value="add attributes to clothes" />
+    <MESSAGE value="Save current changes before pull" />
+    <option name="LAST_COMMIT_MESSAGE" value="Save current changes before pull" />
+    <option name="LAST_CHUNK_COMMIT_MESSAGE" value="Save current changes before pull" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/closet_app_official$app.coverage" NAME="app Coverage Results" MODIFIED="1747435131710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/closet_app_official$app.coverage" NAME="app Coverage Results" MODIFIED="1747456810382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
