@@ -1,10 +1,20 @@
 {
-  "name": "closet-app-official",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "private": true
+    "": [
+        {
+            "image_path": "",
+            "type": "Choose type",
+            "color": "Choose color",
+            "season": "Choose season",
+            "occasion": "Choose occasion",
+            "material": "Choose material"
+        },
+        {
+            "image_path": "",
+            "type": "Choose type",
+            "color": "Choose color",
+            "season": "Choose season",
+            "occasion": "Choose occasion",
+            "material": "Choose material"
+        }
+    ]
 }
