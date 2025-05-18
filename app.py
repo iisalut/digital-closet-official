@@ -1,4 +1,6 @@
+
 import ttkbootstrap as ttk
+from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from tkinter import *
 import json
@@ -24,7 +26,6 @@ window.grid_columnconfigure(0, weight=1)
 # Create a style
 style = ttk.Style()
 style.configure('Custom.TFrame', background='beige')
-style.configure('Custom.TFrame', background='beige')
 style.configure("Header.TLabel",
                 font=("Pangolin", 34),
                 foreground="brown",
@@ -40,6 +41,10 @@ style.configure("small.TLabel",
                 foreground="brown",
                 background="beige",
                 anchor="center")
+style.configure("MyCustom.TCombobox",
+                fieldbackground="#ffe4e1",   # Background of the field (e.g., light pink)
+                background="#ffe4e1",        # Background when dropdown is open
+                foreground="#333333")
 
 #------definitions------
 
@@ -228,21 +233,36 @@ pack_frame.pack(pady=60)  # Remove fill='x' if not needed
 home_upload_button = ttk.Button(pack_frame, text="Upload clothes", bootstyle=PRIMARY, width=15, command=lambda: next_page(page5))
 home_upload_button.pack(side='left', padx=10)
 
+home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle=PRIMARY, width=15)
+home_inventory_button.pack(side='left', padx=10)
+
 home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15)
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
 home_saved_button.pack(side='left', padx=10)
+
+
 #--------- upload_photo_page----(page
 page5=ttk.Frame(window, style="Custom.TFrame")
 page5.grid(row=0, column=0, sticky="nsew")
 page5.grid_propagate(False)
 upload_head_label = ttk.Label(page5, text="Upload your clothes", style="Header.TLabel")
 upload_head_label.pack(padx=10, pady=30)
-photo_frame =Frame(page5, bg="#f7f3e6", width=600, height=600, bd=2, relief="ridge")
-photo_frame.pack(padx=60 ,anchor='nw')
 
+# First, create a container frame to hold both the photo frame and tags frame side by side
+container_frame = ttk.Frame(page5, style="Custom.TFrame")
+container_frame.pack(padx=60, expand=True, fill='both')
+
+# Photo frame on the left
+photo_frame = Frame(container_frame, bg="#f7f3e6", width=600, height=600, bd=2, relief="ridge")
+photo_frame.pack(side='left', padx=(0,50))  # Add padding between frames
+photo_frame.pack_propagate(False)
+
+
+img_path=""
 def upload_img():
+    global img_path
     try:
         img_path = askopenfilename()
         print( "curr_img :"+img_path)
@@ -285,18 +305,168 @@ def upload_img():
     except Exception as e:
         messagebox.showerror(title='Error', message=f"An unexpected error occurred: {e}")
 
-upload_but_frame = ttk.Frame(page5, width=600, height=200, style="Custom.TFrame")
-upload_but_frame.pack(padx=60, pady=10, anchor='nw')
+upload_but_frame = ttk.Frame(page5, width=900, height=200, style="Custom.TFrame")
+upload_but_frame.pack(padx=100, pady=10, anchor='nw')
 upload_but_frame.pack_propagate(False)
 
-upload_button = ttk.Button(upload_but_frame, text="Upload Image", bootstyle=PRIMARY, width=15 ,command= upload_img)
-upload_button.pack(padx=10)
-
 upload_back_button = ttk.Button(upload_but_frame, text="Back",bootstyle=PRIMARY, width=15, command=lambda :next_page(page4))
-upload_back_button.pack(padx=1,pady=22 ,anchor='nw')
+upload_back_button.pack(padx=10,pady=22 ,side='left')
+
+upload_button = ttk.Button(upload_but_frame, text="Upload Image", bootstyle=PRIMARY, width=15 ,command= upload_img)
+upload_button.pack(padx=1, side='left')
+
+
+def clear_all_uploads():
+    # Reset dropdowns
+    attribute_type.set("Choose type")
+    attribute_color.set("Choose color")
+    attribute_season.set("Choose season")
+    attribute_occasion.set("Choose occasion")
+    attribute_material.set("Choose material")
+
+    # Clear image from photo_frame
+    for widget in photo_frame.winfo_children():
+        widget.destroy()
+
+    # Clear stored image path
+    global img_path
+    img_path = ""
+upload_clear_button = ttk.Button(upload_but_frame, text="Clear all ",width=15 ,command=clear_all_uploads)
+upload_clear_button.pack(padx=10, side='left')
+
 # attribute frame for clothes
+# Tags frame on the right
+upload_tags_frame = ttk.Frame(container_frame, width=500, height=600, style="Custom.TFrame")
+upload_tags_frame.pack(side='left', fill='both', expand=True)
+upload_tags_frame.pack_propagate(False)
+
+mid_label = ttk.Label(upload_tags_frame, text="Tags for your clothes", style="mid.TLabel")
+mid_label.pack(pady=10)
+
+q1_label = ttk.Label(upload_tags_frame, text=" Type ?", style="small.TLabel")
+q1_label.pack(pady=10)
+
+attribute_type = StringVar(value="Choose type")
+dress_type_menu = OptionMenu(upload_tags_frame, attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
+
+dress_type_menu.pack(pady=10)
+dress_type_menu.pack(pady=10)
+dress_type_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+q2_label = ttk.Label(upload_tags_frame, text=" Color ?", style="small.TLabel")
+q2_label.pack(pady=10)
+
+attribute_color = StringVar(value="Choose color")
+dress_color_menu = OptionMenu(upload_tags_frame, attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
+
+dress_color_menu.pack(pady=10)
+dress_color_menu.pack(pady=10)
+dress_color_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+q3_label = ttk.Label(upload_tags_frame, text=" Season ?", style="small.TLabel")
+q3_label.pack(pady=10)
+
+attribute_season = StringVar(value="Choose season")
+dress_season_menu = OptionMenu(upload_tags_frame, attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
+
+dress_season_menu.pack(pady=10)
+dress_season_menu.pack(pady=10)
+dress_season_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+q4_label = ttk.Label(upload_tags_frame, text=" Ocassion ?", style="small.TLabel")
+q4_label.pack(pady=10)
+
+attribute_occasion = StringVar(value="Choose occasion")
+dress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+
+dress_occasion_menu.pack(pady=10)
+dress_occasion_menu.pack(pady=10)
+dress_occasion_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+q5_label = ttk.Label(upload_tags_frame, text=" Material ?", style="small.TLabel")
+q5_label.pack(pady=10)
+
+attribute_material = StringVar(value="Choose material")
+dress_material_menu = OptionMenu(upload_tags_frame, attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
+
+dress_material_menu.pack(pady=10)
+dress_material_menu.pack(pady=10)
+dress_material_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
 
 
+
+
+def save_clothing_data():
+    selected_image_path = img_path
+    selected_type = attribute_type.get()
+    selected_color = attribute_color.get()
+    selected_season = attribute_season.get()
+    selected_occasion = attribute_occasion.get()
+    selected_material = attribute_material.get()
+    filename = "closet.json"
+    data = {}
+
+    # Load existing file if present
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = {}
+
+    # Prepare clothing data from your app's current state
+    clothing_item = {
+        "image_path": selected_image_path,
+        "type": selected_type,
+        "color": selected_color,
+        "season": selected_season,
+        "occasion": selected_occasion,
+        "material": selected_material
+    }
+
+    # Add under current user
+    if username not in data:
+        data[username] = []
+
+    data[username].append(clothing_item)
+
+    # Save updated JSON
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4)
+    msg_after_upload()
+
+def msg_after_upload():
+    saved_msg = ttk.Label(upload_tags_frame, text=" Item uploaded !", style="small.TLabel", width=15)
+    saved_msg.pack(pady=2)
+    window.after(1000, saved_msg.destroy)
+
+
+upload_save_button= ttk.Button(upload_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command=save_clothing_data )
+upload_save_button.pack(pady=20)
 
 
 
@@ -310,8 +480,12 @@ def next_page(frame):
 for frame in (page1, page2, page3, page4, page5):
     frame.grid(row=0, column=0, sticky="nsew")
 
-next_page(page1)  # Start by showing the welcome page
+
+
+
+
+
+next_page(page4)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
-#cahdod-duXxo7-zobroh
