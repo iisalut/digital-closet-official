@@ -1,20 +1,20 @@
 {
-    "hi": [
+    "": [
         {
-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic",
-            "type": "Dress",
-            "color": "Green",
-            "season": "Spring",
-            "occasion": "Formal",
-            "material": "Cotton"
+            "image_path": "",
+            "type": "Choose type",
+            "color": "Choose color",
+            "season": "Choose season",
+            "occasion": "Choose occasion",
+            "material": "Choose material"
         },
         {
-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2046.heic",
-            "type": "Top",
-            "color": "Black",
-            "season": "Summer",
-            "occasion": "Casual",
-            "material": "Cotton"
+            "image_path": "",
+            "type": "Choose type",
+            "color": "Choose color",
+            "season": "Choose season",
+            "occasion": "Choose occasion",
+            "material": "Choose material"
         }
     ]
 }
