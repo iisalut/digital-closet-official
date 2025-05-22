@@ -1,6 +1,5 @@
 
 import ttkbootstrap as ttk
-from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from tkinter import *
 import json
@@ -10,6 +9,7 @@ import pillow_heif
 pillow_heif.register_heif_opener()
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
+from tkinter import Canvas
 
 
 
@@ -26,6 +26,7 @@ window.grid_columnconfigure(0, weight=1)
 # Create a style
 style = ttk.Style()
 style.configure('Custom.TFrame', background='beige')
+style.configure('test.TFrame', background='blue')
 style.configure("Header.TLabel",
                 font=("Pangolin", 34),
                 foreground="brown",
@@ -233,7 +234,8 @@ pack_frame.pack(pady=60)  # Remove fill='x' if not needed
 home_upload_button = ttk.Button(pack_frame, text="Upload clothes", bootstyle=PRIMARY, width=15, command=lambda: next_page(page5))
 home_upload_button.pack(side='left', padx=10)
 
-home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle=PRIMARY, width=15)
+home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page6), display_clothes_grid(grid_frame, username)]
+)
 home_inventory_button.pack(side='left', padx=10)
 
 home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15)
@@ -417,9 +419,6 @@ dress_material_menu.config(
     padx=10, pady=5         # add some padding inside button
 )
 
-
-
-
 def save_clothing_data():
     selected_image_path = img_path
     selected_type = attribute_type.get()
@@ -464,9 +463,90 @@ def msg_after_upload():
     saved_msg.pack(pady=2)
     window.after(1000, saved_msg.destroy)
 
-
 upload_save_button= ttk.Button(upload_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command=save_clothing_data )
 upload_save_button.pack(pady=20)
+
+#----------Inventory (page6)-------
+page6=ttk.Frame(window, style="Custom.TFrame")
+page6.grid(row=0, column=0, sticky="nsew")
+page6.grid_propagate(False)
+
+# Header at top
+inventory_header = ttk.Label(page6, text="Inventory", style="Header.TLabel")
+inventory_header.pack(pady=10)
+
+# Create a canvas with scrollbar
+canvas_frame = ttk.Frame(page6, style="Custom.TFrame",width=700, height=700)
+canvas_frame.pack(pady=10, padx=10)
+
+canvas = Canvas(canvas_frame, bg="beige",width=760, height=500)  # Just using Canvas since it's imported
+scrollbar = ttk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
+grid_frame = ttk.Frame(canvas, style="Custom.TFrame")
+
+# Configure the canvas
+canvas.configure(yscrollcommand=scrollbar.set)
+
+# Pack scrollbar and canvas
+scrollbar.pack(side="right", fill="y")
+canvas.pack(side="left" )
+
+# Create a window inside the canvas with the grid_frame
+canvas.create_window((0, 0), window=grid_frame, anchor="nw")
+
+# Update scroll region when the size of grid_frame changes
+def configure_scroll_region(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+grid_frame.bind("<Configure>", configure_scroll_region)
+
+# Back button at bottom
+inventory_back_button = ttk.Button(page6, text="Back", bootstyle=PRIMARY,width=15,
+                                 command=lambda: next_page(page4))
+inventory_back_button.pack(side="bottom", pady=20)
+
+# Optional: Bind mousewheel to scroll
+def on_mousewheel(event):
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+canvas.bind_all("<MouseWheel>", on_mousewheel)
+
+
+def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=4):
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data=json.load(file)
+    except Exception as e:
+        print("could not load json file",e)
+        return
+
+    if username not in data:
+        print("no clothing data for "+username)
+        return
+
+    items = data[username]
+    for index, item in enumerate(items):
+        new_img= item["image_path"].strip()
+
+        try:
+            img = Image.open(new_img)
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)  # Force resize, allows slight stretching
+
+            photo = ImageTk.PhotoImage(img)
+
+            inventory_cloth_button = ttk.Button(grid_frame, image=photo)
+            inventory_cloth_button.image = photo
+            row= index // columns
+            col = index % columns
+            inventory_cloth_button.grid(row=row, column=col,padx=10, pady=10)
+
+        except Exception as e:
+            print(f"could not display cloth for {new_img} :", e)
+
+
+
 
 
 
@@ -477,7 +557,7 @@ def next_page(frame):
     frame.tkraise()
 
 # Configure all frames
-for frame in (page1, page2, page3, page4, page5):
+for frame in (page1, page2, page3, page4, page5, page6):
     frame.grid(row=0, column=0, sticky="nsew")
 
 
@@ -485,7 +565,7 @@ for frame in (page1, page2, page3, page4, page5):
 
 
 
-next_page(page4)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
