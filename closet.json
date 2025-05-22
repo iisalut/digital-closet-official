@@ -1,20 +1,116 @@
 {
-    "": [
+    "hi": [
         {
-            "image_path": "",
-            "type": "Choose type",
-            "color": "Choose color",
-            "season": "Choose season",
-            "occasion": "Choose occasion",
-            "material": "Choose material"
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic",
+            "type": "Dress",
+            "color": "Green",
+            "season": "Spring",
+            "occasion": "Formal",
+            "material": "Cotton"
         },
         {
-            "image_path": "",
-            "type": "Choose type",
-            "color": "Choose color",
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2069.heic",
+            "type": "Top",
+            "color": "Red",
+            "season": "Summer",
+            "occasion": "Party",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2115.heic",
+            "type": "jacket",
+            "color": "Red",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "wool"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic",
+            "type": "Top",
+            "color": "Blue",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2073.heic",
+            "type": "Top",
+            "color": "Black",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "wool"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic",
+            "type": "Top",
+            "color": "Green",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2108.heic",
+            "type": "jacket",
+            "color": "White",
+            "season": "Fall",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2056.heic",
+            "type": "Top",
+            "color": "yellow",
+            "season": "Spring",
+            "occasion": "Formal",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2094.heic",
+            "type": "Pants",
+            "color": "White",
+            "season": "Summer",
+            "occasion": "Lounge/ Homewear",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic",
+            "type": "Pants",
+            "color": "Blue",
             "season": "Choose season",
-            "occasion": "Choose occasion",
-            "material": "Choose material"
+            "occasion": "Casual",
+            "material": "denim"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2090.heic",
+            "type": "Skirt",
+            "color": "White",
+            "season": "Spring",
+            "occasion": "Casual",
+            "material": "ribbed"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2092.heic",
+            "type": "Pants",
+            "color": "yellow",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2058.heic",
+            "type": "Top",
+            "color": "White",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "ribbed"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2060.heic",
+            "type": "Top",
+            "color": "Blue",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "Cotton"
         }
     ]
 }
