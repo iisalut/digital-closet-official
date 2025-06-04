@@ -111,6 +111,14 @@
             "season": "Winter",
             "occasion": "Casual",
             "material": "Cotton"
+        },
+        {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2064.heic",
+            "type": "Top",
+            "color": "White",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
         }
     ]
 }
