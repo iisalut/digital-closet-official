@@ -536,17 +536,66 @@ def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=
 
             photo = ImageTk.PhotoImage(img)
 
-            inventory_cloth_button = ttk.Button(grid_frame, image=photo)
+            inventory_cloth_button = ttk.Button(grid_frame, image=photo,command=lambda i=item: open_edit_page(i))
             inventory_cloth_button.image = photo
             row= index // columns
             col = index % columns
             inventory_cloth_button.grid(row=row, column=col,padx=10, pady=10)
-
+            print("button clicked on : " + new_img)
         except Exception as e:
             print(f"could not display cloth for {new_img} :", e)
 
+def show_detail_image(path):
+    try:
+        img = Image.open(path)
+        img_width, img_height = img.size
 
+        frame_width = photo_frame_edit.winfo_width() or 600
+        frame_height = photo_frame_edit.winfo_height() or 600
+        scale = min(frame_width / img_width, frame_height / img_height, 1)
+        new_width = int(img_width * scale)
+        new_height = int(img_height * scale)
 
+        if scale < 1:
+            img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+        img_tk = ImageTk.PhotoImage(img)
+
+        # Clear previous image widgets
+        for widget in photo_frame_edit.winfo_children():
+            widget.destroy()
+
+        photo_label = Label(photo_frame_edit, image=img_tk, bg="#f7f3e6")
+        photo_label.image = img_tk
+        photo_label.place(relx=0.5, rely=0.5, anchor="center")
+
+    except UnidentifiedImageError:
+        messagebox.showerror(title='Error', message="Invalid image file.")
+    except Exception as e:
+        messagebox.showerror(title='Error', message=f"Error: {e}")
+
+def open_edit_page(item):
+    next_page(page7)
+    show_detail_image(item["image_path"])
+
+#-----special exclusive edit page---page7
+page7=ttk.Frame(window, style="Custom.TFrame")
+page7.grid(row=0, column=0, sticky="nsew")
+page7.grid_propagate(False)
+
+edit_head_label = ttk.Label(page7, text="edit your upload", style="Header.TLabel")
+edit_head_label.pack(padx=10, pady=30)
+
+container_frame_edit = ttk.Frame(page7, style="Custom.TFrame")
+container_frame_edit.pack(padx=60, expand=True, fill='both')
+
+# Photo frame on the left
+photo_frame_edit = Frame(container_frame_edit, bg="#f7f3e6", width=600, height=600, bd=2, relief="ridge")
+photo_frame_edit.pack(side='left', padx=(0,50))  # Add padding between frames
+photo_frame_edit.pack_propagate(False)
+
+edit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text="back", command=lambda:next_page(page6))
+edit_back_button.pack(pady=20)
 
 
 
@@ -557,7 +606,7 @@ def next_page(frame):
     frame.tkraise()
 
 # Configure all frames
-for frame in (page1, page2, page3, page4, page5, page6):
+for frame in (page1, page2, page3, page4, page5, page6, page7):
     frame.grid(row=0, column=0, sticky="nsew")
 
 
