@@ -1,0 +1,345 @@
+Index: users.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[\n\n    {\n        \"username\": \"hi\",\n        \"password\": \"hihi7\"\n    }\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/users.json b/users.json
+--- a/users.json	(revision 7993adeb733155b51663748a276a8e578a1924bd)
++++ b/users.json	(date 1750696218355)
+@@ -1,5 +1,4 @@
+ [
+-
+     {
+         "username": "hi",
+         "password": "hihi7"
+Index: closet.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n    \"hi\": [\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic\",\n            \"type\": \"Dress\",\n            \"color\": \"Green\",\n            \"season\": \"Spring\",\n            \"occasion\": \"Formal\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2069.heic\",\n            \"type\": \"Top\",\n            \"color\": \"Red\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Party\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2115.heic\",\n            \"type\": \"jacket\",\n            \"color\": \"Red\",\n            \"season\": \"Winter\",\n            \"occasion\": \"Casual\",\n            \"material\": \"wool\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic\",\n            \"type\": \"Top\",\n            \"color\": \"Blue\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2073.heic\",\n            \"type\": \"Top\",\n            \"color\": \"Black\",\n            \"season\": \"Winter\",\n            \"occasion\": \"Casual\",\n            \"material\": \"wool\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic\",\n            \"type\": \"Top\",\n            \"color\": \"Green\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2108.heic\",\n            \"type\": \"jacket\",\n            \"color\": \"White\",\n            \"season\": \"Fall\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2056.heic\",\n            \"type\": \"Top\",\n            \"color\": \"yellow\",\n            \"season\": \"Spring\",\n            \"occasion\": \"Formal\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2094.heic\",\n            \"type\": \"Pants\",\n            \"color\": \"White\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Lounge/ Homewear\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic\",\n            \"type\": \"Pants\",\n            \"color\": \"Blue\",\n            \"season\": \"Choose season\",\n            \"occasion\": \"Casual\",\n            \"material\": \"denim\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2090.heic\",\n            \"type\": \"Skirt\",\n            \"color\": \"White\",\n            \"season\": \"Spring\",\n            \"occasion\": \"Casual\",\n            \"material\": \"ribbed\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2092.heic\",\n            \"type\": \"Pants\",\n            \"color\": \"yellow\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2058.heic\",\n            \"type\": \"Top\",\n            \"color\": \"White\",\n            \"season\": \"Winter\",\n            \"occasion\": \"Casual\",\n            \"material\": \"ribbed\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2060.heic\",\n            \"type\": \"Top\",\n            \"color\": \"Blue\",\n            \"season\": \"Winter\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        },\n        {\n            \"image_path\": \"/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2064.heic\",\n            \"type\": \"Top\",\n            \"color\": \"White\",\n            \"season\": \"Summer\",\n            \"occasion\": \"Casual\",\n            \"material\": \"Cotton\"\n        }\n    ]\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/closet.json b/closet.json
+--- a/closet.json	(revision 7993adeb733155b51663748a276a8e578a1924bd)
++++ b/closet.json	(date 1750876710202)
+@@ -1,124 +1,20 @@
+ {
+     "hi": [
+         {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic",
+-            "type": "Dress",
+-            "color": "Green",
+-            "season": "Spring",
+-            "occasion": "Formal",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2069.heic",
+-            "type": "Top",
+-            "color": "Red",
+-            "season": "Summer",
+-            "occasion": "Party",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2115.heic",
+-            "type": "jacket",
+-            "color": "Red",
+-            "season": "Winter",
+-            "occasion": "Casual",
+-            "material": "wool"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic",
+-            "type": "Top",
+-            "color": "Blue",
+-            "season": "Summer",
+-            "occasion": "Casual",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2073.heic",
+-            "type": "Top",
+-            "color": "Black",
+-            "season": "Winter",
+-            "occasion": "Casual",
+-            "material": "wool"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic",
+-            "type": "Top",
+-            "color": "Green",
+-            "season": "Summer",
+-            "occasion": "Casual",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2108.heic",
+-            "type": "jacket",
+-            "color": "White",
+-            "season": "Fall",
+-            "occasion": "Casual",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2056.heic",
++            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2040.heic",
+             "type": "Top",
+-            "color": "yellow",
+-            "season": "Spring",
+-            "occasion": "Formal",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2094.heic",
+-            "type": "Pants",
+-            "color": "White",
+-            "season": "Summer",
+-            "occasion": "Lounge/ Homewear",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic",
+-            "type": "Pants",
+             "color": "Blue",
+-            "season": "Choose season",
+-            "occasion": "Casual",
+-            "material": "denim"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2090.heic",
+-            "type": "Skirt",
+-            "color": "White",
+-            "season": "Spring",
+-            "occasion": "Casual",
+-            "material": "ribbed"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2092.heic",
+-            "type": "Pants",
+-            "color": "yellow",
+             "season": "Summer",
+             "occasion": "Casual",
+             "material": "Cotton"
+         },
+         {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2058.heic",
+-            "type": "Top",
+-            "color": "White",
+-            "season": "Winter",
+-            "occasion": "Casual",
+-            "material": "ribbed"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2060.heic",
+-            "type": "Top",
++            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2062.heic",
++            "type": "Dress",
+             "color": "Blue",
+             "season": "Winter",
+-            "occasion": "Casual",
+-            "material": "Cotton"
+-        },
+-        {
+-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2064.heic",
+-            "type": "Top",
+-            "color": "White",
+-            "season": "Summer",
+-            "occasion": "Casual",
+-            "material": "Cotton"
++            "occasion": "Work/Office",
++            "material": "wool"
+         }
+     ]
+ }
+\ No newline at end of file
+Index: app.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\nimport ttkbootstrap as ttk\nfrom ttkbootstrap.constants import *\nfrom tkinter import *\nimport json\nimport os\nfrom PIL import Image, ImageTk, UnidentifiedImageError\nimport pillow_heif\npillow_heif.register_heif_opener()\nfrom tkinter.filedialog import askopenfilename\nfrom tkinter import messagebox\nfrom tkinter import Canvas\n\n\n\n\n# Create a themed window using ttkbootstrap\nwindow = ttk.Window(themename=\"flatly\")\nwindow.title(\"Digital Closet\")\n\n# Set window size and configure grid\nwindow.geometry(\"1200x850\")  # Set a specific window size\nwindow.grid_rowconfigure(0, weight=1)\nwindow.grid_columnconfigure(0, weight=1)\n\n# Create a style\nstyle = ttk.Style()\nstyle.configure('Custom.TFrame', background='beige')\nstyle.configure('test.TFrame', background='blue')\nstyle.configure(\"Header.TLabel\",\n                font=(\"Pangolin\", 34),\n                foreground=\"brown\",\n                background=\"beige\",\n                anchor=\"center\")\nstyle.configure(\"mid.TLabel\",\n                font=(\"Pangolin\", 24),\n                foreground=\"brown\",\n                background=\"beige\",\n                anchor=\"center\")\nstyle.configure(\"small.TLabel\",\n                font=(\"Pangolin\", 15),\n                foreground=\"brown\",\n                background=\"beige\",\n                anchor=\"center\")\nstyle.configure(\"MyCustom.TCombobox\",\n                fieldbackground=\"#ffe4e1\",   # Background of the field (e.g., light pink)\n                background=\"#ffe4e1\",        # Background when dropdown is open\n                foreground=\"#333333\")\n\n#------definitions------\n\nglobal username\nusername= \"\"\nglobal password\npassword=\"\"\n\ndef json_save():\n    file = 'users.json'\n    # Check if file exists, if not create empty list\n    if os.path.exists(file):\n        with open(file, 'r', newline='') as json_file:\n            if json_file.read().strip():  # Check if file is not empty\n                json_file.seek(0)  # Go back to start of file\n                data = json.load(json_file)\n            else:\n                data = []\n    else:\n        data = []\n\n    user_data = {'username': username, 'password': password}\n    data.append(user_data)\n    with open(file, 'w', newline='') as json_file:\n        json.dump(data, json_file, indent=4)\n    print(\"Saved username and password\")\ndef save_username_password():\n    global username\n    global password\n    username =signUp_username_entry.get().strip()\n    password =signUp_password_entry.get().strip()\n\n    has_dig=False\n    for i in password:\n        if i.isdigit():\n            has_dig = True\n    if len(password) < 5 or len(password) > 10:\n        signUP_password_error.config(text=\" Password must be between 5 and 10 characters.\")\n    elif has_dig == False:\n        signUP_password_error.config(text=\"must contain at least 1 digit\")\n    elif username == \"\":\n        signUP_username_error.config(text=\"Please enter your username\")\n    else:\n        signUP_password_error.config(text=\"Sign up successful\")\n        json_save()\n        signUp_next_button.config(state='normal')\n\ndef login_json():\n    global check,username,password\n    file = 'users.json'\n    if os.path.exists(file):\n        with open(file, 'r', newline='') as json_file:\n            data = json.load(json_file)\n            #print(\"Attempting login with:\", username, password)#tests\n            #print(\"Data in JSON:\", data)#tests\n            for user in data:\n                if user['username'] == username and user['password'] == password:\n                    print(\"User found: \" + user['username']+\" user password : \" +user['password'])#tests\n                    check = True\n                    break\n            else:  # This else belongs to the for loop - runs if no break occurs\n                check = False\n    else:\n        check = False\n\ndef login_verification():\n    global username, password\n    username = login_username_entry.get().strip()\n    password = login_password_entry.get().strip()\n    login_json()\n    if check==True:\n        login_password_error.configure(text='Account found')\n        login_next_button.config(state='normal')\n    else:\n        login_password_error.configure(text='Account not found')\n\n\n\n# Page 1 - Welcome page\n#<editor-fold desc=\"Welcome page 1\">\npage1 = ttk.Frame(window, style='Custom.TFrame')\npage1.grid(row=0, column=0, sticky=\"nsew\")\npage1.grid_propagate(False)\n\n# Add welcome text to page1\nwelcome_text = ttk.Label(page1, text=\"Welcome to your closet !!\",\n                        style=\"Header.TLabel\")\nwelcome_text.pack(pady=50)\n\nwelcome_signUp_button = ttk.Button(page1, text=\"Sign Up\",\n                                 bootstyle='primary',\n                                 command=lambda: next_page(page2),\n                                   width=20)\nwelcome_signUp_button.pack(pady=10)\n\nwelcome_login_button = ttk.Button(page1, text=\"Login\",\n                                bootstyle=PRIMARY,\n                                  width=20,\n                                  command=lambda: next_page(page3))\nwelcome_login_button.pack(pady=10)\n#</editor-foldl\n\n# Page 2 - Sign Up page\n# <editor-fold desc=\"Description\">\npage2 = ttk.Frame(window, style='Custom.TFrame')\npage2.grid(row=0, column=0, sticky=\"nsew\")\npage2.grid_propagate(False)\n\nsignUp_text = ttk.Label(page2, text=\"Sign Up Page\",style=\"Header.TLabel\")\nsignUp_text.pack(pady=50)\nsignUp_username_text = ttk.Label(page2, text=\"Username\",style=\"mid.TLabel\")\nsignUp_username_text.pack(pady=2)\nsignUP_username_error=ttk.Label(page2, text=\"\", style=\"small.TLabel\")\nsignUP_username_error.pack(padx=1, pady=1)\nsignUp_username_entry = ttk.Entry(page2, width=30, bootstyle=PRIMARY)\nsignUp_username_entry.pack(pady=2)\n\nsignUp_password_text = ttk.Label(page2, text=\"Password\",style=\"mid.TLabel\")\nsignUp_password_text.pack(pady=2)\nsignUP_password_error=ttk.Label(page2, text=\"\", style=\"small.TLabel\")\nsignUP_password_error.pack(padx=1, pady=1)\nsignUp_password_entry = ttk.Entry(page2, width=30, bootstyle=PRIMARY)\nsignUp_password_entry.config(show=\"*\")\nsignUp_password_entry.pack(pady=2)\n\nsignUp_submit_button = ttk.Button(page2, text=\"Submit\",bootstyle=PRIMARY, width=15, command=save_username_password)\nsignUp_submit_button.pack(pady=10)\n\nsignUp_next_button = ttk.Button(page2, text=\"Next\",bootstyle=PRIMARY, width=15,command=lambda: next_page(page4))\nsignUp_next_button.pack(pady=10)\nsignUp_next_button.config(state='disabled')\n\nbottom_frame = ttk.Frame(page2, style=\"Custom.TFrame\")\nbottom_frame.pack(fill='x', side='bottom')\nsignUp_back_button = ttk.Button(bottom_frame, text=\"Back\",bootstyle=PRIMARY, width=15, command=lambda :next_page(page1))\nsignUp_back_button.pack(pady=10,padx=10 ,side='left')\n# </editor-fold>\n\n#login page (page3)\npage3 = ttk.Frame(window, style=\"Custom.TFrame\")\npage3.grid(row=0, column=0, sticky=\"nsew\")\npage3.grid_propagate(False)\n# Page 3 - Login Page\npage3 = ttk.Frame(window, style='Custom.TFrame')\npage3.grid(row=0, column=0, sticky=\"nsew\")\npage3.grid_propagate(False)\n\nlogin_head_label = ttk.Label(page3, text=\"Login\", style=\"Header.TLabel\")\nlogin_head_label.pack(padx=10, pady=10)\n\nlogin_username_label = ttk.Label(page3, text=\"Username\", style=\"mid.TLabel\")\nlogin_username_label.pack(padx=10, pady=5)\nlogin_username_entry = ttk.Entry(page3, width=30, bootstyle=PRIMARY)\nlogin_username_entry.pack(padx=10, pady=1)\n\nlogin_password_label = ttk.Label(page3, text=\"Password\", style=\"mid.TLabel\")\nlogin_password_label.pack(padx=10, pady=5)\nlogin_password_entry = ttk.Entry(page3, width=30, bootstyle=PRIMARY, show='*')\nlogin_password_entry.pack(padx=10, pady=1)\n\nlogin_password_error = ttk.Label(page3, text=\"\", style=\"small.TLabel\")\nlogin_password_error.pack(padx=10, pady=5)\n\nlogin_submit_button = ttk.Button(page3, text='Submit',  bootstyle=PRIMARY, width=15,command=login_verification)\nlogin_submit_button.pack(padx=10, pady=10)\n\nlogin_next_button = ttk.Button(page3, text=\"Next\",bootstyle=PRIMARY, width=15, command=lambda: next_page(page4))\nlogin_next_button.pack(pady=10)\nlogin_next_button.config(state='disabled')\n\nbottom_frame_login = ttk.Frame(page3, style=\"Custom.TFrame\")\nbottom_frame_login.pack(fill='x', side='bottom')\nlogin_back_button = ttk.Button(bottom_frame_login, text=\"Back\",bootstyle=PRIMARY, width=15, command=lambda :next_page(page1))\nlogin_back_button.pack(pady=10,padx=10 ,side='left')\n\n# HOME PAGE (page4)\npage4 = ttk.Frame(window, style=\"Custom.TFrame\")\npage4.grid(row=0, column=0, sticky=\"nsew\")\npage4.grid_propagate(False)\n\nhome_head_label = ttk.Label(page4, text=\"hello \"+username+\"this is your HomePage\", style=\"Header.TLabel\")\nhome_head_label.pack(padx=10, pady=10)\npack_frame = ttk.Frame(page4, style=\"Custom.TFrame\")\npack_frame.pack(pady=60)  # Remove fill='x' if not needed\n\nhome_upload_button = ttk.Button(pack_frame, text=\"Upload clothes\", bootstyle=PRIMARY, width=15, command=lambda: next_page(page5))\nhome_upload_button.pack(side='left', padx=10)\n\nhome_inventory_button = ttk.Button(pack_frame, text=\"Inventory\", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page6), display_clothes_grid(grid_frame, username)]\n)\nhome_inventory_button.pack(side='left', padx=10)\n\nhome_closet_button = ttk.Button(pack_frame, text=\"Make outfits\", bootstyle=PRIMARY, width=15)\nhome_closet_button.pack(side='left', padx=10)\n\nhome_saved_button = ttk.Button(pack_frame, text=\"Saved outfits\", bootstyle=PRIMARY, width=15)\nhome_saved_button.pack(side='left', padx=10)\n\n\n#--------- upload_photo_page----(page\npage5=ttk.Frame(window, style=\"Custom.TFrame\")\npage5.grid(row=0, column=0, sticky=\"nsew\")\npage5.grid_propagate(False)\nupload_head_label = ttk.Label(page5, text=\"Upload your clothes\", style=\"Header.TLabel\")\nupload_head_label.pack(padx=10, pady=30)\n\n# First, create a container frame to hold both the photo frame and tags frame side by side\ncontainer_frame = ttk.Frame(page5, style=\"Custom.TFrame\")\ncontainer_frame.pack(padx=60, expand=True, fill='both')\n\n# Photo frame on the left\nphoto_frame = Frame(container_frame, bg=\"#f7f3e6\", width=600, height=600, bd=2, relief=\"ridge\")\nphoto_frame.pack(side='left', padx=(0,50))  # Add padding between frames\nphoto_frame.pack_propagate(False)\n\n\nimg_path=\"\"\ndef upload_img():\n    global img_path\n    try:\n        img_path = askopenfilename()\n        print( \"curr_img :\"+img_path)\n        print(\"curr_user :\"+username)\n        if not img_path:\n            return  # User cancelled dialog\n\n        img = Image.open(img_path)\n        img_width, img_height = img.size\n\n        # Get current frame size (in case it's dynamic)\n        frame_width = photo_frame.winfo_width()\n        frame_height = photo_frame.winfo_height()\n\n        # If frame size isn't ready yet, default to 600x600\n        if frame_width < 10 or frame_height < 10:\n            frame_width, frame_height = 600, 600\n\n        # Calculate scale to maintain aspect ratio and fit in frame\n        scale = min(frame_width / img_width, frame_height / img_height, 1)\n        new_width = int(img_width * scale)\n        new_height = int(img_height * scale)\n\n        if scale < 1:\n            img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)\n            #messagebox.showinfo(title='Attention', message=\"Image resized to fit the frame.\")\n\n        img_tk = ImageTk.PhotoImage(img)\n\n        # Clear any previous images in the frame\n        for widget in photo_frame.winfo_children():\n            widget.destroy()\n\n        photo_label = Label(photo_frame, image=img_tk, bg=\"#f7f3e6\")\n        photo_label.image = img_tk  # Prevent garbage collection\n        photo_label.place(relx=0.5, rely=0.5, anchor=\"center\")\n\n    except UnidentifiedImageError:\n        messagebox.showerror(title='Error', message=\"Please upload a valid image file.\")\n    except Exception as e:\n        messagebox.showerror(title='Error', message=f\"An unexpected error occurred: {e}\")\n\nupload_but_frame = ttk.Frame(page5, width=900, height=200, style=\"Custom.TFrame\")\nupload_but_frame.pack(padx=100, pady=10, anchor='nw')\nupload_but_frame.pack_propagate(False)\n\nupload_back_button = ttk.Button(upload_but_frame, text=\"Back\",bootstyle=PRIMARY, width=15, command=lambda :next_page(page4))\nupload_back_button.pack(padx=10,pady=22 ,side='left')\n\nupload_button = ttk.Button(upload_but_frame, text=\"Upload Image\", bootstyle=PRIMARY, width=15 ,command= upload_img)\nupload_button.pack(padx=1, side='left')\n\n\ndef clear_all_uploads():\n    # Reset dropdowns\n    attribute_type.set(\"Choose type\")\n    attribute_color.set(\"Choose color\")\n    attribute_season.set(\"Choose season\")\n    attribute_occasion.set(\"Choose occasion\")\n    attribute_material.set(\"Choose material\")\n\n    # Clear image from photo_frame\n    for widget in photo_frame.winfo_children():\n        widget.destroy()\n\n    # Clear stored image path\n    global img_path\n    img_path = \"\"\nupload_clear_button = ttk.Button(upload_but_frame, text=\"Clear all \",width=15 ,command=clear_all_uploads)\nupload_clear_button.pack(padx=10, side='left')\n\n# attribute frame for clothes\n# Tags frame on the right\nupload_tags_frame = ttk.Frame(container_frame, width=500, height=600, style=\"Custom.TFrame\")\nupload_tags_frame.pack(side='left', fill='both', expand=True)\nupload_tags_frame.pack_propagate(False)\n\nmid_label = ttk.Label(upload_tags_frame, text=\"Tags for your clothes\", style=\"mid.TLabel\")\nmid_label.pack(pady=10)\n\nq1_label = ttk.Label(upload_tags_frame, text=\" Type ?\", style=\"small.TLabel\")\nq1_label.pack(pady=10)\n\nattribute_type = StringVar(value=\"Choose type\")\ndress_type_menu = OptionMenu(upload_tags_frame, attribute_type, \"Dress\", \"Top\", \"Pants\", \"Skirt\",\"jacket\" ,command=lambda type_value: print(\"type chosen : \"+type_value))\n\ndress_type_menu.pack(pady=10)\ndress_type_menu.pack(pady=10)\ndress_type_menu.config(\n    bg=\"#5C7285\", fg=\"#333333\",\n    font=(\"Pangolin\", 15),  # bigger font size here\n    width=15,               # wider width here\n    padx=10, pady=5         # add some padding inside button\n)\nq2_label = ttk.Label(upload_tags_frame, text=\" Color ?\", style=\"small.TLabel\")\nq2_label.pack(pady=10)\n\nattribute_color = StringVar(value=\"Choose color\")\ndress_color_menu = OptionMenu(upload_tags_frame, attribute_color, \"Black\", \"White\", \"Red\", \"Blue\", \"Green\", \"yellow\", command=lambda color_value: print(\"color chosen ; \"+color_value))\n\ndress_color_menu.pack(pady=10)\ndress_color_menu.pack(pady=10)\ndress_color_menu.config(\n    bg=\"#5C7285\", fg=\"#333333\",\n    font=(\"Pangolin\", 15),  # bigger font size here\n    width=15,               # wider width here\n    padx=10, pady=5         # add some padding inside button\n)\n\nq3_label = ttk.Label(upload_tags_frame, text=\" Season ?\", style=\"small.TLabel\")\nq3_label.pack(pady=10)\n\nattribute_season = StringVar(value=\"Choose season\")\ndress_season_menu = OptionMenu(upload_tags_frame, attribute_season, \"Summer\", \"Winter\", \"Fall\", \"Spring\", command=lambda season_value: print(\"season chosen ; \"+season_value))\n\ndress_season_menu.pack(pady=10)\ndress_season_menu.pack(pady=10)\ndress_season_menu.config(\n    bg=\"#5C7285\", fg=\"#333333\",\n    font=(\"Pangolin\", 15),  # bigger font size here\n    width=15,               # wider width here\n    padx=10, pady=5         # add some padding inside button\n)\n\nq4_label = ttk.Label(upload_tags_frame, text=\" Ocassion ?\", style=\"small.TLabel\")\nq4_label.pack(pady=10)\n\nattribute_occasion = StringVar(value=\"Choose occasion\")\ndress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, \"Casual\", \"Work/Office\", \"Formal\", \"Party\",\"Lounge/ Homewear\", command=lambda occasion_value: print(\"occasion chosen ; \"+occasion_value))\n\ndress_occasion_menu.pack(pady=10)\ndress_occasion_menu.pack(pady=10)\ndress_occasion_menu.config(\n    bg=\"#5C7285\", fg=\"#333333\",\n    font=(\"Pangolin\", 15),  # bigger font size here\n    width=15,               # wider width here\n    padx=10, pady=5         # add some padding inside button\n)\n\nq5_label = ttk.Label(upload_tags_frame, text=\" Material ?\", style=\"small.TLabel\")\nq5_label.pack(pady=10)\n\nattribute_material = StringVar(value=\"Choose material\")\ndress_material_menu = OptionMenu(upload_tags_frame, attribute_material, \"Cotton\", \"denim\", \"wool\",\"khaki\",\"ribbed\",\"leather\", command=lambda material_value: print(\"material chosen ; \"+material_value))\n\ndress_material_menu.pack(pady=10)\ndress_material_menu.pack(pady=10)\ndress_material_menu.config(\n    bg=\"#5C7285\", fg=\"#333333\",\n    font=(\"Pangolin\", 15),  # bigger font size here\n    width=15,               # wider width here\n    padx=10, pady=5         # add some padding inside button\n)\n\ndef save_clothing_data():\n    selected_image_path = img_path\n    selected_type = attribute_type.get()\n    selected_color = attribute_color.get()\n    selected_season = attribute_season.get()\n    selected_occasion = attribute_occasion.get()\n    selected_material = attribute_material.get()\n    filename = \"closet.json\"\n    data = {}\n\n    # Load existing file if present\n    if os.path.exists(filename):\n        with open(filename, 'r') as f:\n            try:\n                data = json.load(f)\n            except json.JSONDecodeError:\n                data = {}\n\n    # Prepare clothing data from your app's current state\n    clothing_item = {\n        \"image_path\": selected_image_path,\n        \"type\": selected_type,\n        \"color\": selected_color,\n        \"season\": selected_season,\n        \"occasion\": selected_occasion,\n        \"material\": selected_material\n    }\n\n    # Add under current user\n    if username not in data:\n        data[username] = []\n\n    data[username].append(clothing_item)\n\n    # Save updated JSON\n    with open(filename, 'w') as f:\n        json.dump(data, f, indent=4)\n    msg_after_upload()\n\ndef msg_after_upload():\n    saved_msg = ttk.Label(upload_tags_frame, text=\" Item uploaded !\", style=\"small.TLabel\", width=15)\n    saved_msg.pack(pady=2)\n    window.after(1000, saved_msg.destroy)\n\nupload_save_button= ttk.Button(upload_tags_frame,bootstyle=PRIMARY, width=15, text=\"Save\", command=save_clothing_data )\nupload_save_button.pack(pady=20)\n\n#----------Inventory (page6)-------\npage6=ttk.Frame(window, style=\"Custom.TFrame\")\npage6.grid(row=0, column=0, sticky=\"nsew\")\npage6.grid_propagate(False)\n\n# Header at top\ninventory_header = ttk.Label(page6, text=\"Inventory\", style=\"Header.TLabel\")\ninventory_header.pack(pady=10)\n\n# Create a canvas with scrollbar\ncanvas_frame = ttk.Frame(page6, style=\"Custom.TFrame\",width=700, height=700)\ncanvas_frame.pack(pady=10, padx=10)\n\ncanvas = Canvas(canvas_frame, bg=\"beige\",width=760, height=500)  # Just using Canvas since it's imported\nscrollbar = ttk.Scrollbar(canvas_frame, orient=\"vertical\", command=canvas.yview)\ngrid_frame = ttk.Frame(canvas, style=\"Custom.TFrame\")\n\n# Configure the canvas\ncanvas.configure(yscrollcommand=scrollbar.set)\n\n# Pack scrollbar and canvas\nscrollbar.pack(side=\"right\", fill=\"y\")\ncanvas.pack(side=\"left\" )\n\n# Create a window inside the canvas with the grid_frame\ncanvas.create_window((0, 0), window=grid_frame, anchor=\"nw\")\n\n# Update scroll region when the size of grid_frame changes\ndef configure_scroll_region(event):\n    canvas.configure(scrollregion=canvas.bbox(\"all\"))\n\ngrid_frame.bind(\"<Configure>\", configure_scroll_region)\n\n# Back button at bottom\ninventory_back_button = ttk.Button(page6, text=\"Back\", bootstyle=PRIMARY,width=15,\n                                 command=lambda: next_page(page4))\ninventory_back_button.pack(side=\"bottom\", pady=20)\n\n# Optional: Bind mousewheel to scroll\ndef on_mousewheel(event):\n    canvas.yview_scroll(int(-1*(event.delta/120)), \"units\")\n\ncanvas.bind_all(\"<MouseWheel>\", on_mousewheel)\n\n\ndef display_clothes_grid(grid_frame, username, json_path=\"closet.json\", columns=4):\n    for widget in grid_frame.winfo_children():\n        widget.destroy()\n\n    try:\n        with open(json_path, 'r') as file:\n            data=json.load(file)\n    except Exception as e:\n        print(\"could not load json file\",e)\n        return\n\n    if username not in data:\n        print(\"no clothing data for \"+username)\n        return\n\n    items = data[username]\n    for index, item in enumerate(items):\n        new_img= item[\"image_path\"].strip()\n\n        try:\n            img = Image.open(new_img)\n            img = img.resize((150, 150), Image.Resampling.LANCZOS)  # Force resize, allows slight stretching\n\n            photo = ImageTk.PhotoImage(img)\n\n            inventory_cloth_button = ttk.Button(grid_frame, image=photo,command=lambda i=item: open_edit_page(i))\n            inventory_cloth_button.image = photo\n            row= index // columns\n            col = index % columns\n            inventory_cloth_button.grid(row=row, column=col,padx=10, pady=10)\n            print(\"button clicked on : \" + new_img)\n        except Exception as e:\n            print(f\"could not display cloth for {new_img} :\", e)\n\ndef show_detail_image(path):\n    try:\n        img = Image.open(path)\n        img_width, img_height = img.size\n\n        frame_width = photo_frame_edit.winfo_width() or 600\n        frame_height = photo_frame_edit.winfo_height() or 600\n        scale = min(frame_width / img_width, frame_height / img_height, 1)\n        new_width = int(img_width * scale)\n        new_height = int(img_height * scale)\n\n        if scale < 1:\n            img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)\n\n        img_tk = ImageTk.PhotoImage(img)\n\n        # Clear previous image widgets\n        for widget in photo_frame_edit.winfo_children():\n            widget.destroy()\n\n        photo_label = Label(photo_frame_edit, image=img_tk, bg=\"#f7f3e6\")\n        photo_label.image = img_tk\n        photo_label.place(relx=0.5, rely=0.5, anchor=\"center\")\n\n    except UnidentifiedImageError:\n        messagebox.showerror(title='Error', message=\"Invalid image file.\")\n    except Exception as e:\n        messagebox.showerror(title='Error', message=f\"Error: {e}\")\n\ndef open_edit_page(item):\n    next_page(page7)\n    show_detail_image(item[\"image_path\"])\n\n#-----special exclusive edit page---page7\npage7=ttk.Frame(window, style=\"Custom.TFrame\")\npage7.grid(row=0, column=0, sticky=\"nsew\")\npage7.grid_propagate(False)\n\nedit_head_label = ttk.Label(page7, text=\"edit your upload\", style=\"Header.TLabel\")\nedit_head_label.pack(padx=10, pady=30)\n\ncontainer_frame_edit = ttk.Frame(page7, style=\"Custom.TFrame\")\ncontainer_frame_edit.pack(padx=60, expand=True, fill='both')\n\n# Photo frame on the left\nphoto_frame_edit = Frame(container_frame_edit, bg=\"#f7f3e6\", width=600, height=600, bd=2, relief=\"ridge\")\nphoto_frame_edit.pack(side='left', padx=(0,50))  # Add padding between frames\nphoto_frame_edit.pack_propagate(False)\n\nedit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text=\"back\", command=lambda:next_page(page6))\nedit_back_button.pack(pady=20)\n\n\n\n# Function to raise the frame\ndef next_page(frame):\n    if frame == page4:\n        home_head_label.config(text=\"hello \" + username + \" this is your HomePage\")\n    frame.tkraise()\n\n# Configure all frames\nfor frame in (page1, page2, page3, page4, page5, page6, page7):\n    frame.grid(row=0, column=0, sticky=\"nsew\")\n\n\n\n\n\n\nnext_page(page1)  # Start by showing the welcome page\n\n# Run the main loop\nwindow.mainloop()\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app.py b/app.py
+--- a/app.py	(revision 7993adeb733155b51663748a276a8e578a1924bd)
++++ b/app.py	(date 1750877095501)
+@@ -575,9 +575,19 @@
+         messagebox.showerror(title='Error', message=f"Error: {e}")
+ 
+ def open_edit_page(item):
++    global current_editing_path
++    current_editing_path = item["image_path"]
++
+     next_page(page7)
+     show_detail_image(item["image_path"])
+ 
++    # Now, load the dropdowns with this item's saved info:
++    edit_attribute_type.set(item.get("type", "Choose type"))
++    edit_attribute_color.set(item.get("color", "Choose color"))
++    edit_attribute_season.set(item.get("season", "Choose season"))
++    edit_attribute_occasion.set(item.get("occasion", "Choose occasion"))
++    edit_attribute_material.set(item.get("material", "Choose material"))
++
+ #-----special exclusive edit page---page7
+ page7=ttk.Frame(window, style="Custom.TFrame")
+ page7.grid(row=0, column=0, sticky="nsew")
+@@ -596,6 +606,139 @@
+ 
+ edit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text="back", command=lambda:next_page(page6))
+ edit_back_button.pack(pady=20)
++edit_frame = ttk.Frame(container_frame_edit, style="Custom.TFrame")
++edit_frame.pack(padx=10, pady=30)
++edit_tags_frame = ttk.Frame(edit_frame, width=500, height=600, style="Custom.TFrame")
++edit_tags_frame.pack(side='left', fill='both', expand=True)
++edit_tags_frame.pack_propagate(False)
++
++edit_mid_label = ttk.Label(edit_tags_frame, text="Tags for your clothes", style="mid.TLabel")
++edit_mid_label.pack(pady=10)
++
++edit_q1_label = ttk.Label(edit_tags_frame, text=" Type ?", style="small.TLabel")
++edit_q1_label.pack(pady=10)
++
++edit_attribute_type = StringVar(value="Choose type")
++edit_type_menu = OptionMenu(edit_tags_frame, edit_attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
++
++edit_type_menu.pack(pady=10)
++edit_type_menu.pack(pady=10)
++edit_type_menu.config(
++    bg="#5C7285", fg="#333333",
++    font=("Pangolin", 15),  # bigger font size here
++    width=15,               # wider width here
++    padx=10, pady=5         # add some padding inside button
++)
++edit_q2_label = ttk.Label(edit_tags_frame, text=" Color ?", style="small.TLabel")
++edit_q2_label.pack(pady=10)
++
++edit_attribute_color = StringVar(value="Choose color")
++edit_color_menu = OptionMenu(edit_tags_frame, edit_attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
++
++edit_color_menu.pack(pady=10)
++edit_color_menu.pack(pady=10)
++edit_color_menu.config(
++    bg="#5C7285", fg="#333333",
++    font=("Pangolin", 15),  # bigger font size here
++    width=15,               # wider width here
++    padx=10, pady=5         # add some padding inside button
++)
++
++edit_q3_label = ttk.Label(edit_tags_frame, text=" Season ?", style="small.TLabel")
++edit_q3_label.pack(pady=10)
++
++edit_attribute_season = StringVar(value="Choose season")
++edit_season_menu = OptionMenu(edit_tags_frame,edit_attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
++
++edit_season_menu.pack(pady=10)
++edit_season_menu.pack(pady=10)
++edit_season_menu.config(
++    bg="#5C7285", fg="#333333",
++    font=("Pangolin", 15),  # bigger font size here
++    width=15,               # wider width here
++    padx=10, pady=5         # add some padding inside button
++)
++
++edit_q4_label = ttk.Label(edit_tags_frame, text=" Ocassion ?", style="small.TLabel")
++edit_q4_label.pack(pady=10)
++
++edit_attribute_occasion = StringVar(value="Choose occasion")
++edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
++
++edit_occasion_menu.pack(pady=10)
++edit_occasion_menu.pack(pady=10)
++edit_occasion_menu.config(
++    bg="#5C7285", fg="#333333",
++    font=("Pangolin", 15),  # bigger font size here
++    width=15,               # wider width here
++    padx=10, pady=5         # add some padding inside button
++)
++
++edit_q5_label = ttk.Label(edit_tags_frame, text=" Material ?", style="small.TLabel")
++edit_q5_label.pack(pady=10)
++
++edit_attribute_material = StringVar(value="Choose material")
++edit_material_menu = OptionMenu(edit_tags_frame, edit_attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
++
++edit_material_menu.pack(pady=10)
++edit_material_menu.pack(pady=10)
++edit_material_menu.config(
++    bg="#5C7285", fg="#333333",
++    font=("Pangolin", 15),  # bigger font size here
++    width=15,               # wider width here
++    padx=10, pady=5         # add some padding inside button
++)
++
++def edit_clothing_data():
++    global current_editing_path  # make sure you're using the shared value
++    selected_image_path = current_editing_path
++
++    updated_type = edit_attribute_type.get()
++    updated_color = edit_attribute_color.get()
++    updated_season = edit_attribute_season.get()
++    updated_occasion = edit_attribute_occasion.get()
++    updated_material = edit_attribute_material.get()
++
++    filename = "closet.json"
++
++    # if not os.path.exists(filename):
++    #     messagebox.showerror("Error", "Clothing data file not found.")
++    #     return
++
++    with open(filename, "r") as f:
++        try:
++            data = json.load(f)
++        except json.decoder.JSONDecodeError:
++            messagebox.showerror("Error", "Could not read clothing data.")
++            return
++
++    if username not in data:
++        messagebox.showerror("Error", f"No data found for user {username}.")
++        return
++
++    for item in data[username]:
++        if item["image_path"] == selected_image_path:
++            item["type"] = updated_type
++            item["color"] = updated_color
++            item["season"] = updated_season
++            item["occasion"] = updated_occasion
++            item["material"] = updated_material
++            break
++    else:
++        messagebox.showerror("Error", "Item not found in your closet.")
++        return
++
++    with open(filename, "w") as f:
++        json.dump(data, f, indent=4)
++
++    messagebox.showinfo("Saved", "Item updated in your closet.")
++    # Optionally go back to inventory and refresh:
++    # next_page(page6)
++    # display_clothes_grid(grid_frame, username)
++
++
++edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
++edit_save_button.pack(pady=20)
+ 
+ 
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"e56c2fe9-63a0-497d-9a38-810ecd77bec0\" name=\"Changes\" comment=\"load clothes !\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/app.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/app.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/closet.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/closet.json\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/users.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/users.json\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"package.json\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"inventory-feature/displayin-json-data\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n    <option name=\"UPDATE_TYPE\" value=\"REBASE\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;iisalut&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">{\n  &quot;selectedUrlAndAccountId&quot;: {\n    &quot;url&quot;: &quot;https://github.com/iisalut/digital-closet-official.git&quot;,\n    &quot;accountId&quot;: &quot;14dc3d05-155b-4fe5-bef9-f3b0feadd9ec&quot;\n  }\n}</component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 0\n}</component>\n  <component name=\"ProjectId\" id=\"2x0U2yHDtEd4vdnfhc8yit4qhe8\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\n    &quot;Python.app.executor&quot;: &quot;Run&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;clothes-edit-feature&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.inline.completion&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-python-sdk-890ed5b35930-d9c5bdb153f4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.444\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"e56c2fe9-63a0-497d-9a38-810ecd77bec0\" name=\"Changes\" comment=\"\" />\n      <created>1747074281081</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1747074281081</updated>\n      <workItem from=\"1747074282081\" duration=\"14438000\" />\n      <workItem from=\"1747252588498\" duration=\"13317000\" />\n      <workItem from=\"1747440121693\" duration=\"2044000\" />\n      <workItem from=\"1747442771123\" duration=\"10087000\" />\n      <workItem from=\"1747487745048\" duration=\"886000\" />\n      <workItem from=\"1747524139241\" duration=\"16239000\" />\n      <workItem from=\"1747709727257\" duration=\"786000\" />\n      <workItem from=\"1747879363846\" duration=\"5231000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"add attributes to clothes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747440843962</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747440843962</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"load clothes !\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747456931439</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747456931439</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"load clothes !\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1747527060390</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1747527060390</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"4\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"OPEN_GENERIC_TABS\">\n      <map>\n        <entry key=\"8796620e-b85f-4cf5-9b02-06aaeb4d29c0\" value=\"TOOL_WINDOW\" />\n      </map>\n    </option>\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"8796620e-b85f-4cf5-9b02-06aaeb4d29c0\">\n          <value>\n            <State />\n          </value>\n        </entry>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"add attributes to clothes\" />\n    <MESSAGE value=\"Save current changes before pull\" />\n    <MESSAGE value=\"load clothes !\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"load clothes !\" />\n    <option name=\"LAST_CHUNK_COMMIT_MESSAGE\" value=\"Save current changes before pull\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/closet_app_official$app.coverage\" NAME=\"app Coverage Results\" MODIFIED=\"1747883710780\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 7993adeb733155b51663748a276a8e578a1924bd)
++++ b/.idea/workspace.xml	(date 1750876819330)
+@@ -5,7 +5,6 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="e56c2fe9-63a0-497d-9a38-810ecd77bec0" name="Changes" comment="load clothes !">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/closet.json" beforeDir="false" afterPath="$PROJECT_DIR$/closet.json" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/users.json" afterDir="false" />
