@@ -575,8 +575,18 @@ def show_detail_image(path):
         messagebox.showerror(title='Error', message=f"Error: {e}")
 
 def open_edit_page(item):
+    global current_editing_path
+    current_editing_path = item["image_path"]
+
     next_page(page7)
     show_detail_image(item["image_path"])
+
+    # Now, load the dropdowns with this item's saved info:
+    edit_attribute_type.set(item.get("type", "Choose type"))
+    edit_attribute_color.set(item.get("color", "Choose color"))
+    edit_attribute_season.set(item.get("season", "Choose season"))
+    edit_attribute_occasion.set(item.get("occasion", "Choose occasion"))
+    edit_attribute_material.set(item.get("material", "Choose material"))
 
 #-----special exclusive edit page---page7
 page7=ttk.Frame(window, style="Custom.TFrame")
@@ -596,7 +606,139 @@ photo_frame_edit.pack_propagate(False)
 
 edit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text="back", command=lambda:next_page(page6))
 edit_back_button.pack(pady=20)
+edit_frame = ttk.Frame(container_frame_edit, style="Custom.TFrame")
+edit_frame.pack(padx=10, pady=30)
+edit_tags_frame = ttk.Frame(edit_frame, width=500, height=600, style="Custom.TFrame")
+edit_tags_frame.pack(side='left', fill='both', expand=True)
+edit_tags_frame.pack_propagate(False)
 
+edit_mid_label = ttk.Label(edit_tags_frame, text="Tags for your clothes", style="mid.TLabel")
+edit_mid_label.pack(pady=10)
+
+edit_q1_label = ttk.Label(edit_tags_frame, text=" Type ?", style="small.TLabel")
+edit_q1_label.pack(pady=10)
+
+edit_attribute_type = StringVar(value="Choose type")
+edit_type_menu = OptionMenu(edit_tags_frame, edit_attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
+
+edit_type_menu.pack(pady=10)
+edit_type_menu.pack(pady=10)
+edit_type_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+edit_q2_label = ttk.Label(edit_tags_frame, text=" Color ?", style="small.TLabel")
+edit_q2_label.pack(pady=10)
+
+edit_attribute_color = StringVar(value="Choose color")
+edit_color_menu = OptionMenu(edit_tags_frame, edit_attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
+
+edit_color_menu.pack(pady=10)
+edit_color_menu.pack(pady=10)
+edit_color_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q3_label = ttk.Label(edit_tags_frame, text=" Season ?", style="small.TLabel")
+edit_q3_label.pack(pady=10)
+
+edit_attribute_season = StringVar(value="Choose season")
+edit_season_menu = OptionMenu(edit_tags_frame,edit_attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
+
+edit_season_menu.pack(pady=10)
+edit_season_menu.pack(pady=10)
+edit_season_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q4_label = ttk.Label(edit_tags_frame, text=" Ocassion ?", style="small.TLabel")
+edit_q4_label.pack(pady=10)
+
+edit_attribute_occasion = StringVar(value="Choose occasion")
+edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+
+edit_occasion_menu.pack(pady=10)
+edit_occasion_menu.pack(pady=10)
+edit_occasion_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q5_label = ttk.Label(edit_tags_frame, text=" Material ?", style="small.TLabel")
+edit_q5_label.pack(pady=10)
+
+edit_attribute_material = StringVar(value="Choose material")
+edit_material_menu = OptionMenu(edit_tags_frame, edit_attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
+
+edit_material_menu.pack(pady=10)
+edit_material_menu.pack(pady=10)
+edit_material_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+def edit_clothing_data():
+    global current_editing_path  # make sure you're using the shared value
+    selected_image_path = current_editing_path
+
+    updated_type = edit_attribute_type.get()
+    updated_color = edit_attribute_color.get()
+    updated_season = edit_attribute_season.get()
+    updated_occasion = edit_attribute_occasion.get()
+    updated_material = edit_attribute_material.get()
+
+    filename = "closet.json"
+
+    # if not os.path.exists(filename):
+    #     messagebox.showerror("Error", "Clothing data file not found.")
+    #     return
+
+    with open(filename, "r") as f:
+        try:
+            data = json.load(f)
+        except json.decoder.JSONDecodeError:
+            messagebox.showerror("Error", "Could not read clothing data.")
+            return
+
+    if username not in data:
+        messagebox.showerror("Error", f"No data found for user {username}.")
+        return
+
+    for item in data[username]:
+        if item["image_path"] == selected_image_path:
+            item["type"] = updated_type
+            item["color"] = updated_color
+            item["season"] = updated_season
+            item["occasion"] = updated_occasion
+            item["material"] = updated_material
+            break
+    else:
+        messagebox.showerror("Error", "Item not found in your closet.")
+        return
+
+    with open(filename, "w") as f:
+        json.dump(data, f, indent=4)
+
+    messagebox.showinfo("Saved", "Item updated in your closet.")
+    # Optionally go back to inventory and refresh:
+    # next_page(page6)
+    # display_clothes_grid(grid_frame, username)
+
+
+edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
+edit_save_button.pack(pady=20)
 
 
 # Function to raise the frame
