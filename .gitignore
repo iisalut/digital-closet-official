@@ -1,2 +1,6 @@
 users.json
 closet.json
+.DS_Store
+dist
+build/app
+.idea/
