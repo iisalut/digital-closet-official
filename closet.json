@@ -1,1 +1,28 @@
-
+{
+    "hi": {
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2043.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2043.heic",
+            "type": "Pants",
+            "color": "Red",
+            "season": "Summer",
+            "occasion": "Work/Office",
+            "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2063.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2063.heic",
+            "type": "Top",
+            "color": "Red",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "Choose season",
+            "occasion": "Casual",
+            "material": "denim"
+        }
+    }
+}
