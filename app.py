@@ -349,7 +349,7 @@ q1_label = ttk.Label(upload_tags_frame, text=" Type ?", style="small.TLabel")
 q1_label.pack(pady=10)
 
 attribute_type = StringVar(value="Choose type")
-dress_type_menu = OptionMenu(upload_tags_frame, attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
+dress_type_menu = OptionMenu(upload_tags_frame, attribute_type, "Dress", "---","Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
 
 dress_type_menu.pack(pady=10)
 dress_type_menu.pack(pady=10)
@@ -363,7 +363,7 @@ q2_label = ttk.Label(upload_tags_frame, text=" Color ?", style="small.TLabel")
 q2_label.pack(pady=10)
 
 attribute_color = StringVar(value="Choose color")
-dress_color_menu = OptionMenu(upload_tags_frame, attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
+dress_color_menu = OptionMenu(upload_tags_frame, attribute_color, "---","Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
 
 dress_color_menu.pack(pady=10)
 dress_color_menu.pack(pady=10)
@@ -378,7 +378,7 @@ q3_label = ttk.Label(upload_tags_frame, text=" Season ?", style="small.TLabel")
 q3_label.pack(pady=10)
 
 attribute_season = StringVar(value="Choose season")
-dress_season_menu = OptionMenu(upload_tags_frame, attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
+dress_season_menu = OptionMenu(upload_tags_frame, attribute_season, "---","Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
 
 dress_season_menu.pack(pady=10)
 dress_season_menu.pack(pady=10)
@@ -393,7 +393,7 @@ q4_label = ttk.Label(upload_tags_frame, text=" Occasion ?", style="small.TLabel"
 q4_label.pack(pady=10)
 
 attribute_occasion = StringVar(value="Choose occasion")
-dress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+dress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
 
 dress_occasion_menu.pack(pady=10)
 dress_occasion_menu.pack(pady=10)
@@ -408,7 +408,7 @@ q5_label = ttk.Label(upload_tags_frame, text=" Material ?", style="small.TLabel"
 q5_label.pack(pady=10)
 
 attribute_material = StringVar(value="Choose material")
-dress_material_menu = OptionMenu(upload_tags_frame, attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
+dress_material_menu = OptionMenu(upload_tags_frame, attribute_material, "---","Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
 
 dress_material_menu.pack(pady=10)
 dress_material_menu.pack(pady=10)
@@ -640,7 +640,7 @@ edit_q1_label = ttk.Label(edit_tags_frame, text=" Type ?", style="small.TLabel")
 edit_q1_label.pack(pady=10)
 
 edit_attribute_type = StringVar(value="Choose type")
-edit_type_menu = OptionMenu(edit_tags_frame, edit_attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
+edit_type_menu = OptionMenu(edit_tags_frame, edit_attribute_type, "---","Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
 
 edit_type_menu.pack(pady=10)
 edit_type_menu.pack(pady=10)
@@ -654,7 +654,7 @@ edit_q2_label = ttk.Label(edit_tags_frame, text=" Color ?", style="small.TLabel"
 edit_q2_label.pack(pady=10)
 
 edit_attribute_color = StringVar(value="Choose color")
-edit_color_menu = OptionMenu(edit_tags_frame, edit_attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
+edit_color_menu = OptionMenu(edit_tags_frame, edit_attribute_color, "---","Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
 
 edit_color_menu.pack(pady=10)
 edit_color_menu.pack(pady=10)
@@ -669,7 +669,7 @@ edit_q3_label = ttk.Label(edit_tags_frame, text=" Season ?", style="small.TLabel
 edit_q3_label.pack(pady=10)
 
 edit_attribute_season = StringVar(value="Choose season")
-edit_season_menu = OptionMenu(edit_tags_frame,edit_attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
+edit_season_menu = OptionMenu(edit_tags_frame,edit_attribute_season, "---","Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
 
 edit_season_menu.pack(pady=10)
 edit_season_menu.pack(pady=10)
@@ -684,7 +684,7 @@ edit_q4_label = ttk.Label(edit_tags_frame, text=" Occasion ?", style="small.TLab
 edit_q4_label.pack(pady=10)
 
 edit_attribute_occasion = StringVar(value="Choose occasion")
-edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
 
 edit_occasion_menu.pack(pady=10)
 edit_occasion_menu.pack(pady=10)
@@ -699,7 +699,7 @@ edit_q5_label = ttk.Label(edit_tags_frame, text=" Material ?", style="small.TLab
 edit_q5_label.pack(pady=10)
 
 edit_attribute_material = StringVar(value="Choose material")
-edit_material_menu = OptionMenu(edit_tags_frame, edit_attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
+edit_material_menu = OptionMenu(edit_tags_frame, edit_attribute_material, "---","Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
 
 edit_material_menu.pack(pady=10)
 edit_material_menu.pack(pady=10)
@@ -773,7 +773,7 @@ edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="
 edit_save_button.pack(pady=20)
 
 edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
-edit_delete_button.pack(pady=20)
+edit_delete_button.pack(pady=0)
 
 
 
