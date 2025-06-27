@@ -389,7 +389,7 @@ dress_season_menu.config(
     padx=10, pady=5         # add some padding inside button
 )
 
-q4_label = ttk.Label(upload_tags_frame, text=" Ocassion ?", style="small.TLabel")
+q4_label = ttk.Label(upload_tags_frame, text=" Occasion ?", style="small.TLabel")
 q4_label.pack(pady=10)
 
 attribute_occasion = StringVar(value="Choose occasion")
@@ -449,9 +449,9 @@ def save_clothing_data():
 
     # Add under current user
     if username not in data:
-        data[username] = []
+        data[username] = {}
 
-    data[username].append(clothing_item)
+    data[username][selected_image_path]= clothing_item
 
     # Save updated JSON
     with open(filename, 'w') as f:
@@ -510,37 +510,48 @@ def on_mousewheel(event):
 
 canvas.bind_all("<MouseWheel>", on_mousewheel)
 
-
 def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=4):
+    from PIL import Image, ImageTk
+    from tkinter import ttk
+
+    # Clear previous widgets
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
     try:
         with open(json_path, 'r') as file:
-            data=json.load(file)
+            data = json.load(file)
     except Exception as e:
-        print("could not load json file",e)
+        print("could not load json file", e)
         return
 
     if username not in data:
-        print("no clothing data for "+username)
+        print("no clothing data for " + username)
         return
 
-    items = data[username]
-    for index, item in enumerate(items):
-        new_img= item["image_path"].strip()
+    items = data[username]  # dict: {image_path: tags_dict}
+
+    for index, (image_path, tags) in enumerate(items.items()):
+        new_img = image_path.strip()
 
         try:
             img = Image.open(new_img)
-            img = img.resize((150, 150), Image.Resampling.LANCZOS)  # Force resize, allows slight stretching
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
 
             photo = ImageTk.PhotoImage(img)
 
-            inventory_cloth_button = ttk.Button(grid_frame, image=photo,command=lambda i=item: open_edit_page(i))
+            # Capture current image_path in default argument to avoid late binding
+            inventory_cloth_button = ttk.Button(
+                grid_frame,
+                image=photo,
+                command=lambda path=new_img: open_edit_page(path)
+            )
             inventory_cloth_button.image = photo
-            row= index // columns
+
+            row = index // columns
             col = index % columns
-            inventory_cloth_button.grid(row=row, column=col,padx=10, pady=10)
+            inventory_cloth_button.grid(row=row, column=col, padx=10, pady=10)
+
             print("button clicked on : " + new_img)
         except Exception as e:
             print(f"could not display cloth for {new_img} :", e)
@@ -574,9 +585,29 @@ def show_detail_image(path):
     except Exception as e:
         messagebox.showerror(title='Error', message=f"Error: {e}")
 
-def open_edit_page(item):
+def open_edit_page(image_path):
+    global current_editing_path
+    current_editing_path = image_path
+
     next_page(page7)
-    show_detail_image(item["image_path"])
+    show_detail_image(image_path)
+
+    # Load JSON and get the item data
+    try:
+        with open("closet.json", "r") as f:
+            data = json.load(f)
+    except Exception as e:
+        print("Failed to load JSON in open_edit_page:", e)
+        return
+
+    item = data.get(username, {}).get(image_path, {})
+
+    # Set dropdowns with saved info or default
+    edit_attribute_type.set(item.get("type", "Choose type"))
+    edit_attribute_color.set(item.get("color", "Choose color"))
+    edit_attribute_season.set(item.get("season", "Choose season"))
+    edit_attribute_occasion.set(item.get("occasion", "Choose occasion"))
+    edit_attribute_material.set(item.get("material", "Choose material"))
 
 #-----special exclusive edit page---page7
 page7=ttk.Frame(window, style="Custom.TFrame")
@@ -596,6 +627,153 @@ photo_frame_edit.pack_propagate(False)
 
 edit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text="back", command=lambda:next_page(page6))
 edit_back_button.pack(pady=20)
+edit_frame = ttk.Frame(container_frame_edit, style="Custom.TFrame")
+edit_frame.pack(padx=10, pady=30)
+edit_tags_frame = ttk.Frame(edit_frame, width=500, height=600, style="Custom.TFrame")
+edit_tags_frame.pack(side='left', fill='both', expand=True)
+edit_tags_frame.pack_propagate(False)
+
+edit_mid_label = ttk.Label(edit_tags_frame, text="Tags for your clothes", style="mid.TLabel")
+edit_mid_label.pack(pady=10)
+
+edit_q1_label = ttk.Label(edit_tags_frame, text=" Type ?", style="small.TLabel")
+edit_q1_label.pack(pady=10)
+
+edit_attribute_type = StringVar(value="Choose type")
+edit_type_menu = OptionMenu(edit_tags_frame, edit_attribute_type, "Dress", "Top", "Pants", "Skirt","jacket" ,command=lambda type_value: print("type chosen : "+type_value))
+
+edit_type_menu.pack(pady=10)
+edit_type_menu.pack(pady=10)
+edit_type_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+edit_q2_label = ttk.Label(edit_tags_frame, text=" Color ?", style="small.TLabel")
+edit_q2_label.pack(pady=10)
+
+edit_attribute_color = StringVar(value="Choose color")
+edit_color_menu = OptionMenu(edit_tags_frame, edit_attribute_color, "Black", "White", "Red", "Blue", "Green", "yellow", command=lambda color_value: print("color chosen ; "+color_value))
+
+edit_color_menu.pack(pady=10)
+edit_color_menu.pack(pady=10)
+edit_color_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q3_label = ttk.Label(edit_tags_frame, text=" Season ?", style="small.TLabel")
+edit_q3_label.pack(pady=10)
+
+edit_attribute_season = StringVar(value="Choose season")
+edit_season_menu = OptionMenu(edit_tags_frame,edit_attribute_season, "Summer", "Winter", "Fall", "Spring", command=lambda season_value: print("season chosen ; "+season_value))
+
+edit_season_menu.pack(pady=10)
+edit_season_menu.pack(pady=10)
+edit_season_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q4_label = ttk.Label(edit_tags_frame, text=" Occasion ?", style="small.TLabel")
+edit_q4_label.pack(pady=10)
+
+edit_attribute_occasion = StringVar(value="Choose occasion")
+edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+
+edit_occasion_menu.pack(pady=10)
+edit_occasion_menu.pack(pady=10)
+edit_occasion_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+edit_q5_label = ttk.Label(edit_tags_frame, text=" Material ?", style="small.TLabel")
+edit_q5_label.pack(pady=10)
+
+edit_attribute_material = StringVar(value="Choose material")
+edit_material_menu = OptionMenu(edit_tags_frame, edit_attribute_material, "Cotton", "denim", "wool","khaki","ribbed","leather", command=lambda material_value: print("material chosen ; "+material_value))
+
+edit_material_menu.pack(pady=10)
+edit_material_menu.pack(pady=10)
+edit_material_menu.config(
+    bg="#5C7285", fg="#333333",
+    font=("Pangolin", 15),  # bigger font size here
+    width=15,               # wider width here
+    padx=10, pady=5         # add some padding inside button
+)
+
+def edit_clothing_data():
+    global current_editing_path  # make sure you're using the shared value
+    selected_image_path = current_editing_path
+
+    updated_type = edit_attribute_type.get()
+    updated_color = edit_attribute_color.get()
+    updated_season = edit_attribute_season.get()
+    updated_occasion = edit_attribute_occasion.get()
+    updated_material = edit_attribute_material.get()
+
+    filename = "closet.json"
+
+    # if not os.path.exists(filename):
+    #     messagebox.showerror("Error", "Clothing data file not found.")
+    #     return
+
+    with open(filename, "r") as f:
+        try:
+            data = json.load(f)
+        except json.decoder.JSONDecodeError:
+            messagebox.showerror("Error", "Could not read clothing data.")
+            return
+
+    if username not in data:
+        messagebox.showerror("Error", f"No data found for user {username}.")
+        return
+    user_data = data[username]
+    user_data[selected_image_path]["type"] = updated_type
+    user_data[selected_image_path]["color"] = updated_color
+    user_data[selected_image_path]["season"] = updated_season
+    user_data[selected_image_path]["occasion"] = updated_occasion
+    user_data[selected_image_path]["material"] = updated_material
+
+    with open(filename, "w") as f:
+        json.dump(data, f, indent=4)
+
+    messagebox.showinfo("Saved", "Item updated in your closet.")
+    # Optionally go back to inventory and refresh:
+    # next_page(page6)
+    # display_clothes_grid(grid_frame, username)
+def delete_clothing_data():
+    global current_editing_path  # make sure you're using the shared value
+    selected_image_path = current_editing_path
+    with open ("closet.json", "r") as f:
+        data= json.load(f)
+
+    print("Trying to delete:", selected_image_path)
+    print("Available keys:", list(data.get(username, {}).keys()))
+
+    if selected_image_path in data.get(username, {}):
+        del data[username][selected_image_path]
+    with open('closet.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+    display_clothes_grid(grid_frame, username)
+    next_page(page6)
+
+
+
+edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
+edit_save_button.pack(pady=20)
+
+edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
+edit_delete_button.pack(pady=20)
 
 
 
