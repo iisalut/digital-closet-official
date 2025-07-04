@@ -512,6 +512,10 @@ canvas.bind_all("<MouseWheel>", on_mousewheel)
 
 
 def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=4):
+    from PIL import Image, ImageTk
+    from tkinter import ttk
+
+    # Clear previous widgets
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
@@ -536,11 +540,18 @@ def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=
 
             photo = ImageTk.PhotoImage(img)
 
-            inventory_cloth_button = ttk.Button(grid_frame, image=photo,command=lambda i=item: open_edit_page(i))
+            # Capture current image_path in default argument to avoid late binding
+            inventory_cloth_button = ttk.Button(
+                grid_frame,
+                image=photo,
+                command=lambda path=new_img: open_edit_page(path)
+            )
             inventory_cloth_button.image = photo
-            row= index // columns
+
+            row = index // columns
             col = index % columns
-            inventory_cloth_button.grid(row=row, column=col,padx=10, pady=10)
+            inventory_cloth_button.grid(row=row, column=col, padx=10, pady=10)
+
             print("button clicked on : " + new_img)
         except Exception as e:
             print(f"could not display cloth for {new_img} :", e)
@@ -579,7 +590,15 @@ def open_edit_page(item):
     current_editing_path = item["image_path"]
 
     next_page(page7)
-    show_detail_image(item["image_path"])
+    show_detail_image(image_path)
+
+    # Load JSON and get the item data
+    try:
+        with open("closet.json", "r") as f:
+            data = json.load(f)
+    except Exception as e:
+        print("Failed to load JSON in open_edit_page:", e)
+        return
 
     # Now, load the dropdowns with this item's saved info:
     edit_attribute_type.set(item.get("type", "Choose type"))
