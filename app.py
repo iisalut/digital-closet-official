@@ -518,7 +518,66 @@ inventory_entry = ttk.Entry(inventory_search_frame, width=30)
 inventory_entry.pack(pady=10,side="left" )
 inventory_entry.bind("<KeyRelease>", show_suggestions)
 
-inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5)
+def search_inventory():
+    selected_tag = inventory_entry.get().strip().lower()
+    if selected_tag == "":
+        # If no search, show all items
+        display_clothes_grid(grid_frame, username=username)
+    else:
+        display_filtered_clothes(grid_frame, username=username, selected_tag=selected_tag)
+
+
+def display_filtered_clothes(grid_frame, username, selected_tag, json_path="closet.json", columns=4):
+    from PIL import Image, ImageTk
+
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+    except Exception as e:
+        print("Could not load JSON file:", e)
+        return
+
+    if username not in data:
+        print("No clothing data for", username)
+        return
+
+    items = data[username]  # {image_path: tags_dict}
+    filtered_items = {}
+
+    for image_path, tags in items.items():
+        tag_list = [value.lower() for value in tags.values()]
+        if selected_tag in tag_list:
+            filtered_items[image_path] = tags
+
+    for index, (image_path, tags) in enumerate(filtered_items.items()):
+        try:
+            img = Image.open(image_path.strip())
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+
+            btn = ttk.Button(
+                grid_frame,
+                image=photo,
+                command=lambda path=image_path: open_edit_page(path)
+            )
+            btn.image = photo
+
+            row = index // columns
+            col = index % columns
+            btn.grid(row=row, column=col, padx=10, pady=10)
+
+        except Exception as e:
+            print(f"Error loading {image_path}:", e)
+
+    if not filtered_items:
+        print("No results found for:", selected_tag)
+
+
+
+inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
 inventory_search_button.pack(pady=10, side="right")
 
 search_tags= ["summer", "winter", "black", "white", "skirt", "top", "dress", "casual", "formal"]
@@ -842,7 +901,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7):
 
 
 
-next_page(page6)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
