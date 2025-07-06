@@ -15,6 +15,14 @@
             "season": "Winter",
             "occasion": "Work/Office",
             "material": "wool"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic",
+            "type": "Top",
+            "color": "Green",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
         }
     },
     "saravan": {
