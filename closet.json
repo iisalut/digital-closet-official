@@ -1,1 +1,38 @@
-
+{
+    "hi": {
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic",
+            "type": "Top",
+            "color": "Blue",
+            "season": "Spring",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        "": {
+            "image_path": "",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "Winter",
+            "occasion": "Work/Office",
+            "material": "wool"
+        }
+    },
+    "saravan": {
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2052.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2052.heic",
+            "type": "Top",
+            "color": "White",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "ribbed"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2062.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2062.heic",
+            "type": "Dress",
+            "color": "Blue",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "wool"
+        }
+    }
+}
