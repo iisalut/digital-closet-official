@@ -476,11 +476,11 @@ page6.grid(row=0, column=0, sticky="nsew")
 inventory_header = ttk.Label(page6, text="Inventory", style="Header.TLabel")
 inventory_header.pack(pady=0)
 
-inventory_search_frame = ttk.Frame(page6,width=350, height=200, style="Custom.TFrame")
-inventory_search_frame.pack(pady=0, padx=0)
+inventory_search_frame = ttk.Frame(page6,width=350, height=100,style="Custom.TFrame")
+inventory_search_frame.pack(pady=10, padx=0)
 inventory_search_frame.pack_propagate(False)
 # creating autocomplete search bar
-autocomplete_Listbox=Listbox(page6, height=2)
+autocomplete_Listbox=Listbox(page6, height=5)
 def show_suggestions(event=None):
     user_input= inventory_entry.get().lower()
     autocomplete_Listbox.delete(0, END)
@@ -503,6 +503,7 @@ def show_suggestions(event=None):
             y=inventory_entry.winfo_y()+inventory_entry.winfo_height(
             )
         )
+        autocomplete_Listbox.lift()
     else:
         autocomplete_Listbox.place_forget()
 def select_suggestions(event):
@@ -514,20 +515,20 @@ def select_suggestions(event):
         autocomplete_Listbox.place_forget()
 
 inventory_entry = ttk.Entry(inventory_search_frame, width=30)
-inventory_entry.pack(pady=0,side="left" )
+inventory_entry.pack(pady=10,side="left" )
 inventory_entry.bind("<KeyRelease>", show_suggestions)
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5)
-inventory_search_button.pack(pady=0, side="right")
+inventory_search_button.pack(pady=10, side="right")
 
 search_tags= ["summer", "winter", "black", "white", "skirt", "top", "dress", "casual", "formal"]
-autocomplete_Listbox=Listbox(inventory_search_frame,height=5)
+autocomplete_Listbox=Listbox(inventory_search_frame,height=3)
 
 autocomplete_Listbox.bind("<<ListboxSelect>>", select_suggestions)
 
 # Create a canvas with scrollbar
 canvas_frame = ttk.Frame(page6, style="Custom.TFrame",width=700, height=700)
-canvas_frame.pack(pady=0, padx=0)
+canvas_frame.pack(pady=10, padx=0, )
 
 canvas = Canvas(canvas_frame, bg="beige",width=760, height=500)  # Just using Canvas since it's imported
 scrollbar = ttk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
