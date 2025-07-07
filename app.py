@@ -238,7 +238,7 @@ home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle=PRIMA
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15)
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: next_page(page8))
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
@@ -894,6 +894,24 @@ edit_save_button.pack(pady=20)
 
 edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
 edit_delete_button.pack(pady=0)
+#----------- make outfits page (page8)-----------
+page8=ttk.Frame(window, style="Custom.TFrame")
+page8.grid(row=0, column=0, sticky="nsew")
+page8.grid_propagate(False)
+
+plan_header= ttk.Label(page8, text="Outfit Planner", style="Header.TLabel")
+plan_header.pack(pady=10, padx=10)
+big_frame = ttk.Frame(page8, style="Custom.TFrame")
+big_frame.pack(pady=10, padx=0)
+
+plan_left_frame = ttk.Frame(big_frame, width=350, height=900)
+plan_left_frame.pack(pady=1, padx=3, side="left")
+
+plan_center_frame = ttk.Frame(big_frame, width=600, height=700)
+plan_center_frame.pack(pady=1, padx=20, side="left")  # <-- Add side="left"
+
+plan_right_frame = ttk.Frame(big_frame, width=350, height=900)
+plan_right_frame.pack(pady=1, padx=3, side="left")  # <-- Add side="left"
 
 
 
@@ -904,14 +922,14 @@ def next_page(frame):
     frame.tkraise()
 
 # Configure all frames
-for frame in (page1, page2, page3, page4, page5, page6, page7):
+for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
     frame.grid(row=0, column=0, sticky="nsew")
 
 
 
 
 
-next_page(page1)  # Start by showing the welcome page
+next_page(page8)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
