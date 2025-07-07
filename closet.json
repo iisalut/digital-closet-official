@@ -1,13 +1,5 @@
 {
     "hi": {
-        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic": {
-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic",
-            "type": "Top",
-            "color": "Blue",
-            "season": "Spring",
-            "occasion": "Casual",
-            "material": "Cotton"
-        },
         "": {
             "image_path": "",
             "type": "Pants",
@@ -16,12 +8,44 @@
             "occasion": "Work/Office",
             "material": "wool"
         },
-        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic": {
-            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2042.heic",
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "---",
+            "occasion": "Casual",
+            "material": "denim"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2115.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2115.heic",
+            "type": "jacket",
+            "color": "Red",
+            "season": "Fall",
+            "occasion": "---",
+            "material": "---"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic",
             "type": "Top",
-            "color": "Green",
+            "color": "Blue",
             "season": "Summer",
             "occasion": "Casual",
+            "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2119.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2119.heic",
+            "type": "Dress",
+            "color": "Blue",
+            "season": "Summer",
+            "occasion": "Formal",
+            "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2102.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2102.heic",
+            "type": "Pants",
+            "color": "Black",
+            "season": "---",
+            "occasion": "Formal",
             "material": "Cotton"
         }
     },

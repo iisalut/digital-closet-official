@@ -476,7 +476,7 @@ page6.grid(row=0, column=0, sticky="nsew")
 inventory_header = ttk.Label(page6, text="Inventory", style="Header.TLabel")
 inventory_header.pack(pady=0)
 
-inventory_search_frame = ttk.Frame(page6,width=350, height=100,style="Custom.TFrame")
+inventory_search_frame = ttk.Frame(page6,width=500, height=100,style="Custom.TFrame")
 inventory_search_frame.pack(pady=10, padx=0)
 inventory_search_frame.pack_propagate(False)
 # creating autocomplete search bar
@@ -578,7 +578,10 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
-inventory_search_button.pack(pady=10, side="right")
+inventory_search_button.pack(pady=10, side="left")
+
+inventory_clear_button= ttk.Button(inventory_search_frame,text="clear filters", width=8, command= lambda : display_clothes_grid(grid_frame, username))
+inventory_clear_button.pack(pady=10, side="right", padx=10)
 
 search_tags= ["summer", "winter", "black", "white", "skirt", "top", "dress", "casual", "formal"]
 autocomplete_Listbox=Listbox(inventory_search_frame,height=3)
@@ -623,6 +626,7 @@ canvas.bind_all("<MouseWheel>", on_mousewheel)
 def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=4):
     from PIL import Image, ImageTk
     from tkinter import ttk
+    import json
 
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
@@ -632,39 +636,45 @@ def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=
         with open(json_path, 'r') as file:
             data = json.load(file)
     except Exception as e:
-        print("could not load json file", e)
+        print("Could not load JSON file:", e)
         return
 
     if username not in data:
-        print("no clothing data for " + username)
+        print("No clothing data for", username)
         return
 
     items = data[username]  # dict: {image_path: tags_dict}
 
-    for index, (image_path, tags) in enumerate(items.items()):
+    row = 0
+    col = 0
+
+    for image_path, tags in items.items():
         new_img = image_path.strip()
 
         try:
+            print("Trying to open:", new_img)
             img = Image.open(new_img)
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
-
             photo = ImageTk.PhotoImage(img)
 
-            # Capture current image_path in default argument to avoid late binding
             inventory_cloth_button = ttk.Button(
                 grid_frame,
                 image=photo,
                 command=lambda path=new_img: open_edit_page(path)
             )
-            inventory_cloth_button.image = photo
-
-            row = index // columns
-            col = index % columns
+            inventory_cloth_button.image = photo  # prevent image from being garbage collected
             inventory_cloth_button.grid(row=row, column=col, padx=10, pady=10)
 
-            print("button clicked on : " + new_img)
+            print("Displayed button for:", new_img)
+
+            col += 1
+            if col >= columns:
+                col = 0
+                row += 1
+
         except Exception as e:
-            print(f"could not display cloth for {new_img} :", e)
+            print(f"Could not display cloth for {new_img}:", e)
+
 
 def show_detail_image(path):
     try:
