@@ -240,7 +240,7 @@ home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle='prim
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_grid(plan_frame, username, columns=2)])
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame, username),display_clothes_plangrid(plan2_frame, username)])
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
@@ -530,6 +530,57 @@ def search_inventory():
     else:
         display_filtered_clothes(grid_frame, username=username, selected_tag=selected_tag)
 
+def display_clothes_plangrid(grid_frame, username, json_path="closet.json", columns=2):
+    from PIL import Image, ImageTk
+    from tkinter import ttk
+    import json
+
+    # Clear previous widgets
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+    except Exception as e:
+        print("Could not load JSON file:", e)
+        return
+
+    if username not in data:
+        print("No clothing data for", username)
+        return
+
+    items = data[username]  # dict: {image_path: tags_dict}
+
+    row = 0
+    col = 0
+
+    for image_path, tags in items.items():
+        new_img = image_path.strip()
+
+        try:
+            print("Trying to open:", new_img)
+            img = Image.open(new_img)
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+
+            inventory_cloth_button = ttk.Button(
+                grid_frame,
+                image=photo,
+
+            )
+            inventory_cloth_button.image = photo  # prevent image from being garbage collected
+            inventory_cloth_button.grid(row=row, column=col, padx=10, pady=10)
+
+            print("Displayed button for:", new_img)
+
+            col += 1
+            if col >= columns:
+                col = 0
+                row += 1
+
+        except Exception as e:
+            print(f"Could not display cloth for {new_img}:", e)
 
 def display_filtered_clothes(grid_frame, username, selected_tag, json_path="closet.json", columns=4):
     from PIL import Image, ImageTk
@@ -901,46 +952,69 @@ edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text
 edit_delete_button.pack(pady=0)
 #</editor-fold>
 #----------- make outfits page (page8)-----------
-page8=ttk.Frame(window, style="Custom.TFrame")
+page8 = ttk.Frame(window, style="Custom.TFrame")
 page8.grid(row=0, column=0, sticky="nsew")
 page8.grid_propagate(False)
 
-plan_header= ttk.Label(page8, text="Outfit Planner", style="Header.TLabel")
+plan_header = ttk.Label(page8, text="Outfit Planner", style="Header.TLabel")
 plan_header.pack(pady=10, padx=10)
+
 big_frame = ttk.Frame(page8, style="Custom.TFrame")
 big_frame.pack(pady=10, padx=0)
 
+# ----- Left Frame -----
 plan_left_frame = ttk.Frame(big_frame, width=350, height=900)
 plan_left_frame.pack(pady=1, padx=3, side="left")
-
-plan_center_frame = ttk.Frame(big_frame, width=600, height=700)
-plan_center_frame.pack(pady=1, padx=20, side="left")  # <-- Add side="left"
-
-plan_right_frame = ttk.Frame(big_frame, width=350, height=900)
-plan_right_frame.pack(pady=1, padx=3, side="left")  # <-- Add side="left"
 
 plan_canvas = Canvas(plan_left_frame, bg="beige", width=350, height=900)
 plan_scrollbar = ttk.Scrollbar(plan_left_frame, orient="vertical", command=plan_canvas.yview)
 plan_frame = ttk.Frame(plan_canvas, style="Custom.TFrame")
 
-# Fix: connect scrollbar to canvas
 plan_canvas.configure(yscrollcommand=plan_scrollbar.set)
-
-# Pack scrollbar and canvas correctly
 plan_scrollbar.pack(side="right", fill="y")
 plan_canvas.pack(side="left", fill="both", expand=True)
-
-# Create window inside canvas
 plan_canvas.create_window((0, 0), window=plan_frame, anchor="nw")
-
-# Fix: bind correct frame
 plan_frame.bind("<Configure>", lambda e: plan_canvas.configure(scrollregion=plan_canvas.bbox("all")))
 
-# Mousewheel scrolling
-def on_mousewheel(event):
-    plan_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+# ----- Center Frame -----
+plan_center_frame = ttk.Frame(big_frame, width=600, height=700)
+plan_center_frame.pack(pady=1, padx=20, side="left")
 
-plan_canvas.bind_all("<MouseWheel>", on_mousewheel)
+# ----- Right Frame -----
+plan_right_frame = ttk.Frame(big_frame, width=350, height=900)
+plan_right_frame.pack(pady=1, padx=3, side="left")
+
+plan2_canvas = Canvas(plan_right_frame, bg="beige", width=350, height=900)
+plan2_scrollbar = ttk.Scrollbar(plan_right_frame, orient="vertical", command=plan2_canvas.yview)
+plan2_frame = ttk.Frame(plan2_canvas, style="Custom.TFrame")
+
+plan2_canvas.configure(yscrollcommand=plan2_scrollbar.set)
+plan2_scrollbar.pack(side="right", fill="y")
+plan2_canvas.pack(side="left", fill="both", expand=True)
+plan2_canvas.create_window((0, 0), window=plan2_frame, anchor="nw")
+plan2_frame.bind("<Configure>", lambda e: plan2_canvas.configure(scrollregion=plan2_canvas.bbox("all")))
+
+# ----- Mousewheel binding -----
+def bind_mousewheel_to(canvas):
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+    canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
+    canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+
+bind_mousewheel_to(plan_canvas)
+bind_mousewheel_to(plan2_canvas)
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Function to raise the frame
 def next_page(frame):
