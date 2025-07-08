@@ -14,7 +14,7 @@ from tkinter import Canvas
 
 
 
-# Create a themed window using ttkbootstrap
+#themed window using ttkbootstrap
 window = ttk.Window(themename="flatly")
 window.title("Digital Closet")
 
@@ -638,7 +638,7 @@ inventory_search_button.pack(pady=10, side="left")
 inventory_clear_button= ttk.Button(inventory_search_frame,text="clear filters", width=8, command= lambda : display_clothes_grid(grid_frame, username))
 inventory_clear_button.pack(pady=10, side="right", padx=10)
 
-search_tags= ["summer", "winter", "black", "white", "skirt", "top", "dress", "casual", "formal"]
+search_tags= ["summer", "winter","fall","spring", "black", "white","red","blue","yellow","pink","brown","green","pants","denim","jacket", "skirt", "top", "dress", "casual", "formal"]
 autocomplete_Listbox=Listbox(inventory_search_frame,height=3)
 
 autocomplete_Listbox.bind("<<ListboxSelect>>", select_suggestions)
@@ -970,8 +970,8 @@ plan_left_frame = ttk.Frame(big_frame, width=350, height=900)
 plan_left_frame.pack(pady=1, padx=3, side="left")
 
 # --- Entry section at the top ---
-entry_section = ttk.Frame(plan_left_frame)
-entry_section.pack(fill="x", pady=(10, 0))
+entry_section = ttk.Frame(plan_left_frame, style="Custom.TFrame")
+entry_section.pack(fill="x", pady= 0,side="top")
 
 plan_entry = ttk.Entry(entry_section, width=25)
 plan_entry.pack(side="left", padx=(5, 5))
@@ -1032,13 +1032,37 @@ def search_outfit_inventory():
     else:
         display_filtered_clothes(plan_frame, username=username, selected_tag=selected_tag)
 
+
 # ----- Center Frame -----
-plan_center_frame = ttk.Frame(big_frame, width=600, height=700)
+plan_center_frame = ttk.Frame(big_frame, width=600, height=900, style="Custom.TFrame")
 plan_center_frame.pack(pady=1, padx=20, side="left")
+plan_center_frame.pack_propagate(False)
+
+plan_mini_frame = ttk.Frame(plan_center_frame, width=600, height=750)
+plan_mini_frame.pack(pady=1, padx=20)
+
+plan_back_button = ttk.Button(plan_center_frame, text="back", width=6, command=lambda: next_page(page4))
+plan_back_button.pack(side="bottom",pady=15)
+
 
 # ----- Right Frame -----
 plan_right_frame = ttk.Frame(big_frame, width=350, height=900)
 plan_right_frame.pack(pady=1, padx=3, side="left")
+
+entry2_section = ttk.Frame(plan_right_frame, style="Custom.TFrame")
+entry2_section.pack(fill="x", pady=0, side="top")
+
+plan2_entry = ttk.Entry(entry2_section, width=25)
+plan2_entry.pack(side="left", padx=(5, 5))
+plan2_entry.bind("<KeyRelease>", lambda e: show_plan2_suggestions())
+
+plan2_search_button = ttk.Button(entry2_section, text="search", width=6, command=lambda: search_outfit_inventory2())
+plan2_search_button.pack(side="left")
+
+plan2_autocomplete_Listbox = Listbox(plan_right_frame, height=3)
+plan2_autocomplete_Listbox.place_forget()
+plan2_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: select_plan2_suggestions())
+
 
 plan2_canvas = Canvas(plan_right_frame, bg="beige", width=350, height=900)
 plan2_scrollbar = ttk.Scrollbar(plan_right_frame, orient="vertical", command=plan2_canvas.yview)
@@ -1049,6 +1073,42 @@ plan2_scrollbar.pack(side="right", fill="y")
 plan2_canvas.pack(side="left", fill="both", expand=True)
 plan2_canvas.create_window((0, 0), window=plan2_frame, anchor="nw")
 plan2_frame.bind("<Configure>", lambda e: plan2_canvas.configure(scrollregion=plan2_canvas.bbox("all")))
+
+
+def show_plan2_suggestions():
+    user_input = plan2_entry.get().lower()
+    plan2_autocomplete_Listbox.delete(0, END)
+
+    if user_input == "":
+        plan2_autocomplete_Listbox.place_forget()
+        return
+
+    matches = [tag for tag in search_tags if user_input in tag.lower()]
+    if matches:
+        for tag in matches:
+            plan2_autocomplete_Listbox.insert(END, tag)
+        plan2_autocomplete_Listbox.place(
+            x=plan2_entry.winfo_x(),
+            y=plan2_entry.winfo_y() + plan2_entry.winfo_height()
+        )
+        plan2_autocomplete_Listbox.lift()
+    else:
+        plan2_autocomplete_Listbox.place_forget()
+
+def select_plan2_suggestions():
+    selection = plan2_autocomplete_Listbox.curselection()
+    if selection:
+        selected_tag = plan2_autocomplete_Listbox.get(selection[0])
+        plan2_entry.delete(0, END)
+        plan2_entry.insert(0, selected_tag)
+        plan2_autocomplete_Listbox.place_forget()
+
+def search_outfit_inventory2():
+    selected_tag = plan2_entry.get().strip().lower()
+    if selected_tag == "":
+        display_clothes_plangrid(plan2_frame, username=username)
+    else:
+        display_filtered_clothes(plan2_frame, username=username, selected_tag=selected_tag)
 
 # ----- Mousewheel binding -----
 def bind_mousewheel_to(canvas):
@@ -1086,7 +1146,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
 
 
 
-next_page(page1)  # Start by showing the welcome page
+next_page(page8)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
