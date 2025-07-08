@@ -952,6 +952,7 @@ edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text
 edit_delete_button.pack(pady=0)
 #</editor-fold>
 #----------- make outfits page (page8)-----------
+
 page8 = ttk.Frame(window, style="Custom.TFrame")
 page8.grid(row=0, column=0, sticky="nsew")
 page8.grid_propagate(False)
@@ -963,10 +964,28 @@ big_frame = ttk.Frame(page8, style="Custom.TFrame")
 big_frame.pack(pady=10, padx=0)
 
 # ----- Left Frame -----
+
+# ---- Outfit Planner LEFT PANEL (page8) ----
 plan_left_frame = ttk.Frame(big_frame, width=350, height=900)
 plan_left_frame.pack(pady=1, padx=3, side="left")
 
-plan_canvas = Canvas(plan_left_frame, bg="beige", width=350, height=900)
+# --- Entry section at the top ---
+entry_section = ttk.Frame(plan_left_frame)
+entry_section.pack(fill="x", pady=(10, 0))
+
+plan_entry = ttk.Entry(entry_section, width=25)
+plan_entry.pack(side="left", padx=(5, 5))
+plan_entry.bind("<KeyRelease>", lambda e: show_plan_suggestions())
+
+plan_search_button = ttk.Button(entry_section, text="search", width=6, command=lambda: search_outfit_inventory())
+plan_search_button.pack(side="left")
+
+plan_autocomplete_Listbox = Listbox(plan_left_frame, height=3)
+plan_autocomplete_Listbox.place_forget()
+plan_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: select_plan_suggestions())
+
+# --- Scrollable canvas for clothing items ---
+plan_canvas = Canvas(plan_left_frame, bg="beige", width=350, height=800)
 plan_scrollbar = ttk.Scrollbar(plan_left_frame, orient="vertical", command=plan_canvas.yview)
 plan_frame = ttk.Frame(plan_canvas, style="Custom.TFrame")
 
@@ -975,6 +994,43 @@ plan_scrollbar.pack(side="right", fill="y")
 plan_canvas.pack(side="left", fill="both", expand=True)
 plan_canvas.create_window((0, 0), window=plan_frame, anchor="nw")
 plan_frame.bind("<Configure>", lambda e: plan_canvas.configure(scrollregion=plan_canvas.bbox("all")))
+
+# --- Autocomplete suggestions ---
+def show_plan_suggestions():
+    user_input = plan_entry.get().lower()
+    plan_autocomplete_Listbox.delete(0, END)
+
+    if user_input == "":
+        plan_autocomplete_Listbox.place_forget()
+        return
+
+    matches = [tag for tag in search_tags if user_input in tag.lower()]
+    if matches:
+        for tag in matches:
+            plan_autocomplete_Listbox.insert(END, tag)
+        plan_autocomplete_Listbox.place(
+            x=plan_entry.winfo_x(),
+            y=plan_entry.winfo_y() + plan_entry.winfo_height()
+        )
+        plan_autocomplete_Listbox.lift()
+    else:
+        plan_autocomplete_Listbox.place_forget()
+
+def select_plan_suggestions():
+    selection = plan_autocomplete_Listbox.curselection()
+    if selection:
+        selected_tag = plan_autocomplete_Listbox.get(selection[0])
+        plan_entry.delete(0, END)
+        plan_entry.insert(0, selected_tag)
+        plan_autocomplete_Listbox.place_forget()
+
+# --- Search handler for planner ---
+def search_outfit_inventory():
+    selected_tag = plan_entry.get().strip().lower()
+    if selected_tag == "":
+        display_clothes_plangrid(plan_frame, username=username)
+    else:
+        display_filtered_clothes(plan_frame, username=username, selected_tag=selected_tag)
 
 # ----- Center Frame -----
 plan_center_frame = ttk.Frame(big_frame, width=600, height=700)
