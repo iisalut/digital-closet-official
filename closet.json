@@ -47,6 +47,14 @@
             "season": "---",
             "occasion": "Formal",
             "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2092.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2092.heic",
+            "type": "Pants",
+            "color": "yellow",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
         }
     },
     "saravan": {
