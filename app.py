@@ -185,6 +185,7 @@ signUp_back_button.pack(pady=10,padx=10 ,side='left')
 # </editor-fold>
 
 #login page (page3)
+#<editor-fold 1">
 page3 = ttk.Frame(window, style="Custom.TFrame")
 page3.grid(row=0, column=0, sticky="nsew")
 page3.grid_propagate(False)
@@ -220,8 +221,9 @@ bottom_frame_login = ttk.Frame(page3, style="Custom.TFrame")
 bottom_frame_login.pack(fill='x', side='bottom')
 login_back_button = ttk.Button(bottom_frame_login, text="Back",bootstyle=PRIMARY, width=15, command=lambda :next_page(page1))
 login_back_button.pack(pady=10,padx=10 ,side='left')
-
+#</editor-fold>
 # HOME PAGE (page4)
+#<editor-fold 1">
 page4 = ttk.Frame(window, style="Custom.TFrame")
 page4.grid(row=0, column=0, sticky="nsew")
 page4.grid_propagate(False)
@@ -234,18 +236,19 @@ pack_frame.pack(pady=60)  # Remove fill='x' if not needed
 home_upload_button = ttk.Button(pack_frame, text="Upload clothes", bootstyle=PRIMARY, width=15, command=lambda: next_page(page5))
 home_upload_button.pack(side='left', padx=10)
 
-home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page6), display_clothes_grid(grid_frame, username)]
+home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle='primary', width=15, command=lambda: [next_page(page6), display_clothes_grid(grid_frame, username)]
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: next_page(page8))
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_grid(plan_frame, username, columns=2)])
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
 home_saved_button.pack(side='left', padx=10)
-
+#</editor-fold>
 
 #--------- upload_photo_page----(page5)
+#<editor-fold 1">
 page5=ttk.Frame(window, style="Custom.TFrame")
 page5.grid(row=0, column=0, sticky="nsew")
 page5.grid_propagate(False)
@@ -465,8 +468,9 @@ def msg_after_upload():
 
 upload_save_button= ttk.Button(upload_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command=save_clothing_data )
 upload_save_button.pack(pady=20)
-
+#</editor-fold>
 #----------Inventory (page6)-------
+#<editor-fold 1">
 page6=ttk.Frame(window, style="Custom.TFrame")
 page6.grid(row=0, column=0, sticky="nsew")
 #page6.grid_propagate(False)
@@ -728,8 +732,9 @@ def open_edit_page(image_path):
     edit_attribute_season.set(item.get("season", "Choose season"))
     edit_attribute_occasion.set(item.get("occasion", "Choose occasion"))
     edit_attribute_material.set(item.get("material", "Choose material"))
-
+#</editor-fold>
 #-----special exclusive edit page---page7
+#<editor-fold 1">
 page7=ttk.Frame(window, style="Custom.TFrame")
 page7.grid(row=0, column=0, sticky="nsew")
 page7.grid_propagate(False)
@@ -894,6 +899,7 @@ edit_save_button.pack(pady=20)
 
 edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
 edit_delete_button.pack(pady=0)
+#</editor-fold>
 #----------- make outfits page (page8)-----------
 page8=ttk.Frame(window, style="Custom.TFrame")
 page8.grid(row=0, column=0, sticky="nsew")
@@ -913,7 +919,28 @@ plan_center_frame.pack(pady=1, padx=20, side="left")  # <-- Add side="left"
 plan_right_frame = ttk.Frame(big_frame, width=350, height=900)
 plan_right_frame.pack(pady=1, padx=3, side="left")  # <-- Add side="left"
 
+plan_canvas = Canvas(plan_left_frame, bg="beige", width=350, height=900)
+plan_scrollbar = ttk.Scrollbar(plan_left_frame, orient="vertical", command=plan_canvas.yview)
+plan_frame = ttk.Frame(plan_canvas, style="Custom.TFrame")
 
+# Fix: connect scrollbar to canvas
+plan_canvas.configure(yscrollcommand=plan_scrollbar.set)
+
+# Pack scrollbar and canvas correctly
+plan_scrollbar.pack(side="right", fill="y")
+plan_canvas.pack(side="left", fill="both", expand=True)
+
+# Create window inside canvas
+plan_canvas.create_window((0, 0), window=plan_frame, anchor="nw")
+
+# Fix: bind correct frame
+plan_frame.bind("<Configure>", lambda e: plan_canvas.configure(scrollregion=plan_canvas.bbox("all")))
+
+# Mousewheel scrolling
+def on_mousewheel(event):
+    plan_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+plan_canvas.bind_all("<MouseWheel>", on_mousewheel)
 
 # Function to raise the frame
 def next_page(frame):
@@ -929,7 +956,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
 
 
 
-next_page(page8)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
