@@ -10,6 +10,8 @@ pillow_heif.register_heif_opener()
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
 from tkinter import Canvas
+import functools
+import random
 
 
 
@@ -240,7 +242,7 @@ home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle='prim
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame, username),display_clothes_plangrid(plan2_frame, username)])
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_frame, username),display_clothes_plangrid(plan2_frame,plan_mini_frame, username)])
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
@@ -530,10 +532,7 @@ def search_inventory():
     else:
         display_filtered_clothes(grid_frame, username=username, selected_tag=selected_tag)
 
-def display_clothes_plangrid(grid_frame, username, json_path="closet.json", columns=2):
-    from PIL import Image, ImageTk
-    from tkinter import ttk
-    import json
+def display_clothes_plangrid(grid_frame, center_frame, username, json_path="closet.json", columns=2):
 
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
@@ -554,6 +553,45 @@ def display_clothes_plangrid(grid_frame, username, json_path="closet.json", colu
 
     row = 0
     col = 0
+    import random  # Add this import at the top of your file
+
+    def clone_to_planner(event, img_obj):
+        # Get center_frame's size
+        width = center_frame.winfo_width()
+        height = center_frame.winfo_height()
+
+        # Generate random x,y within center_frame bounds minus image size (150x150)
+        x = random.randint(0, max(0, width - 150))
+        y = random.randint(0, max(0, height - 150))
+
+        # Create clone Label inside center_frame at random position
+        clone = Label(center_frame, image=img_obj, relief="solid")
+        clone.image = img_obj
+        clone.place(x=x, y=y)
+
+        # Dragging handlers
+        def start_drag(e):
+            clone.startX = e.x
+            clone.startY = e.y
+
+        def on_drag(e):
+            new_x = clone.winfo_x() + e.x - clone.startX
+            new_y = clone.winfo_y() + e.y - clone.startY
+
+            # Optional: constrain inside center_frame boundaries
+            new_x = max(0, min(new_x, width - 150))
+            new_y = max(0, min(new_y, height - 150))
+
+            clone.place(x=new_x, y=new_y)
+
+        clone.bind("<Button-1>", start_drag)
+        clone.bind("<B1-Motion>", on_drag)
+
+        def on_clone_click(event):
+            answer= messagebox.askyesno("delete Item", "Do you want to delete this item from outfit ?")
+            if answer:
+                clone.destroy()
+        clone.bind("<Double-Button-1>", on_clone_click)
 
     for image_path, tags in items.items():
         new_img = image_path.strip()
@@ -564,15 +602,20 @@ def display_clothes_plangrid(grid_frame, username, json_path="closet.json", colu
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            inventory_cloth_button = ttk.Button(
+            inventory_cloth_label = Label(
                 grid_frame,
                 image=photo,
-
+                relief="raised",
+                cursor="hand2"
             )
-            inventory_cloth_button.image = photo  # prevent image from being garbage collected
-            inventory_cloth_button.grid(row=row, column=col, padx=10, pady=10)
 
-            print("Displayed button for:", new_img)
+            inventory_cloth_label.image = photo  # prevent garbage collection
+            inventory_cloth_label.grid(row=row, column=col, padx=10, pady=10)
+
+            # Bind click event using functools.partial to pass current photo
+            inventory_cloth_label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo))
+
+            print("Displayed label for:", new_img)
 
             col += 1
             if col >= columns:
@@ -623,6 +666,87 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
             row = index // columns
             col = index % columns
             btn.grid(row=row, column=col, padx=10, pady=10)
+
+        except Exception as e:
+            print(f"Error loading {image_path}:", e)
+
+    if not filtered_items:
+        print("No results found for:", selected_tag)
+
+def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_tag, json_path="closet.json", columns=4):
+    from PIL import Image, ImageTk
+
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+    except Exception as e:
+        print("Could not load JSON file:", e)
+        return
+
+    if username not in data:
+        print("No clothing data for", username)
+        return
+
+    items = data[username]  # {image_path: tags_dict}
+    filtered_items = {}
+
+    for image_path, tags in items.items():
+        tag_list = [value.lower() for value in tags.values()]
+        if selected_tag in tag_list:
+            filtered_items[image_path] = tags
+
+    def clone_to_planner(event,img_obj):
+        width = center_frame.winfo_width()
+        height = center_frame.winfo_height()
+        x = random.randint(0, max(0, width - 150))
+        y = random.randint(0, max(0, height - 150))
+
+        clone = Label(center_frame, image=img_obj, relief="solid")
+        clone.image = img_obj
+        clone.place(x=x, y=y)
+
+        def start_drag(e):
+            clone.startX = e.x
+            clone.startY = e.y
+
+        def on_drag(e):
+            new_x = clone.winfo_x() + e.x - clone.startX
+            new_y = clone.winfo_y() + e.y - clone.startY
+            new_x = max(0, min(new_x, width - 150))
+            new_y = max(0, min(new_y, height - 150))
+            clone.place(x=new_x, y=new_y)
+
+        def on_clone_click(event):
+            answer = messagebox.askyesno("Delete Item", "Do you want to delete this item from the outfit?")
+            if answer:
+                clone.destroy()
+
+        clone.bind("<Button-1>", start_drag)
+        clone.bind("<B1-Motion>", on_drag)
+        clone.bind("<Double-Button-1>", on_clone_click)
+
+    for index, (image_path, tags) in enumerate(filtered_items.items()):
+        try:
+            img = Image.open(image_path.strip())
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+
+            label = Label(
+                grid_frame,
+                image=photo,
+                relief="raised",
+                cursor="hand2"
+            )
+            label.image = photo
+
+            row = index // columns
+            col = index % columns
+            label.grid(row=row, column=col, padx=10, pady=10)
+
+            label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo))
 
         except Exception as e:
             print(f"Error loading {image_path}:", e)
@@ -1030,7 +1154,7 @@ def search_outfit_inventory():
     if selected_tag == "":
         display_clothes_plangrid(plan_frame, username=username)
     else:
-        display_filtered_clothes(plan_frame, username=username, selected_tag=selected_tag)
+        display_filtered_clothes_plan(plan_frame,plan_center_frame ,username=username, selected_tag=selected_tag)
 
 
 # ----- Center Frame -----
@@ -1108,7 +1232,7 @@ def search_outfit_inventory2():
     if selected_tag == "":
         display_clothes_plangrid(plan2_frame, username=username)
     else:
-        display_filtered_clothes(plan2_frame, username=username, selected_tag=selected_tag)
+        display_filtered_clothes_plan(plan2_frame,plan_center_frame, username=username, selected_tag=selected_tag)
 
 # ----- Mousewheel binding -----
 def bind_mousewheel_to(canvas):
@@ -1119,8 +1243,6 @@ def bind_mousewheel_to(canvas):
 
 bind_mousewheel_to(plan_canvas)
 bind_mousewheel_to(plan2_canvas)
-
-
 
 
 
@@ -1146,7 +1268,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
 
 
 
-next_page(page8)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
