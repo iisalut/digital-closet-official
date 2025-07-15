@@ -4,7 +4,7 @@ from ttkbootstrap.constants import *
 from tkinter import *
 import json
 import os
-from PIL import Image, ImageTk, UnidentifiedImageError
+from PIL import Image, ImageTk, UnidentifiedImageError,ImageGrab
 import pillow_heif
 pillow_heif.register_heif_opener()
 from tkinter.filedialog import askopenfilename
@@ -555,7 +555,7 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
     col = 0
     import random  # Add this import at the top of your file
 
-    def clone_to_planner(event, img_obj):
+    def clone_to_planner(event, img_obj, original_path):
         # Get center_frame's size
         width = center_frame.winfo_width()
         height = center_frame.winfo_height()
@@ -588,10 +588,15 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
         clone.bind("<B1-Motion>", on_drag)
 
         def on_clone_click(event):
-            answer= messagebox.askyesno("delete Item", "Do you want to delete this item from outfit ?")
+            answer = messagebox.askyesno("Delete", "Do you want to delete this item?")
             if answer:
                 clone.destroy()
+                if original_path in used_items:
+                    used_items.remove(original_path)
+
         clone.bind("<Double-Button-1>", on_clone_click)
+        if original_path not in used_items:
+            used_items.append(original_path)
 
     for image_path, tags in items.items():
         new_img = image_path.strip()
@@ -613,7 +618,7 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
             inventory_cloth_label.grid(row=row, column=col, padx=10, pady=10)
 
             # Bind click event using functools.partial to pass current photo
-            inventory_cloth_label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo))
+            inventory_cloth_label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo, original_path=new_img))
 
             print("Displayed label for:", new_img)
 
@@ -753,6 +758,44 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
 
     if not filtered_items:
         print("No results found for:", selected_tag)
+#--------- snapshot feature----
+used_items = [] # stores current cloth items :D
+def take_snapshot(widget,username):
+    global used_items
+
+    widget.update()
+
+    x= widget.winfo_rootx()
+    y= widget.winfo_rooty()
+    width= widget.winfo_rootx()
+    height= widget.winfo_rooty()
+    box= (x,y, x+width, y+height)
+
+    snapshot= ImageGrab.grab(box)
+
+    try:
+        with open('closet.json', 'r') as f:
+            data = json.load(f)
+    except:
+        data={}
+
+    if username not in data:
+        data[username]={}
+
+    if "outfits" not in data[username]:
+        data[username]["outfits"] = []
+
+    outfit_count = len(data[username]["outfits"])+1
+
+    filename= f"outfit{outfit_count}.png"
+    snapshot.save(filename)
+    data[username]["outfits"][filename]= used_items.copy()
+
+    with open("closet.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+    messagebox.showinfo("saved",f"outfit saved!")
+    used_items.clear()
 
 
 
@@ -1165,8 +1208,15 @@ plan_center_frame.pack_propagate(False)
 plan_mini_frame = ttk.Frame(plan_center_frame, width=600, height=750)
 plan_mini_frame.pack(pady=1, padx=20)
 
-plan_back_button = ttk.Button(plan_center_frame, text="back", width=6, command=lambda: next_page(page4))
-plan_back_button.pack(side="bottom",pady=15)
+plan_button_frame = ttk.Frame(plan_center_frame, style="Custom.TFrame")
+plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is at the bottom
+
+# Pack buttons side by side inside the frame
+plan_back_button = ttk.Button(plan_button_frame, text="back", width=6, command=lambda: next_page(page4))
+plan_back_button.pack(side="left", padx=10)
+
+plan_save_button = ttk.Button(plan_button_frame, text="save", width=6, command=lambda: take_snapshot(plan_mini_frame, username))
+plan_save_button.pack(side="left", padx=10)
 
 
 # ----- Right Frame -----
@@ -1243,9 +1293,6 @@ def bind_mousewheel_to(canvas):
 
 bind_mousewheel_to(plan_canvas)
 bind_mousewheel_to(plan2_canvas)
-
-
-
 
 
 
