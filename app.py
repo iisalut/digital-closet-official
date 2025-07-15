@@ -760,43 +760,45 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
         print("No results found for:", selected_tag)
 #--------- snapshot feature----
 used_items = [] # stores current cloth items :D
-def take_snapshot(widget,username):
-    global used_items
+def take_snapshot(widget,username,json_path="closet.json"):
+    plan_mini_frame.update()
+    x = plan_mini_frame.winfo_rootx()
+    y = plan_mini_frame.winfo_rooty()
+    w = x + plan_mini_frame.winfo_width()
+    h = y + plan_mini_frame.winfo_height()
 
-    widget.update()
+    # Create unique filename (customize if needed)
+    filename = f"snapshot_{username}_outfit.png"
 
-    x= widget.winfo_rootx()
-    y= widget.winfo_rooty()
-    width= widget.winfo_rootx()
-    height= widget.winfo_rooty()
-    box= (x,y, x+width, y+height)
-
-    snapshot= ImageGrab.grab(box)
-
-    try:
-        with open('closet.json', 'r') as f:
-            data = json.load(f)
-    except:
-        data={}
-
-    if username not in data:
-        data[username]={}
-
-    if "outfits" not in data[username]:
-        data[username]["outfits"] = []
-
-    outfit_count = len(data[username]["outfits"])+1
-
-    filename= f"outfit{outfit_count}.png"
+    # Grab image of the planner area and save
+    snapshot = ImageGrab.grab(bbox=(x, y, w, h))
     snapshot.save(filename)
-    data[username]["outfits"][filename]= used_items.copy()
 
-    with open("closet.json", "w") as f:
+    # Load JSON data
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+    except json.JSONDecodeError:
+        data = {}
+
+    # Ensure the user exists in the data
+    if username not in data:
+        data[username] = {}
+
+    # Ensure "outfits" exists and is a dict
+    if "outfits" not in data[username] or not isinstance(data[username]["outfits"], dict):
+        data[username]["outfits"] = {}
+
+    # Save outfit (used_items must be defined globally or passed in)
+    data[username]["outfits"][filename] = used_items.copy()
+
+    # Write updated JSON data back to file
+    with open(json_path, "w") as f:
         json.dump(data, f, indent=4)
 
-    messagebox.showinfo("saved",f"outfit saved!")
-    used_items.clear()
-
+    messagebox.showinfo("Saved", f"Outfit saved as {filename}")
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
@@ -1314,8 +1316,8 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
 
 
 
-
 next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
+
