@@ -246,7 +246,7 @@ home_inventory_button.pack(side='left', padx=10)
 home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_frame, username),display_clothes_plangrid(plan2_frame,plan_mini_frame, username)])
 home_closet_button.pack(side='left', padx=10)
 
-home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15)
+home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: next_page(page9))
 home_saved_button.pack(side='left', padx=10)
 #</editor-fold>
 
@@ -1131,8 +1131,9 @@ edit_save_button.pack(pady=20)
 edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
 edit_delete_button.pack(pady=0)
 #</editor-fold>
-#----------- make outfits page (page8)-----------
 
+#----------- make outfits page (page8)-----------
+#<editor-fold 2">
 page8 = ttk.Frame(window, style="Custom.TFrame")
 page8.grid(row=0, column=0, sticky="nsew")
 page8.grid_propagate(False)
@@ -1309,7 +1310,37 @@ def bind_mousewheel_to(canvas):
 
 bind_mousewheel_to(plan_canvas)
 bind_mousewheel_to(plan2_canvas)
+#</editor-fold>
 
+#----------- display all outfits page (page9)----
+page9 = ttk.Frame(window, style="Custom.TFrame")
+page9.grid(row=0, column=0, sticky="nsew")
+page9.grid_propagate(False)
+
+fit_header = ttk.Label(page9, text="Outfit Planner", style="Header.TLabel")
+fit_header.pack(pady=10, padx=10)
+
+fit_canvas_frame = ttk.Frame(page9, style="Custom.TFrame",width=800, height=900)
+fit_canvas_frame.pack(pady=10, padx=0, )
+
+fit_canvas = Canvas(fit_canvas_frame, bg="beige",width=860, height=860)  # Just using Canvas since it's imported
+fit_scrollbar = ttk.Scrollbar(fit_canvas_frame, orient="vertical", command=fit_canvas.yview)
+fit_grid_frame = ttk.Frame(fit_canvas, style="Custom.TFrame")
+
+
+fit_canvas.configure(yscrollcommand=fit_scrollbar.set)
+
+fit_scrollbar.pack(side="right", fill="y")
+fit_canvas.pack(side="left" )
+
+
+fit_canvas.create_window((0, 0), window=fit_grid_frame, anchor="nw")
+
+
+def configure_scroll_region(event):
+    fit_canvas.configure(scrollregion=fit_canvas.bbox("all"))
+
+fit_grid_frame.bind("<Configure>", configure_scroll_region)
 
 
 
@@ -1324,13 +1355,13 @@ def next_page(frame):
     frame.tkraise()
 
 # Configure all frames
-for frame in (page1, page2, page3, page4, page5, page6, page7, page8):
+for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
     frame.grid(row=0, column=0, sticky="nsew")
 
 
 
 
-next_page(page1)  # Start by showing the welcome page
+next_page(page9)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
