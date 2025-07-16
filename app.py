@@ -12,6 +12,7 @@ from tkinter import messagebox
 from tkinter import Canvas
 import functools
 import random
+import time
 
 
 
@@ -767,8 +768,11 @@ def take_snapshot(widget,username,json_path="closet.json"):
     w = x + plan_mini_frame.winfo_width()
     h = y + plan_mini_frame.winfo_height()
 
-    # Create unique filename (customize if needed)
-    filename = f"snapshot_{username}_outfit.png"
+    #need to add timestamps to fix override issue (new skill ;D)
+    # Create unique filename (customize if needed later )
+    timestamp= time.strftime("%Y%m%d-%H%M%S")
+    filename = f"snapshot_{username}_outfit_{timestamp}.png"
+
 
     # Grab image of the planner area and save
     snapshot = ImageGrab.grab(bbox=(x, y, w, h))
@@ -799,6 +803,13 @@ def take_snapshot(widget,username,json_path="closet.json"):
         json.dump(data, f, indent=4)
 
     messagebox.showinfo("Saved", f"Outfit saved as {filename}")
+
+def clear_outfit_frame():
+    for widget in plan_mini_frame.winfo_children():
+        widget.destroy()
+
+    used_items.clear()
+    messagebox.showinfo("Cleared", f"Outfit cleared")
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
@@ -1219,6 +1230,9 @@ plan_back_button.pack(side="left", padx=10)
 
 plan_save_button = ttk.Button(plan_button_frame, text="save", width=6, command=lambda: take_snapshot(plan_mini_frame, username))
 plan_save_button.pack(side="left", padx=10)
+
+plan_clear_button = ttk.Button(plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
+plan_clear_button.pack(side="left", padx=10)
 
 
 # ----- Right Frame -----
