@@ -246,7 +246,7 @@ home_inventory_button.pack(side='left', padx=10)
 home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_frame, username),display_clothes_plangrid(plan2_frame,plan_mini_frame, username)])
 home_closet_button.pack(side='left', padx=10)
 
-home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: next_page(page9))
+home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page9),display_saved_outfits(fit_grid_frame, fit_canvas_frame, username)])
 home_saved_button.pack(side='left', padx=10)
 #</editor-fold>
 
@@ -632,7 +632,7 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
             print(f"Could not display cloth for {new_img}:", e)
 
 def display_filtered_clothes(grid_frame, username, selected_tag, json_path="closet.json", columns=4):
-    from PIL import Image, ImageTk
+
 
     for widget in grid_frame.winfo_children():
         widget.destroy()
@@ -810,6 +810,90 @@ def clear_outfit_frame():
 
     used_items.clear()
     messagebox.showinfo("Cleared", f"Outfit cleared")
+
+def display_saved_outfits(grid_frame, display_frame, username, json_path="closet.json", columns=2):
+    from PIL import Image, ImageTk
+
+    # Clear previous widgets
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+
+        # Check if user exists
+        if username not in data:
+            print(f"Username '{username}' not found in data.")
+            return
+
+        user_data = data[username]
+
+        # Check if outfits exist for this user
+        if "outfits" not in user_data:
+            print(f"No outfits found for user '{username}'.")
+            return
+
+        outfits = user_data["outfits"]
+
+        # Iterate through outfits
+        for index, (snapshot_name, outfit_clothes_paths) in enumerate(outfits.items()):
+            print(f"Outfit {index+1}: {snapshot_name} with {len(outfit_clothes_paths)} items")
+
+            try:
+                # Load snapshot image (the outfit's saved snapshot image)
+                img = Image.open(snapshot_name.strip())
+                img = img.resize((300, 400), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+
+                frame = ttk.Frame(grid_frame)
+                frame.grid(row=index // columns, column=index % columns, padx=10, pady=10)
+
+                btn = ttk.Button(
+                    frame,
+                    image=photo,
+                    command=lambda key=snapshot_name: load_outfit(key, display_frame, username)
+                )
+                btn.image = photo  # Keep a reference!
+                btn.pack()
+            except Exception as e:
+                print(f"Error loading snapshot image '{snapshot_name}':", e)
+
+    except Exception as e:
+        print("Error loading JSON file or parsing data:", e)
+
+
+def load_outfit(snapshot_key, display_frame, json_path="closet.json"):
+    from PIL import Image, ImageTk
+
+    # Clear previous displayed clothing
+    for widget in display_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+            outfit_paths = data["outfits"].get(snapshot_key, [])
+    except Exception as e:
+        print("Error loading outfit:", e)
+        return
+
+    for path in outfit_paths:
+        try:
+            img = Image.open(path.strip())
+            img = img.resize((120, 120), Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+
+            label = ttk.Label(display_frame, image=photo)
+            label.image = photo
+            label.pack(side="left", padx=5)
+        except Exception as e:
+            print(f"Error displaying item {path}:", e)
+
+
+
+
+
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
@@ -1323,7 +1407,7 @@ fit_header.pack(pady=10, padx=10)
 fit_canvas_frame = ttk.Frame(page9, style="Custom.TFrame",width=800, height=900)
 fit_canvas_frame.pack(pady=10, padx=0, )
 
-fit_canvas = Canvas(fit_canvas_frame, bg="beige",width=860, height=860)  # Just using Canvas since it's imported
+fit_canvas = Canvas(fit_canvas_frame, bg="beige",width=680, height=860)  # Just using Canvas since it's imported
 fit_scrollbar = ttk.Scrollbar(fit_canvas_frame, orient="vertical", command=fit_canvas.yview)
 fit_grid_frame = ttk.Frame(fit_canvas, style="Custom.TFrame")
 
@@ -1345,9 +1429,6 @@ fit_grid_frame.bind("<Configure>", configure_scroll_region)
 
 
 
-
-
-
 # Function to raise the frame
 def next_page(frame):
     if frame == page4:
@@ -1361,8 +1442,9 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
 
 
 
-next_page(page9)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
+
 
