@@ -763,44 +763,48 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
 used_items = [] # stores current cloth items :D
 currently_loaded_snapshot = None  # Global tracker for deleting old snapshot
 
-def take_snapshot(widget,username,json_path="closet.json"):
+def take_snapshot(widget, username, json_path="closet.json"):
     plan_mini_frame.update()
     x = plan_mini_frame.winfo_rootx()
     y = plan_mini_frame.winfo_rooty()
     w = x + plan_mini_frame.winfo_width()
     h = y + plan_mini_frame.winfo_height()
 
-    #need to add timestamps to fix override issue (new skill ;D)
-    # Create unique filename (customize if needed later )
-    timestamp= time.strftime("%Y%m%d-%H%M%S")
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
     filename = f"snapshot_{username}_outfit_{timestamp}.png"
 
 
-    # Grab image of the planner area and save
     snapshot = ImageGrab.grab(bbox=(x, y, w, h))
     snapshot.save(filename)
 
-    # Load JSON data
+
     try:
         with open(json_path, "r") as f:
             data = json.load(f)
-    except FileNotFoundError:
-        data = {}
-    except json.JSONDecodeError:
+    except (FileNotFoundError, json.JSONDecodeError):
         data = {}
 
-    # Ensure the user exists in the data
     if username not in data:
         data[username] = {}
 
-    # Ensure "outfits" exists and is a dict
     if "outfits" not in data[username] or not isinstance(data[username]["outfits"], dict):
         data[username]["outfits"] = {}
 
-    # Save outfit (used_items must be defined globally or passed in)
+
+    global currently_loaded_snapshot
+    if currently_loaded_snapshot:
+        old_file = currently_loaded_snapshot
+        try:
+            os.remove(old_file)
+            print(f"Deleted old snapshot: {old_file}")
+        except:
+            print(f"Could not delete old file: {old_file}")
+        data[username]["outfits"].pop(old_file, None)
+        currently_loaded_snapshot = None  # Reset after deleting
+
+
     data[username]["outfits"][filename] = used_items.copy()
 
-    # Write updated JSON data back to file
     with open(json_path, "w") as f:
         json.dump(data, f, indent=4)
 
@@ -811,10 +815,15 @@ def clear_outfit_frame():
         widget.destroy()
 
     used_items.clear()
-    messagebox.showinfo("Cleared", f"Outfit cleared")
+
+    global currently_loaded_snapshot
+    currently_loaded_snapshot = None
+
+    messagebox.showinfo("Cleared", "Outfit cleared")
+
 
 def display_saved_outfits(grid_frame, display_frame, username, json_path="closet.json", columns=2):
-    from PIL import Image, ImageTk
+
 
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
@@ -854,7 +863,8 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
                 btn = ttk.Button(
                     frame,
                     image=photo,
-                    command=lambda key=snapshot_name: load_outfit(key, display_frame, username)
+                    command=lambda key=snapshot_name: load_outfit(key, display_frame=fit_plan_mini_frame,username=username)
+
                 )
                 btn.image = photo  # Keep a reference!
                 btn.pack()
@@ -865,19 +875,21 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
         print("Error loading JSON file or parsing data:", e)
 
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
-    global currently_loaded_snapshot
+    global currently_loaded_snapshot, used_items
     currently_loaded_snapshot = snapshot_key
 
+    # ---- Switch to page10 ----
+    page10.tkraise()
 
-    for widget in display_frame.winfo_children():
+    # ---- Clear current outfit ----
+    for widget in fit_plan_mini_frame.winfo_children():
         widget.destroy()
     used_items.clear()
 
+    # ---- Load the outfit ----
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
-
-            # Get outfit items
             outfit_paths = data[username]["outfits"].get(snapshot_key, [])
     except Exception as e:
         print("Error loading outfit:", e)
@@ -889,19 +901,14 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
             img = img.resize((120, 120), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            label = ttk.Label(display_frame, image=photo)
+            label = ttk.Label(fit_plan_mini_frame, image=photo)
             label.image = photo
             label.path = path.strip()
             label.pack(side="left", padx=5)
 
-            used_items.append(path.strip())
+            used_items.append(path.strip())  # For saving
         except Exception as e:
             print(f"Error displaying item {path}:", e)
-
-
-
-
-
 
 
 
@@ -1632,7 +1639,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
 
 
 
-next_page(page10)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
