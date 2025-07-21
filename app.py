@@ -864,7 +864,7 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
 
 
 def load_outfit(snapshot_key, display_frame, json_path="closet.json"):
-    from PIL import Image, ImageTk
+
 
     # Clear previous displayed clothing
     for widget in display_frame.winfo_children():
@@ -1407,19 +1407,22 @@ fit_header.pack(pady=10, padx=10)
 fit_canvas_frame = ttk.Frame(page9, style="Custom.TFrame",width=800, height=900)
 fit_canvas_frame.pack(pady=10, padx=0, )
 
-fit_canvas = Canvas(fit_canvas_frame, bg="beige",width=680, height=860)  # Just using Canvas since it's imported
+fit_canvas = Canvas(fit_canvas_frame, bg="beige",width=680, height=760)  # Just using Canvas since it's imported
 fit_scrollbar = ttk.Scrollbar(fit_canvas_frame, orient="vertical", command=fit_canvas.yview)
 fit_grid_frame = ttk.Frame(fit_canvas, style="Custom.TFrame")
 
 
 fit_canvas.configure(yscrollcommand=fit_scrollbar.set)
-
 fit_scrollbar.pack(side="right", fill="y")
 fit_canvas.pack(side="left" )
 
-
 fit_canvas.create_window((0, 0), window=fit_grid_frame, anchor="nw")
 
+fit_button_frame = ttk.Frame(page9,style="Custom.TFrame")
+fit_button_frame.pack(pady=10, padx=10,side="bottom")
+
+fit_back_button = ttk.Button(fit_button_frame, text="Back", command=lambda: next_page(page5))
+fit_back_button.pack(pady=10, padx=10)
 
 def configure_scroll_region(event):
     fit_canvas.configure(scrollregion=fit_canvas.bbox("all"))
