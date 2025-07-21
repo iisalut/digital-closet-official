@@ -126,6 +126,34 @@ def login_verification():
         login_password_error.configure(text='Account not found')
 
 
+# ---- Global drag variables ----
+drag_data = {
+    "widget": None,
+    "x": 0,
+    "y": 0
+}
+
+def on_start_drag(event):
+    widget = event.widget
+    drag_data["widget"] = widget
+    drag_data["x"] = event.x
+    drag_data["y"] = event.y
+
+def on_drag_motion(event):
+    widget = drag_data["widget"]
+    if widget:
+        x = widget.winfo_x() + event.x - drag_data["x"]
+        y = widget.winfo_y() + event.y - drag_data["y"]
+
+
+        x = max(0, min(x, 600 - 120))
+        y = max(0, min(y, 750 - 120))
+
+        widget.place(x=x, y=y)
+
+def on_end_drag(event):
+    drag_data["widget"] = None
+
 
 # Page 1 - Welcome page
 #<editor-fold desc="Welcome page 1">
@@ -890,6 +918,31 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
     except Exception as e:
         print("Error loading JSON file or parsing data:", e)
 
+from tkinter import Label  # Use tk.Label, not ttk.Label
+
+# Drag state tracking
+drag_data = {
+    "widget": None,
+    "x": 0,
+    "y": 0
+}
+
+def on_start_drag(event):
+    drag_data["widget"] = event.widget
+    drag_data["x"] = event.x
+    drag_data["y"] = event.y
+
+def on_drag_motion(event):
+    widget = drag_data["widget"]
+    if widget:
+        x = widget.winfo_x() + event.x - drag_data["x"]
+        y = widget.winfo_y() + event.y - drag_data["y"]
+        widget.place(x=x, y=y)
+
+def on_end_drag(event):
+    drag_data["widget"] = None
+
+
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
     global currently_loaded_snapshot, used_items
     currently_loaded_snapshot = snapshot_key
@@ -911,20 +964,41 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
         print("Error loading outfit:", e)
         return
 
+    def on_label_click(event):
+        label_answer = messagebox.askyesno("Delete", "Do you want to delete this item?")
+        if label_answer:
+            label.destroy()
+            if hasattr(label, "path") and label.path in used_items:
+                used_items.remove(label.path)
+
+
+
     for path in outfit_paths:
         try:
             img = Image.open(path.strip())
-            img = img.resize((120, 120), Image.Resampling.LANCZOS)
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            label = ttk.Label(fit_plan_mini_frame, image=photo)
+            label = Label(fit_plan_mini_frame, image=photo, bd=0)  # Use tk.Label
             label.image = photo
             label.path = path.strip()
-            label.pack(side="left", padx=5)
+
+            x = random.randint(0, max(0, 600 - 120))
+            y = random.randint(0, max(0, 750 - 120))
+
+            label.place(x=x, y=y)  # Position anywhere; you can randomize
+
+            # Bind drag events
+            label.bind("<Button-1>", on_start_drag)
+            label.bind("<B1-Motion>", on_drag_motion)
+            label.bind("<ButtonRelease-1>", on_end_drag)
+            label.bind("<Double-Button-1>", on_label_click)
 
             used_items.append(path.strip())  # For saving
+
         except Exception as e:
             print(f"Error displaying item {path}:", e)
+
 
 
 
