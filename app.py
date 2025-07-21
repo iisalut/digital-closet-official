@@ -650,9 +650,15 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
 
     items = data[username]  # {image_path: tags_dict}
     filtered_items = {}
-
+# need to do this cuz json has both dict and list values
     for image_path, tags in items.items():
-        tag_list = [value.lower() for value in tags.values()]
+        if isinstance(tags, dict):
+            tag_list = [str(value).lower() for value in tags.values()]
+        elif isinstance(tags, list):
+            tag_list = [str(value).lower() for value in tags]
+        else:
+            tag_list = []
+
         if selected_tag in tag_list:
             filtered_items[image_path] = tags
 
@@ -679,12 +685,12 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
     if not filtered_items:
         print("No results found for:", selected_tag)
 
-def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_tag, json_path="closet.json", columns=4):
-    from PIL import Image, ImageTk
-
+def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_tag, json_path="closet.json", columns=4):
+    # Clear previous thumbnails
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
+    # Load clothing data
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
@@ -696,15 +702,25 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
         print("No clothing data for", username)
         return
 
-    items = data[username]  # {image_path: tags_dict}
+    user_items = data[username]  # Dictionary of {image_path: tags_dict or tags_list}
     filtered_items = {}
 
-    for image_path, tags in items.items():
-        tag_list = [value.lower() for value in tags.values()]
-        if selected_tag in tag_list:
-            filtered_items[image_path] = tags
+    # Filter items by tag
+    for image_path, tags in user_items.items():
+        try:
+            if isinstance(tags, dict):
+                tag_list = [str(v).lower() for v in tags.values()]
+            elif isinstance(tags, list):
+                tag_list = [str(v).lower() for v in tags]
+            else:
+                continue
 
-    def clone_to_planner(event,img_obj):
+            if selected_tag.lower() in tag_list:
+                filtered_items[image_path] = tags
+        except Exception as e:
+            print(f"Error processing tags for {image_path}:", e)
+
+    def clone_to_planner(event, img_obj):
         width = center_frame.winfo_width()
         height = center_frame.winfo_height()
         x = random.randint(0, max(0, width - 150))
@@ -725,31 +741,25 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
             new_y = max(0, min(new_y, height - 150))
             clone.place(x=new_x, y=new_y)
 
-        def on_clone_click(event):
-            answer = messagebox.askyesno("Delete Item", "Do you want to delete this item from the outfit?")
-            if answer:
+        def on_clone_click(e):
+            if messagebox.askyesno("Delete Item", "Do you want to delete this item from the outfit?"):
                 clone.destroy()
 
         clone.bind("<Button-1>", start_drag)
         clone.bind("<B1-Motion>", on_drag)
         clone.bind("<Double-Button-1>", on_clone_click)
 
-    for index, (image_path, tags) in enumerate(filtered_items.items()):
+    # Display filtered items
+    for index, (image_path, _) in enumerate(filtered_items.items()):
         try:
             img = Image.open(image_path.strip())
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            label = Label(
-                grid_frame,
-                image=photo,
-                relief="raised",
-                cursor="hand2"
-            )
+            label = Label(grid_frame, image=photo, relief="raised", cursor="hand2")
             label.image = photo
 
-            row = index // columns
-            col = index % columns
+            row, col = divmod(index, columns)
             label.grid(row=row, column=col, padx=10, pady=10)
 
             label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo))
@@ -758,7 +768,8 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
             print(f"Error loading {image_path}:", e)
 
     if not filtered_items:
-        print("No results found for:", selected_tag)
+        print("No results found for tag:", selected_tag)
+
 #--------- snapshot feature----
 used_items = [] # stores current cloth items :D
 currently_loaded_snapshot = None  # Global tracker for deleting old snapshot
@@ -860,10 +871,15 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
                 frame = ttk.Frame(grid_frame)
                 frame.grid(row=index // columns, column=index % columns, padx=10, pady=10)
 
+                def on_snapshot_click(key=snapshot_name):
+                    load_outfit(key, display_frame=fit_plan_mini_frame, username=username)
+                    display_clothes_plangrid(fit_plan_frame, fit_plan_mini_frame, username)
+                    display_clothes_plangrid(fit_plan2_frame, fit_plan_mini_frame, username)
+
                 btn = ttk.Button(
                     frame,
                     image=photo,
-                    command=lambda key=snapshot_name: load_outfit(key, display_frame=fit_plan_mini_frame,username=username)
+                    command= on_snapshot_click
 
                 )
                 btn.image = photo  # Keep a reference!
@@ -1481,7 +1497,7 @@ fit_plan_autocomplete_Listbox = Listbox(fit_plan_left_frame, height=3)
 fit_plan_autocomplete_Listbox.place_forget()
 fit_plan_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: fit_select_plan_suggestions())
 
-# --- Scrollable canvas for clothing items ---
+# --- Scrollable canvas for clothing it  ems ---
 fit_plan_canvas = Canvas(fit_plan_left_frame, bg="beige", width=350, height=800)
 fit_plan_scrollbar = ttk.Scrollbar(fit_plan_left_frame, orient="vertical", command=fit_plan_canvas.yview)
 fit_plan_frame = ttk.Frame(fit_plan_canvas, style="Custom.TFrame")
@@ -1536,6 +1552,7 @@ fit_plan_center_frame.pack_propagate(False)
 
 fit_plan_mini_frame = ttk.Frame(fit_plan_center_frame, width=600, height=750)
 fit_plan_mini_frame.pack(pady=1, padx=20)
+fit_plan_mini_frame.pack_propagate(False)
 
 fit_plan_button_frame = ttk.Frame(fit_plan_center_frame, style="Custom.TFrame")
 fit_plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is at the bottom
