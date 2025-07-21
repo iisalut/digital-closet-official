@@ -761,6 +761,8 @@ def display_filtered_clothes_plan(grid_frame, center_frame,username, selected_ta
         print("No results found for:", selected_tag)
 #--------- snapshot feature----
 used_items = [] # stores current cloth items :D
+currently_loaded_snapshot = None  # Global tracker for deleting old snapshot
+
 def take_snapshot(widget,username,json_path="closet.json"):
     plan_mini_frame.update()
     x = plan_mini_frame.winfo_rootx()
@@ -862,18 +864,21 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
     except Exception as e:
         print("Error loading JSON file or parsing data:", e)
 
+def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
+    global currently_loaded_snapshot
+    currently_loaded_snapshot = snapshot_key
 
-def load_outfit(snapshot_key, display_frame, json_path="closet.json"):
 
-
-    # Clear previous displayed clothing
     for widget in display_frame.winfo_children():
         widget.destroy()
+    used_items.clear()
 
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
-            outfit_paths = data["outfits"].get(snapshot_key, [])
+
+            # Get outfit items
+            outfit_paths = data[username]["outfits"].get(snapshot_key, [])
     except Exception as e:
         print("Error loading outfit:", e)
         return
@@ -886,9 +891,13 @@ def load_outfit(snapshot_key, display_frame, json_path="closet.json"):
 
             label = ttk.Label(display_frame, image=photo)
             label.image = photo
+            label.path = path.strip()
             label.pack(side="left", padx=5)
+
+            used_items.append(path.strip())
         except Exception as e:
             print(f"Error displaying item {path}:", e)
+
 
 
 
@@ -1397,6 +1406,7 @@ bind_mousewheel_to(plan2_canvas)
 #</editor-fold>
 
 #----------- display all outfits page (page9)----
+#<editor-fold>
 page9 = ttk.Frame(window, style="Custom.TFrame")
 page9.grid(row=0, column=0, sticky="nsew")
 page9.grid_propagate(False)
@@ -1421,16 +1431,193 @@ fit_canvas.create_window((0, 0), window=fit_grid_frame, anchor="nw")
 fit_button_frame = ttk.Frame(page9,style="Custom.TFrame")
 fit_button_frame.pack(pady=10, padx=10,side="bottom")
 
-fit_back_button = ttk.Button(fit_button_frame, text="Back", command=lambda: next_page(page5))
+fit_back_button = ttk.Button(fit_button_frame, text="Back", command=lambda: next_page(page4))
 fit_back_button.pack(pady=10, padx=10)
 
 def configure_scroll_region(event):
     fit_canvas.configure(scrollregion=fit_canvas.bbox("all"))
 
 fit_grid_frame.bind("<Configure>", configure_scroll_region)
+#------------page10(outfit edit)------
+
+page10 = ttk.Frame(window,style="Custom.TFrame")
+page10.grid(row=0, column=0, sticky="nsew")
+page10.grid_propagate(False)
+
+fit_edit_header = ttk.Label(page10, text="Edit Outfit", style="Header.TLabel")
+fit_edit_header.pack(pady=10, padx=10)
+
+fit_plan_header = ttk.Label(page10, text="Outfit Planner", style="Header.TLabel")
+plan_header.pack(pady=10, padx=10)
+
+fit_big_frame = ttk.Frame(page10, style="Custom.TFrame")
+fit_big_frame.pack(pady=10, padx=0)
+
+# ----- Left Frame -----
+
+# ---- Outfit Planner LEFT PANEL (page10) ----
+fit_plan_left_frame = ttk.Frame(fit_big_frame, width=350, height=900)
+fit_plan_left_frame.pack(pady=1, padx=3, side="left")
+
+# --- Entry section at the top ---
+fit_entry_section = ttk.Frame(fit_plan_left_frame, style="Custom.TFrame")
+fit_entry_section.pack(fill="x", pady=0, side="top")
+
+fit_plan_entry = ttk.Entry(fit_entry_section, width=25)
+fit_plan_entry.pack(side="left", padx=(5, 5))
+fit_plan_entry.bind("<KeyRelease>", lambda e: fit_show_plan_suggestions())
+
+fit_plan_search_button = ttk.Button(fit_entry_section, text="search", width=6, command=lambda: fit_search_outfit_inventory())
+fit_plan_search_button.pack(side="left")
+
+fit_plan_autocomplete_Listbox = Listbox(fit_plan_left_frame, height=3)
+fit_plan_autocomplete_Listbox.place_forget()
+fit_plan_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: fit_select_plan_suggestions())
+
+# --- Scrollable canvas for clothing items ---
+fit_plan_canvas = Canvas(fit_plan_left_frame, bg="beige", width=350, height=800)
+fit_plan_scrollbar = ttk.Scrollbar(fit_plan_left_frame, orient="vertical", command=fit_plan_canvas.yview)
+fit_plan_frame = ttk.Frame(fit_plan_canvas, style="Custom.TFrame")
+
+fit_plan_canvas.configure(yscrollcommand=fit_plan_scrollbar.set)
+fit_plan_scrollbar.pack(side="right", fill="y")
+fit_plan_canvas.pack(side="left", fill="both", expand=True)
+fit_plan_canvas.create_window((0, 0), window=fit_plan_frame, anchor="nw")
+fit_plan_frame.bind("<Configure>", lambda e: fit_plan_canvas.configure(scrollregion=fit_plan_canvas.bbox("all")))
+
+# --- Autocomplete suggestions ---
+def fit_show_plan_suggestions():
+    user_input = fit_plan_entry.get().lower()
+    fit_plan_autocomplete_Listbox.delete(0, END)
+
+    if user_input == "":
+        fit_plan_autocomplete_Listbox.place_forget()
+        return
+
+    matches = [tag for tag in search_tags if user_input in tag.lower()]
+    if matches:
+        for tag in matches:
+            fit_plan_autocomplete_Listbox.insert(END, tag)
+        fit_plan_autocomplete_Listbox.place(
+            x=fit_plan_entry.winfo_x(),
+            y=fit_plan_entry.winfo_y() + fit_plan_entry.winfo_height()
+        )
+        fit_plan_autocomplete_Listbox.lift()
+    else:
+        fit_plan_autocomplete_Listbox.place_forget()
+
+def fit_select_plan_suggestions():
+    selection = fit_plan_autocomplete_Listbox.curselection()
+    if selection:
+        selected_tag = fit_plan_autocomplete_Listbox.get(selection[0])
+        fit_plan_entry.delete(0, END)
+        fit_plan_entry.insert(0, selected_tag)
+        fit_plan_autocomplete_Listbox.place_forget()
+
+# --- Search handler for planner ---
+def fit_search_outfit_inventory():
+    selected_tag = fit_plan_entry.get().strip().lower()
+    if selected_tag == "":
+        display_clothes_plangrid(fit_plan_frame, username=username)
+    else:
+        display_filtered_clothes_plan(fit_plan_frame, fit_plan_center_frame, username=username, selected_tag=selected_tag)
+
+# ----- Center Frame -----
+fit_plan_center_frame = ttk.Frame(fit_big_frame, width=600, height=900, style="Custom.TFrame")
+fit_plan_center_frame.pack(pady=1, padx=20, side="left")
+fit_plan_center_frame.pack_propagate(False)
+
+fit_plan_mini_frame = ttk.Frame(fit_plan_center_frame, width=600, height=750)
+fit_plan_mini_frame.pack(pady=1, padx=20)
+
+fit_plan_button_frame = ttk.Frame(fit_plan_center_frame, style="Custom.TFrame")
+fit_plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is at the bottom
+
+# Pack buttons side by side inside the frame
+fit_plan_back_button = ttk.Button(fit_plan_button_frame, text="back", width=6, command=lambda: next_page(page4))
+fit_plan_back_button.pack(side="left", padx=10)
+
+fit_plan_save_button = ttk.Button(fit_plan_button_frame, text="save", width=6, command=lambda: take_snapshot(fit_plan_mini_frame, username))
+fit_plan_save_button.pack(side="left", padx=10)
+
+fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
+fit_plan_clear_button.pack(side="left", padx=10)
+
+# ----- Right Frame -----
+fit_plan_right_frame = ttk.Frame(fit_big_frame, width=350, height=900)
+fit_plan_right_frame.pack(pady=1, padx=3, side="left")
+
+fit_entry2_section = ttk.Frame(fit_plan_right_frame, style="Custom.TFrame")
+fit_entry2_section.pack(fill="x", pady=0, side="top")
+
+fit_plan2_entry = ttk.Entry(fit_entry2_section, width=25)
+fit_plan2_entry.pack(side="left", padx=(5, 5))
+fit_plan2_entry.bind("<KeyRelease>", lambda e: fit_show_plan2_suggestions())
+
+fit_plan2_search_button = ttk.Button(fit_entry2_section, text="search", width=6, command=lambda: fit_search_outfit_inventory2())
+fit_plan2_search_button.pack(side="left")
+
+fit_plan2_autocomplete_Listbox = Listbox(fit_plan_right_frame, height=3)
+fit_plan2_autocomplete_Listbox.place_forget()
+fit_plan2_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: fit_select_plan2_suggestions())
+
+fit_plan2_canvas = Canvas(fit_plan_right_frame, bg="beige", width=350, height=900)
+fit_plan2_scrollbar = ttk.Scrollbar(fit_plan_right_frame, orient="vertical", command=fit_plan2_canvas.yview)
+fit_plan2_frame = ttk.Frame(fit_plan2_canvas, style="Custom.TFrame")
+
+fit_plan2_canvas.configure(yscrollcommand=fit_plan2_scrollbar.set)
+fit_plan2_scrollbar.pack(side="right", fill="y")
+fit_plan2_canvas.pack(side="left", fill="both", expand=True)
+fit_plan2_canvas.create_window((0, 0), window=fit_plan2_frame, anchor="nw")
+fit_plan2_frame.bind("<Configure>", lambda e: fit_plan2_canvas.configure(scrollregion=fit_plan2_canvas.bbox("all")))
+
+def fit_show_plan2_suggestions():
+    user_input = fit_plan2_entry.get().lower()
+    fit_plan2_autocomplete_Listbox.delete(0, END)
+
+    if user_input == "":
+        fit_plan2_autocomplete_Listbox.place_forget()
+        return
+
+    matches = [tag for tag in search_tags if user_input in tag.lower()]
+    if matches:
+        for tag in matches:
+            fit_plan2_autocomplete_Listbox.insert(END, tag)
+        fit_plan2_autocomplete_Listbox.place(
+            x=fit_plan2_entry.winfo_x(),
+            y=fit_plan2_entry.winfo_y() + fit_plan2_entry.winfo_height()
+        )
+        fit_plan2_autocomplete_Listbox.lift()
+    else:
+        fit_plan2_autocomplete_Listbox.place_forget()
+
+def fit_select_plan2_suggestions():
+    selection = fit_plan2_autocomplete_Listbox.curselection()
+    if selection:
+        selected_tag = fit_plan2_autocomplete_Listbox.get(selection[0])
+        fit_plan2_entry.delete(0, END)
+        fit_plan2_entry.insert(0, selected_tag)
+        fit_plan2_autocomplete_Listbox.place_forget()
+
+def fit_search_outfit_inventory2():
+    selected_tag = fit_plan2_entry.get().strip().lower()
+    if selected_tag == "":
+        display_clothes_plangrid(fit_plan2_frame, username=username)
+    else:
+        display_filtered_clothes_plan(fit_plan2_frame, fit_plan_center_frame, username=username, selected_tag=selected_tag)
+
+# ----- Mousewheel binding -----
+def fit_bind_mousewheel_to(canvas):
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+    canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
+    canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+
+fit_bind_mousewheel_to(fit_plan_canvas)
+fit_bind_mousewheel_to(fit_plan2_canvas)
 
 
-
+#</editor-fold>
 
 # Function to raise the frame
 def next_page(frame):
@@ -1445,7 +1632,7 @@ for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
 
 
 
-next_page(page1)  # Start by showing the welcome page
+next_page(page10)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
