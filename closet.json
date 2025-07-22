@@ -56,15 +56,41 @@
             "occasion": "Formal",
             "material": "Cotton"
         },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2036.heic",
+            "type": "Dress",
+            "color": "Green",
+            "season": "Spring",
+            "occasion": "Formal",
+            "material": "Cotton"
+        },
         "outfits": {
-            "snapshot_hi_outfit_20250720-220115.png": [
-                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic",
-                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2119.heic"
+            "snapshot_hi_outfit_20250721-215123.png": [
+                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2050.heic"
             ],
-            "snapshot_hi_outfit_20250721-144741.png": [
-                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2044.heic",
-                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2102.heic"
+            "snapshot_hi_outfit_20250721-215408.png": [
+                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2050.heic"
+            ],
+            "snapshot_hi_outfit_20250721-225920.png": [
+                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2071.heic",
+                "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2099.heic"
             ]
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2039.heic",
+            "type": "Top",
+            "color": "Blue",
+            "season": "Spring",
+            "occasion": "Casual",
+            "material": "Cotton"
+        },
+        "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2050.heic": {
+            "image_path": "/Users/tulasii/Desktop/digital-closet/Clothes/IMG_2050.heic",
+            "type": "Top",
+            "color": "Black",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton"
         }
     },
     "saravan": {

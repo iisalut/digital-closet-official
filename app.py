@@ -800,6 +800,7 @@ def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_t
 
 #--------- snapshot feature----
 used_items = [] # stores current cloth items :D
+
 currently_loaded_snapshot = None  # Global tracker for deleting old snapshot
 
 def take_snapshot(widget, username, json_path="closet.json"):
@@ -848,6 +849,8 @@ def take_snapshot(widget, username, json_path="closet.json"):
         json.dump(data, f, indent=4)
 
     messagebox.showinfo("Saved", f"Outfit saved as {filename}")
+
+    print (used_items)
 
 def clear_outfit_frame():
     for widget in plan_mini_frame.winfo_children():
@@ -964,13 +967,6 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
         print("Error loading outfit:", e)
         return
 
-    def on_label_click(event):
-        label_answer = messagebox.askyesno("Delete", "Do you want to delete this item?")
-        if label_answer:
-            label.destroy()
-            if hasattr(label, "path") and label.path in used_items:
-                used_items.remove(label.path)
-
 
 
     for path in outfit_paths:
@@ -979,27 +975,40 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            label = Label(fit_plan_mini_frame, image=photo, bd=0)  # Use tk.Label
+            label = Label(display_frame, image=photo, bd=0, bg="white")
             label.image = photo
+
+
+            import random
+            x = random.randint(100, 300)
+            y = random.randint(100, 300)
+            label.place(x=x, y=y)
+
+
             label.path = path.strip()
+            used_items.append(label.path)
 
-            x = random.randint(0, max(0, 600 - 120))
-            y = random.randint(0, max(0, 750 - 120))
+            # Make draggable
+            def on_drag(event, lbl=label):
+                lbl.place(
+                    x=event.x_root - display_frame.winfo_rootx() - 75,
+                    y=event.y_root - display_frame.winfo_rooty() - 75
+                )
 
-            label.place(x=x, y=y)  # Position anywhere; you can randomize
+            label.bind("<B1-Motion>", on_drag)
 
-            # Bind drag events
-            label.bind("<Button-1>", on_start_drag)
-            label.bind("<B1-Motion>", on_drag_motion)
-            label.bind("<ButtonRelease-1>", on_end_drag)
-            label.bind("<Double-Button-1>", on_label_click)
+            # Make deletable
+            def on_right_click(event, lbl=label):
+                if messagebox.askyesno("Delete", "Do you want to delete this item?"):
+                    if lbl.path in used_items:
+                        used_items.remove(lbl.path)
+                    lbl.destroy()
 
-            used_items.append(path.strip())  # For saving
+            label.bind("<Double-Button-1>", on_right_click)
+
 
         except Exception as e:
             print(f"Error displaying item {path}:", e)
-
-
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
@@ -1296,7 +1305,7 @@ def edit_clothing_data():
     # Optionally go back to inventory and refresh:
     # next_page(page6)
     # display_clothes_grid(grid_frame, username)
-def delete_clothing_data():
+def delete_outfit_data():
     global current_editing_path  # make sure you're using the shared value
     selected_image_path = current_editing_path
     with open ("closet.json", "r") as f:
@@ -1318,8 +1327,13 @@ def delete_clothing_data():
 edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
 edit_save_button.pack(pady=20)
 
-edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_clothing_data )
+
+
+
+edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_outfit_data )
 edit_delete_button.pack(pady=0)
+
+
 #</editor-fold>
 
 #----------- make outfits page (page8)-----------
@@ -1535,8 +1549,10 @@ def configure_scroll_region(event):
     fit_canvas.configure(scrollregion=fit_canvas.bbox("all"))
 
 fit_grid_frame.bind("<Configure>", configure_scroll_region)
-#------------page10(outfit edit)------
 
+#</editor-fold>
+#------------page10(outfit edit)------
+#<editor-fold>
 page10 = ttk.Frame(window,style="Custom.TFrame")
 page10.grid(row=0, column=0, sticky="nsew")
 page10.grid_propagate(False)
@@ -1641,6 +1657,8 @@ fit_plan_save_button.pack(side="left", padx=10)
 fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
 fit_plan_clear_button.pack(side="left", padx=10)
 
+fit_plan_delete_button = ttk.Button(fit_plan_button_frame, text="delete outfit", width=10)
+fit_plan_delete_button.pack(side="left", padx=10)
 # ----- Right Frame -----
 fit_plan_right_frame = ttk.Frame(fit_big_frame, width=350, height=900)
 fit_plan_right_frame.pack(pady=1, padx=3, side="left")
