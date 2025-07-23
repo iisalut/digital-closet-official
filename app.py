@@ -863,6 +863,17 @@ def clear_outfit_frame():
 
     messagebox.showinfo("Cleared", "Outfit cleared")
 
+def fit_clear_outfit_frame():
+    for widget in fit_plan_mini_frame.winfo_children():
+        widget.destroy()
+
+    used_items.clear()
+
+    global currently_loaded_snapshot
+    currently_loaded_snapshot = None
+
+    messagebox.showinfo("Cleared", "Outfit cleared")
+
 
 def display_saved_outfits(grid_frame, display_frame, username, json_path="closet.json", columns=2):
 
@@ -921,7 +932,7 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
     except Exception as e:
         print("Error loading JSON file or parsing data:", e)
 
-from tkinter import Label  # Use tk.Label, not ttk.Label
+
 
 # Drag state tracking
 drag_data = {
@@ -1654,7 +1665,7 @@ fit_plan_back_button.pack(side="left", padx=10)
 fit_plan_save_button = ttk.Button(fit_plan_button_frame, text="save", width=6, command=lambda: take_snapshot(fit_plan_mini_frame, username))
 fit_plan_save_button.pack(side="left", padx=10)
 
-fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
+fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=fit_clear_outfit_frame)
 fit_plan_clear_button.pack(side="left", padx=10)
 
 fit_plan_delete_button = ttk.Button(fit_plan_button_frame, text="delete outfit", width=10)
