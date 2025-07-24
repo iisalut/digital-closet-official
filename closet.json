@@ -17,10 +17,39 @@
             "material": "Cotton"
         },
         "outfits": {
-            "snapshot_hi_outfit_20250722-212326.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2040.heic"
+            "snapshot_hi_outfit_20250724-124053.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2040.heic",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic"
             ],
-            "snapshot_hi_outfit_20250722-212427.png": []
+            "snapshot_hi_outfit_20250724-124114.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2039.heic",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "---",
+            "occasion": "Casual",
+            "material": "denim"
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "---",
+            "occasion": "Casual",
+            "material": "denim"
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic",
+            "type": "Skirt",
+            "color": "White",
+            "season": "---",
+            "occasion": "Casual",
+            "material": "ribbed"
         }
     }
 }
