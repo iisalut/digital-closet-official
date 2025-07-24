@@ -582,7 +582,7 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
 
     row = 0
     col = 0
-    import random  # Add this import at the top of your file
+
 
     def clone_to_planner(event, img_obj, original_path):
         # Get center_frame's size
@@ -1069,9 +1069,6 @@ def on_mousewheel(event):
 canvas.bind_all("<MouseWheel>", on_mousewheel)
 
 def display_clothes_grid(grid_frame, username, json_path="closet.json", columns=4):
-    from PIL import Image, ImageTk
-    from tkinter import ttk
-    import json
 
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
@@ -1317,7 +1314,7 @@ def edit_clothing_data():
     # next_page(page6)
     # display_clothes_grid(grid_frame, username)
 def delete_outfit_data():
-    global current_editing_path  # make sure you're using the shared value
+    global current_editing_path
     selected_image_path = current_editing_path
     with open ("closet.json", "r") as f:
         data= json.load(f)
@@ -1337,7 +1334,6 @@ def delete_outfit_data():
 
 edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
 edit_save_button.pack(pady=20)
-
 
 
 
@@ -1668,7 +1664,51 @@ fit_plan_save_button.pack(side="left", padx=10)
 fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=fit_clear_outfit_frame)
 fit_plan_clear_button.pack(side="left", padx=10)
 
-fit_plan_delete_button = ttk.Button(fit_plan_button_frame, text="delete outfit", width=10)
+def delete_edit_outfit_data(json_path="closet.json"):
+    global currently_loaded_snapshot
+
+    print("[DEBUG] Delete function called.")
+    print(f"[DEBUG] currently_loaded_snapshot: {currently_loaded_snapshot}")
+
+    if not currently_loaded_snapshot:
+        print("No snapshot loaded to delete.")
+        return
+
+    answer = messagebox.askyesno("Delete Outfit", "Are you sure you want to delete this entire outfit?")
+    if not answer:
+        print("[DEBUG] User canceled deletion.")
+        return
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+
+        #  i Loop through users to find the snapshot
+        for username in data:
+            outfits = data[username].get("outfits", {})
+            if currently_loaded_snapshot in outfits:
+                del outfits[currently_loaded_snapshot]
+                print(f"[DEBUG] Deleted snapshot {currently_loaded_snapshot} under user {username}")
+                break
+
+        with open(json_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+        # delete the image file
+        if os.path.exists(currently_loaded_snapshot):
+            os.remove(currently_loaded_snapshot)
+            print(f"[DEBUG] Snapshot image file {currently_loaded_snapshot} deleted from disk.")
+
+        currently_loaded_snapshot = None  # Reset
+
+        messagebox.showinfo("Success", "Outfit deleted successfully.")
+
+    except Exception as e:
+        print("[ERROR] Failed to delete outfit:", e)
+        messagebox.showerror("Error", f"Failed to delete outfit: {e}")
+    next_page(page5)
+
+fit_plan_delete_button = ttk.Button(fit_plan_button_frame, text="delete outfit", width=10, command=delete_edit_outfit_data)
 fit_plan_delete_button.pack(side="left", padx=10)
 # ----- Right Frame -----
 fit_plan_right_frame = ttk.Frame(fit_big_frame, width=350, height=900)
