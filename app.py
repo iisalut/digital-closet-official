@@ -51,7 +51,8 @@ style.configure("MyCustom.TCombobox",
                 foreground="#333333")
 
 #------definitions------
-
+global custom_user_tags
+custom_user_tags=[]
 global username
 username= ""
 global password
@@ -341,7 +342,7 @@ def upload_img():
     except Exception as e:
         messagebox.showerror(title='Error', message=f"An unexpected error occurred: {e}")
 
-upload_but_frame = ttk.Frame(page5, width=900, height=200, style="Custom.TFrame")
+upload_but_frame = ttk.Frame(page5, width=700, height=200, style="Custom.TFrame")
 upload_but_frame.pack(padx=100, pady=10, anchor='nw')
 upload_but_frame.pack_propagate(False)
 
@@ -364,6 +365,10 @@ def clear_all_uploads():
     for widget in photo_frame.winfo_children():
         widget.destroy()
 
+    custom_user_tags.clear()
+    for widget in custom_tags_display.winfo_children():
+        widget.destroy()
+
     # Clear stored image path
     global img_path
     img_path = ""
@@ -372,12 +377,9 @@ upload_clear_button.pack(padx=10, side='left')
 
 # attribute frame for clothes
 # Tags frame on the right
-upload_tags_frame = ttk.Frame(container_frame, width=500, height=600, style="Custom.TFrame")
+upload_tags_frame = ttk.Frame(container_frame, width=500, height=700, style="Custom.TFrame")
 upload_tags_frame.pack(side='left', fill='both', expand=True)
 upload_tags_frame.pack_propagate(False)
-
-mid_label = ttk.Label(upload_tags_frame, text="Tags for your clothes", style="mid.TLabel")
-mid_label.pack(pady=10)
 
 q1_label = ttk.Label(upload_tags_frame, text=" Type ?", style="small.TLabel")
 q1_label.pack(pady=10)
@@ -452,6 +454,41 @@ dress_material_menu.config(
     width=15,               # wider width here
     padx=10, pady=5         # add some padding inside button
 )
+def add_custom_tag():
+    tag = custom_tag_entry.get().strip()
+    if tag and tag not in custom_user_tags:
+        custom_user_tags.append(tag)
+
+        #
+        tag_frame = Frame(custom_tags_display, bg="#f7f3e6", bd=0)
+        tag_frame.pack(side="left", padx=5, pady=2)
+
+        # Tag label
+        tag_label = Label(tag_frame, text=tag, bg="#d9e2ec", font=("Pangolin", 10), padx=10, pady=5, relief="ridge")
+        tag_label.pack(side="left")
+
+        # "x" icon
+        remove_btn = Button(tag_frame, text="✕", font=("Arial", 10), bg="#f7f3e6", fg="red", bd=0, relief="flat", command=lambda: remove_custom_tag(tag, tag_frame))
+        remove_btn.pack(side="left", padx=(2, 0))
+
+        custom_tag_entry.delete(0, END)
+
+q6_label = ttk.Label(upload_tags_frame, text="Custom Tags", style="small.TLabel")
+q6_label.pack(pady=10)
+
+custom_tag_entry = Entry(upload_tags_frame, width=20)
+custom_tag_entry.pack(pady=5)
+
+add_tag_button = ttk.Button(upload_tags_frame, text="Add Tag", width=10, bootstyle="secondary", command=add_custom_tag)
+add_tag_button.pack(pady=5)
+
+custom_tags_display = Frame(upload_tags_frame, bg="#f7f3e6")
+custom_tags_display.pack(pady=5)
+def remove_custom_tag(tag, tag_frame):
+    if tag in custom_user_tags:
+        custom_user_tags.remove(tag)
+    tag_frame.destroy()  # Remove the UI for this tag
+
 
 def save_clothing_data():
     selected_image_path = img_path
@@ -478,7 +515,8 @@ def save_clothing_data():
         "color": selected_color,
         "season": selected_season,
         "occasion": selected_occasion,
-        "material": selected_material
+        "material": selected_material,
+        "custom_tags": custom_user_tags[:]
     }
 
     # Add under current user
