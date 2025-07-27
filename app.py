@@ -51,12 +51,15 @@ style.configure("MyCustom.TCombobox",
                 foreground="#333333")
 
 #------definitions------
-global custom_user_tags
+global custom_user_tags,edit_custom_user_tags
 custom_user_tags=[]
+
 global username
 username= ""
 global password
 password=""
+all_custom_tags = set()  # set avoids duplicates but tuples does not
+
 
 def json_save():
     file = 'users.json'
@@ -305,16 +308,16 @@ def upload_img():
         print( "curr_img :"+img_path)
         print("curr_user :"+username)
         if not img_path:
-            return  # User cancelled dialog
+            return
 
         img = Image.open(img_path)
         img_width, img_height = img.size
 
-        # Get current frame size (in case it's dynamic)
+        # Get current frame size
         frame_width = photo_frame.winfo_width()
         frame_height = photo_frame.winfo_height()
 
-        # If frame size isn't ready yet, default to 600x600
+        # If frame size isn't ready yet default set to 600x600
         if frame_width < 10 or frame_height < 10:
             frame_width, frame_height = 600, 600
 
@@ -472,6 +475,7 @@ def add_custom_tag():
         remove_btn.pack(side="left", padx=(2, 0))
 
         custom_tag_entry.delete(0, END)
+
 
 q6_label = ttk.Label(upload_tags_frame, text="Custom Tags", style="small.TLabel")
 q6_label.pack(pady=10)
@@ -1310,6 +1314,39 @@ edit_material_menu.config(
     width=15,               # wider width here
     padx=10, pady=5         # add some padding inside button
 )
+
+def add_edit_custom_tag():
+    tag = edit_custom_tag_entry.get().strip()
+    if tag and tag not in edit_custom_user_tags:
+        edit_custom_user_tags.append(tag)
+
+        tag_frame = Frame(edit_custom_tags_display, bg="#f7f3e6", bd=0)
+        tag_frame.pack(side="left", padx=5, pady=2)
+
+        tag_label = Label(tag_frame, text=tag, bg="#d9e2ec", font=("Pangolin", 10), padx=10, pady=5, relief="ridge")
+        tag_label.pack(side="left")
+
+        remove_btn = Button(tag_frame, text="✕", font=("Arial", 10), bg="#f7f3e6", fg="red", bd=0, relief="flat",
+                            command=lambda: remove_edit_custom_tag(tag, tag_frame))
+        remove_btn.pack(side="left", padx=(2, 0))
+
+        edit_custom_tag_entry.delete(0, END)
+
+def remove_edit_custom_tag(tag, tag_frame):
+    if tag in edit_custom_user_tags:
+        edit_custom_user_tags.remove(tag)
+    tag_frame.destroy()
+
+
+
+edit_custom_tag_entry = Entry(edit_tags_frame, width=20)
+edit_custom_tag_entry.pack(pady=5)
+
+edit_add_tag_button = ttk.Button(edit_tags_frame, text="Add Tag", width=10, bootstyle="secondary", command=add_custom_tag)
+edit_add_tag_button.pack(pady=5)
+
+edit_custom_tags_display = Frame(edit_tags_frame, bg="#f7f3e6")
+edit_custom_tags_display.pack(pady=5)
 
 def edit_clothing_data():
     global current_editing_path  # make sure you're using the shared value
