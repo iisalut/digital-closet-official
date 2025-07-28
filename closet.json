@@ -73,7 +73,8 @@
             "occasion": "---",
             "material": "---",
             "custom_tags": [
-                "sparkly"
+                "sparkly",
+                "yellowy"
             ]
         },
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2073.heic": {
@@ -95,7 +96,6 @@
             "occasion": "Casual",
             "material": "Cotton",
             "custom_tags": [
-                "floral",
                 "off shoulders"
             ]
         }

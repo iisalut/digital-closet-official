@@ -53,6 +53,7 @@ style.configure("MyCustom.TCombobox",
 #------definitions------
 global custom_user_tags,edit_custom_user_tags
 custom_user_tags=[]
+edit_custom_user_tags=[]
 
 global username
 username= ""
@@ -1212,6 +1213,28 @@ def open_edit_page(image_path):
     edit_attribute_season.set(item.get("season", "Choose season"))
     edit_attribute_occasion.set(item.get("occasion", "Choose occasion"))
     edit_attribute_material.set(item.get("material", "Choose material"))
+
+    load_edit_custom_tags(item.get("custom_tags", []))
+
+
+def load_edit_custom_tags(tag_list):
+    global edit_custom_user_tags
+    edit_custom_user_tags.clear()
+    for widget in edit_custom_tags_display.winfo_children():
+        widget.destroy()
+
+    for tag in tag_list:
+        edit_custom_user_tags.append(tag)
+        tag_frame = Frame(edit_custom_tags_display, bg="#f7f3e6", bd=0)
+        tag_frame.pack(side="left", padx=5, pady=2)
+
+        tag_label = Label(tag_frame, text=tag, bg="#d9e2ec", font=("Pangolin", 10), padx=10, pady=5, relief="ridge")
+        tag_label.pack(side="left")
+
+        remove_btn = Button(tag_frame, text="✕", font=("Arial", 10), bg="#f7f3e6", fg="red", bd=0, relief="flat",
+                            command=lambda t=tag, f=tag_frame: remove_edit_custom_tag(t, f))
+        remove_btn.pack(side="left", padx=(2, 0))
+
 #</editor-fold>
 #-----special exclusive edit page---page7
 #<editor-fold 1">
@@ -1238,8 +1261,6 @@ edit_tags_frame = ttk.Frame(edit_frame, width=500, height=600, style="Custom.TFr
 edit_tags_frame.pack(side='left', fill='both', expand=True)
 edit_tags_frame.pack_propagate(False)
 
-edit_mid_label = ttk.Label(edit_tags_frame, text="Tags for your clothes", style="mid.TLabel")
-edit_mid_label.pack(pady=10)
 
 edit_q1_label = ttk.Label(edit_tags_frame, text=" Type ?", style="small.TLabel")
 edit_q1_label.pack(pady=10)
@@ -1342,14 +1363,14 @@ def remove_edit_custom_tag(tag, tag_frame):
 edit_custom_tag_entry = Entry(edit_tags_frame, width=20)
 edit_custom_tag_entry.pack(pady=5)
 
-edit_add_tag_button = ttk.Button(edit_tags_frame, text="Add Tag", width=10, bootstyle="secondary", command=add_custom_tag)
+edit_add_tag_button = ttk.Button(edit_tags_frame, text="Add Tag", width=10, bootstyle="secondary", command=add_edit_custom_tag)
 edit_add_tag_button.pack(pady=5)
 
 edit_custom_tags_display = Frame(edit_tags_frame, bg="#f7f3e6")
 edit_custom_tags_display.pack(pady=5)
 
 def edit_clothing_data():
-    global current_editing_path  # make sure you're using the shared value
+    global current_editing_path, all_custom_tags
     selected_image_path = current_editing_path
 
     updated_type = edit_attribute_type.get()
@@ -1360,50 +1381,65 @@ def edit_clothing_data():
 
     filename = "closet.json"
 
-    # if not os.path.exists(filename):
-    #     messagebox.showerror("Error", "Clothing data file not found.")
-    #     return
-
-    with open(filename, "r") as f:
-        try:
+    try:
+        with open(filename, "r") as f:
             data = json.load(f)
-        except json.decoder.JSONDecodeError:
-            messagebox.showerror("Error", "Could not read clothing data.")
-            return
-
-    if username not in data:
-        messagebox.showerror("Error", f"No data found for user {username}.")
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        messagebox.showerror("Error", "Could not read clothing data.")
         return
-    user_data = data[username]
-    user_data[selected_image_path]["type"] = updated_type
-    user_data[selected_image_path]["color"] = updated_color
-    user_data[selected_image_path]["season"] = updated_season
-    user_data[selected_image_path]["occasion"] = updated_occasion
-    user_data[selected_image_path]["material"] = updated_material
+
+    if username not in data or selected_image_path not in data[username]:
+        messagebox.showerror("Error", "Clothing item not found.")
+        return
+
+    # Update all fields
+    item = data[username][selected_image_path]
+    item["type"] = updated_type
+    item["color"] = updated_color
+    item["season"] = updated_season
+    item["occasion"] = updated_occasion
+    item["material"] = updated_material
+    item["custom_tags"] = edit_custom_user_tags[:]
+
+
+    for tag in edit_custom_user_tags:
+        all_custom_tags.add(tag)
 
     with open(filename, "w") as f:
         json.dump(data, f, indent=4)
+
+    messagebox.showinfo("Saved", "Item updated in your closet.")
+
+
 
     messagebox.showinfo("Saved", "Item updated in your closet.")
     # Optionally go back to inventory and refresh:
     # next_page(page6)
     # display_clothes_grid(grid_frame, username)
 def delete_outfit_data():
-    global current_editing_path
+    global current_editing_path, all_custom_tags
     selected_image_path = current_editing_path
-    with open ("closet.json", "r") as f:
-        data= json.load(f)
 
-    print("Trying to delete:", selected_image_path)
-    print("Available keys:", list(data.get(username, {}).keys()))
+    with open("closet.json", "r") as f:
+        data = json.load(f)
 
     if selected_image_path in data.get(username, {}):
+        # Optionally remove tags from global list
+        tags_to_remove = set(data[username][selected_image_path].get("custom_tags", []))
         del data[username][selected_image_path]
-    with open('closet.json', 'w') as f:
-        json.dump(data, f, indent=4)
+
+        # Rebuild global tag list (since other items may use same tags)
+        all_custom_tags.clear()
+        for item in data.get(username, {}).values():
+            for tag in item.get("custom_tags", []):
+                all_custom_tags.add(tag)
+
+        with open("closet.json", "w") as f:
+            json.dump(data, f, indent=4)
 
     display_clothes_grid(grid_frame, username)
     next_page(page6)
+
 
 
 
