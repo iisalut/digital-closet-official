@@ -54,50 +54,11 @@
             "color": "White",
             "season": "---",
             "occasion": "Casual",
-            "material": "ribbed"
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2036.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2036.heic",
-            "type": "Dress",
-            "color": "---",
-            "season": "Summer",
-            "occasion": "Formal",
-            "material": "Cotton",
-            "custom_tags": []
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2056.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2056.heic",
-            "type": "Top",
-            "color": "yellow",
-            "season": "---",
-            "occasion": "---",
-            "material": "---",
+            "material": "ribbed",
             "custom_tags": [
-                "sparkly",
-                "yellowy"
+                "floral"
             ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2073.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2073.heic",
-            "type": "Top",
-            "color": "Black",
-            "season": "Winter",
-            "occasion": "---",
-            "material": "wool",
-            "custom_tags": [
-                "star pattern"
-            ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2059.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2059.heic",
-            "type": "Top",
-            "color": "---",
-            "season": "Summer",
-            "occasion": "Casual",
-            "material": "Cotton",
-            "custom_tags": [
-                "off shoulders"
-            ]
+        }
         }
     }
 }

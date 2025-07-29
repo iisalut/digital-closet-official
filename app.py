@@ -481,8 +481,55 @@ def add_custom_tag():
 q6_label = ttk.Label(upload_tags_frame, text="Custom Tags", style="small.TLabel")
 q6_label.pack(pady=10)
 
+def show_custom_tag_suggestions(event=None):
+    user_input = custom_tag_entry.get().lower()
+    autocomplete_listbox.delete(0, END)
+
+    if not user_input:
+        autocomplete_listbox.place_forget()
+        return
+
+    matches = [tag for tag in search_tags if user_input in tag.lower()]
+    if matches:
+        for tag in matches:
+            autocomplete_listbox.insert(END, tag)
+        autocomplete_listbox.place(
+            x=custom_tag_entry.winfo_x(),
+            y=custom_tag_entry.winfo_y() + custom_tag_entry.winfo_height()
+        )
+        autocomplete_listbox.lift()
+    else:
+        autocomplete_listbox.place_forget()
+
+def select_custom_tag_suggestion(event=None):
+    selection = autocomplete_listbox.curselection()
+    if selection:
+        selected_tag = autocomplete_listbox.get(selection[0])
+        custom_tag_entry.delete(0, END)
+        custom_tag_entry.insert(0, selected_tag)
+        autocomplete_listbox.place_forget()
+
+def confirm_custom_tag(event=None):
+    value = custom_tag_entry.get().strip().lower()
+    if value:
+        if value not in search_tags:
+            search_tags.append(value)
+            print(f"Added '{value}' to search_tags")  # Debug/log
+        else:
+            print(f"'{value}' already in search_tags")  # Optional
+    autocomplete_listbox.place_forget()
+    custom_tag_entry.delete(0, END)
+
 custom_tag_entry = Entry(upload_tags_frame, width=20)
 custom_tag_entry.pack(pady=5)
+
+autocomplete_listbox = Listbox(upload_tags_frame, height=3)
+autocomplete_listbox.place_forget()
+
+custom_tag_entry.bind('<KeyRelease>', show_custom_tag_suggestions)
+custom_tag_entry.bind('<Return>', confirm_custom_tag)
+autocomplete_listbox.bind('<<ListboxSelect>>', select_custom_tag_suggestion)
+
 
 add_tag_button = ttk.Button(upload_tags_frame, text="Add Tag", width=10, bootstyle="secondary", command=add_custom_tag)
 add_tag_button.pack(pady=5)
@@ -492,8 +539,7 @@ custom_tags_display.pack(pady=5)
 def remove_custom_tag(tag, tag_frame):
     if tag in custom_user_tags:
         custom_user_tags.remove(tag)
-    tag_frame.destroy()  # Remove the UI for this tag
-
+    tag_frame.destroy()  # Remove the UI for this tagsearcg
 
 def save_clothing_data():
     selected_image_path = img_path
@@ -505,7 +551,7 @@ def save_clothing_data():
     filename = "closet.json"
     data = {}
 
-    # Load existing file if present
+
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             try:
@@ -513,7 +559,19 @@ def save_clothing_data():
             except json.JSONDecodeError:
                 data = {}
 
-    # Prepare clothing data from your app's current state
+    # Add official tags to search_tags if not present (incase da user does not hit enter)
+    official_tags = [selected_type, selected_color, selected_season, selected_occasion, selected_material]
+    for tag in official_tags:
+        tag = tag.strip().lower()
+        if tag and tag not in search_tags:
+            search_tags.append(tag)
+
+    # Add custom tags too (assumes already lowercase & checked on entry)
+    for tag in custom_user_tags:
+        if tag and tag not in search_tags:
+            search_tags.append(tag)
+
+    # Prepares clothing item dictionary~
     clothing_item = {
         "image_path": selected_image_path,
         "type": selected_type,
@@ -528,11 +586,12 @@ def save_clothing_data():
     if username not in data:
         data[username] = {}
 
-    data[username][selected_image_path]= clothing_item
+    data[username][selected_image_path] = clothing_item
 
-    # Save updated JSON
+    # Saves the updated JSON
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
+
     msg_after_upload()
 
 def msg_after_upload():
@@ -703,11 +762,11 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
             print(f"Could not display cloth for {new_img}:", e)
 
 def display_filtered_clothes(grid_frame, username, selected_tag, json_path="closet.json", columns=4):
-
-
+    # Clear previous results
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
+    # Load data
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
@@ -719,20 +778,30 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
         print("No clothing data for", username)
         return
 
-    items = data[username]  # {image_path: tags_dict}
+    selected_tag = selected_tag.lower().strip()
+    items = data[username]
     filtered_items = {}
-# need to do this cuz json has both dict and list values
+
     for image_path, tags in items.items():
+        tag_list = []
+
+        # Collect all values as lowercase strings
         if isinstance(tags, dict):
-            tag_list = [str(value).lower() for value in tags.values()]
+            for key, value in tags.items():
+                if key == "custom_tags" and isinstance(value, list):
+                    tag_list.extend([str(v).lower() for v in value])
+                else:
+                    tag_list.append(str(value).lower())
         elif isinstance(tags, list):
             tag_list = [str(value).lower() for value in tags]
         else:
             tag_list = []
 
+        # Check if selected tag exists in any tag
         if selected_tag in tag_list:
             filtered_items[image_path] = tags
 
+    # Display filtered items in grid
     for index, (image_path, tags) in enumerate(filtered_items.items()):
         try:
             img = Image.open(image_path.strip())
@@ -755,13 +824,12 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
 
     if not filtered_items:
         print("No results found for:", selected_tag)
-
 def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_tag, json_path="closet.json", columns=4):
-    # Clear previous thumbnails
+    # Clear previous results
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
-    # Load clothing data
+    # Load data
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
@@ -773,73 +841,52 @@ def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_t
         print("No clothing data for", username)
         return
 
-    user_items = data[username]  # Dictionary of {image_path: tags_dict or tags_list}
+    selected_tag = selected_tag.lower().strip()
+    items = data[username]
     filtered_items = {}
 
-    # Filter items by tag
-    for image_path, tags in user_items.items():
-        try:
-            if isinstance(tags, dict):
-                tag_list = [str(v).lower() for v in tags.values()]
-            elif isinstance(tags, list):
-                tag_list = [str(v).lower() for v in tags]
-            else:
-                continue
+    for image_path, tags in items.items():
+        tag_list = []
 
-            if selected_tag.lower() in tag_list:
-                filtered_items[image_path] = tags
-        except Exception as e:
-            print(f"Error processing tags for {image_path}:", e)
+        # Collect all values as lowercase strings
+        if isinstance(tags, dict):
+            for key, value in tags.items():
+                if key == "custom_tags" and isinstance(value, list):
+                    tag_list.extend([str(v).lower() for v in value])
+                else:
+                    tag_list.append(str(value).lower())
+        elif isinstance(tags, list):
+            tag_list = [str(value).lower() for value in tags]
+        else:
+            tag_list = []
 
-    def clone_to_planner(event, img_obj):
-        width = center_frame.winfo_width()
-        height = center_frame.winfo_height()
-        x = random.randint(0, max(0, width - 150))
-        y = random.randint(0, max(0, height - 150))
+        # Check if selected tag exists in any tag
+        if selected_tag in tag_list:
+            filtered_items[image_path] = tags
 
-        clone = Label(center_frame, image=img_obj, relief="solid")
-        clone.image = img_obj
-        clone.place(x=x, y=y)
-
-        def start_drag(e):
-            clone.startX = e.x
-            clone.startY = e.y
-
-        def on_drag(e):
-            new_x = clone.winfo_x() + e.x - clone.startX
-            new_y = clone.winfo_y() + e.y - clone.startY
-            new_x = max(0, min(new_x, width - 150))
-            new_y = max(0, min(new_y, height - 150))
-            clone.place(x=new_x, y=new_y)
-
-        def on_clone_click(e):
-            if messagebox.askyesno("Delete Item", "Do you want to delete this item from the outfit?"):
-                clone.destroy()
-
-        clone.bind("<Button-1>", start_drag)
-        clone.bind("<B1-Motion>", on_drag)
-        clone.bind("<Double-Button-1>", on_clone_click)
-
-    # Display filtered items
-    for index, (image_path, _) in enumerate(filtered_items.items()):
+    # Display filtered items in grid
+    for index, (image_path, tags) in enumerate(filtered_items.items()):
         try:
             img = Image.open(image_path.strip())
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            label = Label(grid_frame, image=photo, relief="raised", cursor="hand2")
-            label.image = photo
+            btn = ttk.Button(
+                grid_frame,
+                image=photo,
+                command=lambda path=image_path: open_edit_page(path)
+            )
+            btn.image = photo
 
-            row, col = divmod(index, columns)
-            label.grid(row=row, column=col, padx=10, pady=10)
-
-            label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo))
+            row = index // columns
+            col = index % columns
+            btn.grid(row=row, column=col, padx=10, pady=10)
 
         except Exception as e:
             print(f"Error loading {image_path}:", e)
 
     if not filtered_items:
-        print("No results found for tag:", selected_tag)
+        print("No results found for:", selected_tag)
 
 #--------- snapshot feature----
 used_items = [] # stores current cloth items :D
@@ -1257,7 +1304,7 @@ edit_back_button= ttk.Button(page7,bootstyle=PRIMARY, width=15, text="back", com
 edit_back_button.pack(pady=20)
 edit_frame = ttk.Frame(container_frame_edit, style="Custom.TFrame")
 edit_frame.pack(padx=10, pady=30)
-edit_tags_frame = ttk.Frame(edit_frame, width=500, height=600, style="Custom.TFrame")
+edit_tags_frame = ttk.Frame(edit_frame, width=500, height=670, style="Custom.TFrame")
 edit_tags_frame.pack(side='left', fill='both', expand=True)
 edit_tags_frame.pack_propagate(False)
 
@@ -1444,9 +1491,7 @@ def delete_outfit_data():
 
 
 edit_save_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="Save", command= edit_clothing_data)
-edit_save_button.pack(pady=20)
-
-
+edit_save_button.pack(pady=5)
 
 edit_delete_button= ttk.Button(edit_tags_frame,bootstyle=PRIMARY, width=15, text="delete item", command=delete_outfit_data )
 edit_delete_button.pack(pady=0)
