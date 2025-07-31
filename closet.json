@@ -1,38 +1,52 @@
 {
     "tag_pool": [
-        "dress",
-        "red",
+        "top",
+        "---",
         "summer",
         "casual",
         "cotton",
-        "sequins",
-        "top",
-        "---",
-        "text",
-        "purple"
+        "multicolor",
+        "tie die",
+        "green",
+        "tank top",
+        "pants",
+        "blue",
+        "denim",
+        "dark blue"
     ],
     "hi": {
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2069.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2069.heic",
-            "type": "Dress",
-            "color": "Red",
-            "season": "Summer",
-            "occasion": "Casual",
-            "material": "Cotton",
-            "custom_tags": [
-                "sequins"
-            ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2053.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2053.heic",
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png",
             "type": "Top",
             "color": "---",
             "season": "Summer",
             "occasion": "Casual",
             "material": "Cotton",
             "custom_tags": [
-                "text",
-                "purple"
+                "multicolor",
+                "tie die"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
+            "type": "Top",
+            "color": "Green",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton",
+            "custom_tags": [
+                "tank top"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png",
+            "type": "Pants",
+            "color": "Blue",
+            "season": "---",
+            "occasion": "---",
+            "material": "denim",
+            "custom_tags": [
+                "dark blue"
             ]
         }
     }

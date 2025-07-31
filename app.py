@@ -13,6 +13,9 @@ from tkinter import Canvas
 import functools
 import random
 import time
+from rembg import remove
+import pillow_heif
+pillow_heif.register_heif_opener()
 
 
 
@@ -61,8 +64,6 @@ global password
 password=""
 all_custom_tags = set()  # set avoids duplicates but tuples does not
 global search_tags
-
-
 
 def json_save():
     file = 'users.json'
@@ -356,39 +357,47 @@ def upload_img():
     global img_path
     try:
         img_path = askopenfilename()
-        print( "curr_img :"+img_path)
-        print("curr_user :"+username)
+        print("curr_img: " + img_path)
+        print("curr_user: " + username)
         if not img_path:
             return
 
+        # heic to png conversion
+        if img_path.lower().endswith(".heic"):
+            img = Image.open(img_path)
+            png_path = os.path.splitext(img_path)[0] + ".png"
+            img.save(png_path)
+            img_path = png_path  # updates path to PNG version
+
         img = Image.open(img_path)
-        img_width, img_height = img.size
 
-        # Get current frame size
-        frame_width = photo_frame.winfo_width()
-        frame_height = photo_frame.winfo_height()
 
-        # If frame size isn't ready yet default set to 600x600
-        if frame_width < 10 or frame_height < 10:
-            frame_width, frame_height = 600, 600
+        # 1. Remove bg ( used Hoverboard Cube's code as referance)
+        with open(img_path, "rb") as f:
+            input_img = f.read()
+        output_img_bytes = remove(input_img)
 
-        # Calculate scale to maintain aspect ratio and fit in frame
-        scale = min(frame_width / img_width, frame_height / img_height, 1)
-        new_width = int(img_width * scale)
-        new_height = int(img_height * scale)
+        # Save to a temporary transparent image file
+        transparent_output_path = os.path.splitext(img_path)[0] + "_transparent.png"
+        with open(transparent_output_path, "wb") as out_file:
+            out_file.write(output_img_bytes)
 
-        if scale < 1:
-            img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-            #messagebox.showinfo(title='Attention', message="Image resized to fit the frame.")
+        #  Open the saved transparent image
+        img = Image.open(transparent_output_path).convert("RGBA")
+
+        # 3. Resize to fit frame
+        frame_width = photo_frame.winfo_width() or 600
+        frame_height = photo_frame.winfo_height() or 600
+        scale = min(frame_width / img.width, frame_height / img.height, 1)
+        img = img.resize((int(img.width * scale), int(img.height * scale)), Image.Resampling.LANCZOS)
+
+        img_path = transparent_output_path
 
         img_tk = ImageTk.PhotoImage(img)
-
-        # Clear any previous images in the frame
         for widget in photo_frame.winfo_children():
             widget.destroy()
-
         photo_label = Label(photo_frame, image=img_tk, bg="#f7f3e6")
-        photo_label.image = img_tk  # Prevent garbage collection
+        photo_label.image = img_tk
         photo_label.place(relx=0.5, rely=0.5, anchor="center")
 
     except UnidentifiedImageError:
@@ -760,7 +769,7 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
         y = random.randint(0, max(0, height - 150))
 
         # Create clone Label inside center_frame at random position
-        clone = Label(center_frame, image=img_obj, relief="solid")
+        clone = Label(center_frame, image=img_obj)
         clone.image = img_obj
         clone.place(x=x, y=y)
 
@@ -805,7 +814,6 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
             inventory_cloth_label = Label(
                 grid_frame,
                 image=photo,
-                relief="raised",
                 cursor="hand2"
             )
 
@@ -1095,20 +1103,6 @@ drag_data = {
     "y": 0
 }
 
-def on_start_drag(event):
-    drag_data["widget"] = event.widget
-    drag_data["x"] = event.x
-    drag_data["y"] = event.y
-
-def on_drag_motion(event):
-    widget = drag_data["widget"]
-    if widget:
-        x = widget.winfo_x() + event.x - drag_data["x"]
-        y = widget.winfo_y() + event.y - drag_data["y"]
-        widget.place(x=x, y=y)
-
-def on_end_drag(event):
-    drag_data["widget"] = None
 
 
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
