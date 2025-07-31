@@ -1,64 +1,39 @@
 {
+    "tag_pool": [
+        "dress",
+        "red",
+        "summer",
+        "casual",
+        "cotton",
+        "sequins",
+        "top",
+        "---",
+        "text",
+        "purple"
+    ],
     "hi": {
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2040.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2040.heic",
-            "type": "Top",
-            "color": "Black",
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2069.heic": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2069.heic",
+            "type": "Dress",
+            "color": "Red",
             "season": "Summer",
             "occasion": "Casual",
-            "material": "Cotton"
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2039.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2039.heic",
-            "type": "Top",
-            "color": "Blue",
-            "season": "Summer",
-            "occasion": "---",
-            "material": "Cotton"
-        },
-        "outfits": {
-            "snapshot_hi_outfit_20250724-124053.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2040.heic",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic"
-            ],
-            "snapshot_hi_outfit_20250724-124114.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2039.heic",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic"
-            ],
-            "snapshot_hi_outfit_20250724-125639.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2039.heic"
-            ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101.heic",
-            "type": "Pants",
-            "color": "Blue",
-            "season": "---",
-            "occasion": "Casual",
-            "material": "denim"
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2099.heic",
-            "type": "Pants",
-            "color": "Blue",
-            "season": "---",
-            "occasion": "Casual",
-            "material": "denim"
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2090.heic",
-            "type": "Skirt",
-            "color": "White",
-            "season": "---",
-            "occasion": "Casual",
-            "material": "ribbed",
+            "material": "Cotton",
             "custom_tags": [
-                "floral"
+                "sequins"
             ]
-        }
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2053.heic": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2053.heic",
+            "type": "Top",
+            "color": "---",
+            "season": "Summer",
+            "occasion": "Casual",
+            "material": "Cotton",
+            "custom_tags": [
+                "text",
+                "purple"
+            ]
         }
     }
 }
