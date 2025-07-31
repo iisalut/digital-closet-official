@@ -60,6 +60,8 @@ username= ""
 global password
 password=""
 all_custom_tags = set()  # set avoids duplicates but tuples does not
+global search_tags
+
 
 
 def json_save():
@@ -158,6 +160,54 @@ def on_drag_motion(event):
 
 def on_end_drag(event):
     drag_data["widget"] = None
+
+#-----new  tag system-----
+def add_tags_to_pool(new_tags, json_path="closet.json"):
+    try:
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = {}
+
+    # Ensure tag_pool exists
+    if "tag_pool" not in data:
+        data["tag_pool"] = []
+
+    existing_tags_lower = {tag.lower() for tag in data["tag_pool"]}
+
+    for tag in new_tags:
+        if tag.lower() not in existing_tags_lower:
+            data["tag_pool"].append(tag)
+
+    with open(json_path, 'w') as f:
+        json.dump(data, f, indent=4)
+def load_search_tags(json_path="closet.json"):
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+        return data.get("tag_pool", [])
+    except:
+        return []
+def ensure_tag_pool(json_path="closet.json"):
+    default_tags = [
+        "summer", "winter", "fall", "spring", "black", "white",
+        "red", "blue", "yellow", "pink", "brown", "green",
+        "pants", "denim", "jacket", "skirt", "top", "dress",
+        "casual", "formal"
+    ]
+
+    try:
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = {}
+
+    if "tag_pool" not in data:
+        data["tag_pool"] = default_tags.copy()
+        with open(json_path, 'w') as f:
+            json.dump(data, f, indent=4)
+
+
 
 
 # Page 1 - Welcome page
@@ -551,7 +601,6 @@ def save_clothing_data():
     filename = "closet.json"
     data = {}
 
-
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             try:
@@ -559,19 +608,34 @@ def save_clothing_data():
             except json.JSONDecodeError:
                 data = {}
 
-    # Add official tags to search_tags if not present (incase da user does not hit enter)
+    # Add official tags
     official_tags = [selected_type, selected_color, selected_season, selected_occasion, selected_material]
+    all_tags = []
+
     for tag in official_tags:
         tag = tag.strip().lower()
-        if tag and tag not in search_tags:
-            search_tags.append(tag)
+        if tag:
+            all_tags.append(tag)
+            if tag not in search_tags:
+                search_tags.append(tag)
 
-    # Add custom tags too (assumes already lowercase & checked on entry)
+    # Add custom tags
     for tag in custom_user_tags:
-        if tag and tag not in search_tags:
-            search_tags.append(tag)
+        if tag:
+            all_tags.append(tag)
+            if tag not in search_tags:
+                search_tags.append(tag)
 
-    # Prepares clothing item dictionary~
+
+    if "tag_pool" not in data:
+        data["tag_pool"] = []
+
+    current_pool = {t.lower() for t in data["tag_pool"]}
+    for tag in all_tags:
+        if tag.lower() not in current_pool:
+            data["tag_pool"].append(tag)
+
+    # Clothing item dictionary
     clothing_item = {
         "image_path": selected_image_path,
         "type": selected_type,
@@ -582,17 +646,17 @@ def save_clothing_data():
         "custom_tags": custom_user_tags[:]
     }
 
-    # Add under current user
     if username not in data:
         data[username] = {}
 
     data[username][selected_image_path] = clothing_item
 
-    # Saves the updated JSON
+    # Save everything
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
 
     msg_after_upload()
+
 
 def msg_after_upload():
     saved_msg = ttk.Label(upload_tags_frame, text=" Item uploaded !", style="small.TLabel", width=15)
@@ -617,7 +681,7 @@ inventory_search_frame = ttk.Frame(page6,width=500, height=100,style="Custom.TFr
 inventory_search_frame.pack(pady=10, padx=0)
 inventory_search_frame.pack_propagate(False)
 # creating autocomplete search bar
-autocomplete_Listbox=Listbox(page6, height=5)
+
 def show_suggestions(event=None):
     user_input= inventory_entry.get().lower()
     autocomplete_Listbox.delete(0, END)
@@ -1118,7 +1182,7 @@ inventory_search_button.pack(pady=10, side="left")
 inventory_clear_button= ttk.Button(inventory_search_frame,text="clear filters", width=8, command= lambda : display_clothes_grid(grid_frame, username))
 inventory_clear_button.pack(pady=10, side="right", padx=10)
 
-search_tags= ["summer", "winter","fall","spring", "black", "white","red","blue","yellow","pink","brown","green","pants","denim","jacket", "skirt", "top", "dress", "casual", "formal"]
+search_tags=load_search_tags()
 autocomplete_Listbox=Listbox(inventory_search_frame,height=3)
 
 autocomplete_Listbox.bind("<<ListboxSelect>>", select_suggestions)
@@ -1448,21 +1512,27 @@ def edit_clothing_data():
     item["material"] = updated_material
     item["custom_tags"] = edit_custom_user_tags[:]
 
-
+    # Add custom tags to global session tag set
     for tag in edit_custom_user_tags:
         all_custom_tags.add(tag)
 
+
+    all_tags = [
+        updated_type, updated_color, updated_season,
+        updated_occasion, updated_material
+    ] + edit_custom_user_tags
+
+    # Skip defaults/empties like "---"
+    add_tags_to_pool([
+        tag.lower() for tag in all_tags if tag and tag != "---"
+    ])
+
+    # Save back to file
     with open(filename, "w") as f:
         json.dump(data, f, indent=4)
 
     messagebox.showinfo("Saved", "Item updated in your closet.")
 
-
-
-    messagebox.showinfo("Saved", "Item updated in your closet.")
-    # Optionally go back to inventory and refresh:
-    # next_page(page6)
-    # display_clothes_grid(grid_frame, username)
 def delete_outfit_data():
     global current_editing_path, all_custom_tags
     selected_image_path = current_editing_path
