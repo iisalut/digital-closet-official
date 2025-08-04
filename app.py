@@ -327,7 +327,7 @@ home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle='prim
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_frame, username),display_clothes_plangrid(plan2_frame,plan_mini_frame, username)])
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_canvas, username),display_clothes_plangrid(plan2_frame,plan_mini_canvas, username)])
 home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page9),display_saved_outfits(fit_grid_frame, fit_canvas_frame, username)])
@@ -758,56 +758,12 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
     row = 0
     col = 0
 
-
-    def clone_to_planner(event, img_obj, original_path):
-        # Get center_frame's size
-        width = center_frame.winfo_width()
-        height = center_frame.winfo_height()
-
-        # Generate random x,y within center_frame bounds minus image size (150x150)
-        x = random.randint(0, max(0, width - 150))
-        y = random.randint(0, max(0, height - 150))
-
-        # Create clone Label inside center_frame at random position
-        clone = Label(center_frame, image=img_obj)
-        clone.image = img_obj
-        clone.place(x=x, y=y)
-
-        # Dragging handlers
-        def start_drag(e):
-            clone.startX = e.x
-            clone.startY = e.y
-
-        def on_drag(e):
-            new_x = clone.winfo_x() + e.x - clone.startX
-            new_y = clone.winfo_y() + e.y - clone.startY
-
-            # Optional: constrain inside center_frame boundaries
-            new_x = max(0, min(new_x, width - 150))
-            new_y = max(0, min(new_y, height - 150))
-
-            clone.place(x=new_x, y=new_y)
-
-        clone.bind("<Button-1>", start_drag)
-        clone.bind("<B1-Motion>", on_drag)
-
-        def on_clone_click(event):
-            answer = messagebox.askyesno("Delete", "Do you want to delete this item?")
-            if answer:
-                clone.destroy()
-                if original_path in used_items:
-                    used_items.remove(original_path)
-
-        clone.bind("<Double-Button-1>", on_clone_click)
-        if original_path not in used_items:
-            used_items.append(original_path)
-
     for image_path, tags in items.items():
         new_img = image_path.strip()
 
         try:
             print("Trying to open:", new_img)
-            img = Image.open(new_img)
+            img = Image.open(new_img).convert('RGBA')
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
@@ -817,11 +773,47 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
                 cursor="hand2"
             )
 
-            inventory_cloth_label.image = photo  # prevent garbage collection
+            inventory_cloth_label.image = photo
             inventory_cloth_label.grid(row=row, column=col, padx=10, pady=10)
 
+            def clone_to_planner_on_canvas(event, img_path):
+                try:
+                    img = Image.open(img_path).convert("RGBA")
+                    img = img.resize((150, 150), Image.Resampling.LANCZOS)
+                    photo = ImageTk.PhotoImage(img)
+                    plan_mini_canvas_images.append(photo)
+
+                    width = plan_mini_canvas.winfo_width()
+                    height = plan_mini_canvas.winfo_height()
+
+                    x = random.randint(0, max(0, width - 150))
+                    y = random.randint(0, max(0, height - 150))
+
+                    image_id = plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
+
+                    def start_drag(e, id=image_id):
+                        plan_mini_canvas._drag_data = (id, e.x, e.y)
+
+                    def on_drag(e):
+                        item_id, start_x, start_y = plan_mini_canvas._drag_data
+                        dx = e.x - start_x
+                        dy = e.y - start_y
+                        plan_mini_canvas.move(item_id, dx, dy)
+                        plan_mini_canvas._drag_data = (item_id, e.x, e.y)
+
+                    def on_double_click(e, id=image_id):
+                        plan_mini_canvas.delete(id)
+
+                    plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
+                    plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+                    plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+
+                except Exception as e:
+                    print("Error cloning to canvas:", e)
+
+
             # Bind click event using functools.partial to pass current photo
-            inventory_cloth_label.bind("<Button-1>", functools.partial(clone_to_planner, img_obj=photo, original_path=new_img))
+            inventory_cloth_label.bind("<Button-1>", lambda e, p=new_img: clone_to_planner_on_canvas(e, p))
 
             print("Displayed label for:", new_img)
 
@@ -966,11 +958,11 @@ used_items = [] # stores current cloth items :D
 currently_loaded_snapshot = None  # Global tracker for deleting old snapshot
 
 def take_snapshot(widget, username, json_path="closet.json"):
-    plan_mini_frame.update()
-    x = plan_mini_frame.winfo_rootx()
-    y = plan_mini_frame.winfo_rooty()
-    w = x + plan_mini_frame.winfo_width()
-    h = y + plan_mini_frame.winfo_height()
+    plan_mini_canvas.update()
+    x = plan_mini_canvas.winfo_rootx()
+    y = plan_mini_canvas.winfo_rooty()
+    w = x + plan_mini_canvas.winfo_width()
+    h = y +plan_mini_canvas.winfo_height()
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     filename = f"snapshot_{username}_outfit_{timestamp}.png"
@@ -1015,7 +1007,7 @@ def take_snapshot(widget, username, json_path="closet.json"):
     print (used_items)
 
 def clear_outfit_frame():
-    for widget in plan_mini_frame.winfo_children():
+    for widget in plan_mini_canvas.winfo_children():
         widget.destroy()
 
     used_items.clear()
@@ -1647,24 +1639,28 @@ def search_outfit_inventory():
 
 # ----- Center Frame -----
 plan_center_frame = ttk.Frame(big_frame, width=600, height=900, style="Custom.TFrame")
-plan_center_frame.pack(pady=1, padx=20, side="left")
+plan_center_frame.pack(pady=1, padx=20, side="left", fill="both")
 plan_center_frame.pack_propagate(False)
 
-plan_mini_frame = ttk.Frame(plan_center_frame, width=600, height=750)
-plan_mini_frame.pack(pady=1, padx=20)
+
+plan_mini_canvas = Canvas(plan_center_frame, width=480, height=600, bg="white", highlightthickness=1, highlightbackground="gray")
+plan_mini_canvas.pack(pady=10, padx=10)
+plan_mini_canvas_images = []
+
 
 plan_button_frame = ttk.Frame(plan_center_frame, style="Custom.TFrame")
-plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is at the bottom
+plan_button_frame.pack(side='bottom', pady=10, fill="x")  # Frame at the bottom
 
-# Pack buttons side by side inside the frame
+
 plan_back_button = ttk.Button(plan_button_frame, text="back", width=6, command=lambda: next_page(page4))
 plan_back_button.pack(side="left", padx=10)
 
-plan_save_button = ttk.Button(plan_button_frame, text="save", width=6, command=lambda: take_snapshot(plan_mini_frame, username))
+plan_save_button = ttk.Button(plan_button_frame, text="save", width=6, command=lambda: take_snapshot(plan_mini_canvas, username))
 plan_save_button.pack(side="left", padx=10)
 
 plan_clear_button = ttk.Button(plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
 plan_clear_button.pack(side="left", padx=10)
+
 
 
 # ----- Right Frame -----
