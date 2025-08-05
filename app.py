@@ -888,8 +888,8 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
 
     if not filtered_items:
         print("No results found for:", selected_tag)
+
 def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_tag, json_path="closet.json", columns=4):
-    # Clear previous results
     for widget in grid_frame.winfo_children():
         widget.destroy()
 
@@ -912,7 +912,6 @@ def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_t
     for image_path, tags in items.items():
         tag_list = []
 
-        # Collect all values as lowercase strings
         if isinstance(tags, dict):
             for key, value in tags.items():
                 if key == "custom_tags" and isinstance(value, list):
@@ -921,33 +920,68 @@ def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_t
                     tag_list.append(str(value).lower())
         elif isinstance(tags, list):
             tag_list = [str(value).lower() for value in tags]
-        else:
-            tag_list = []
 
-        # Check if selected tag exists in any tag
         if selected_tag in tag_list:
             filtered_items[image_path] = tags
 
-    # Display filtered items in grid
-    for index, (image_path, tags) in enumerate(filtered_items.items()):
+    row = 0
+    col = 0
+
+    for image_path, tags in filtered_items.items():
         try:
-            img = Image.open(image_path.strip())
+            new_img = image_path.strip()
+            img = Image.open(new_img).convert("RGBA")
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
 
-            btn = ttk.Button(
-                grid_frame,
-                image=photo,
-                command=lambda path=image_path: open_edit_page(path)
-            )
-            btn.image = photo
+            label = Label(grid_frame, image=photo, cursor="hand2")
+            label.image = photo
+            label.grid(row=row, column=col, padx=10, pady=10)
 
-            row = index // columns
-            col = index % columns
-            btn.grid(row=row, column=col, padx=10, pady=10)
+            def clone_to_planner_on_canvas(event, img_path=new_img):
+                try:
+                    img = Image.open(img_path).convert("RGBA")
+                    img = img.resize((150, 150), Image.Resampling.LANCZOS)
+                    photo = ImageTk.PhotoImage(img)
+                    plan_mini_canvas_images.append(photo)
+
+                    width = plan_mini_canvas.winfo_width()
+                    height = plan_mini_canvas.winfo_height()
+
+                    x = random.randint(0, max(0, width - 150))
+                    y = random.randint(0, max(0, height - 150))
+
+                    image_id = plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
+
+                    def start_drag(e, id=image_id):
+                        plan_mini_canvas._drag_data = (id, e.x, e.y)
+
+                    def on_drag(e):
+                        item_id, start_x, start_y = plan_mini_canvas._drag_data
+                        dx = e.x - start_x
+                        dy = e.y - start_y
+                        plan_mini_canvas.move(item_id, dx, dy)
+                        plan_mini_canvas._drag_data = (item_id, e.x, e.y)
+
+                    def on_double_click(e, id=image_id):
+                        plan_mini_canvas.delete(id)
+
+                    plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
+                    plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+                    plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+
+                except Exception as e:
+                    print("Error cloning to canvas:", e)
+
+            label.bind("<Button-1>", lambda e, path=new_img: clone_to_planner_on_canvas(e, path))
+
+            col += 1
+            if col >= columns:
+                col = 0
+                row += 1
 
         except Exception as e:
-            print(f"Error loading {image_path}:", e)
+            print(f"Error displaying filtered item {image_path}:", e)
 
     if not filtered_items:
         print("No results found for:", selected_tag)
