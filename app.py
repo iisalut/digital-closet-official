@@ -783,6 +783,9 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
                     photo = ImageTk.PhotoImage(img)
                     plan_mini_canvas_images.append(photo)
 
+                    if img_path.strip() not in used_items:
+                        used_items.append(img_path.strip())
+
                     width = plan_mini_canvas.winfo_width()
                     height = plan_mini_canvas.winfo_height()
 
@@ -1041,25 +1044,10 @@ def take_snapshot(widget, username, json_path="closet.json"):
     print (used_items)
 
 def clear_outfit_frame():
-    for widget in plan_mini_canvas.winfo_children():
-        widget.destroy()
-
+    plan_mini_canvas.delete("all")
     used_items.clear()
-
     global currently_loaded_snapshot
     currently_loaded_snapshot = None
-
-    messagebox.showinfo("Cleared", "Outfit cleared")
-
-def fit_clear_outfit_frame():
-    for widget in fit_plan_mini_frame.winfo_children():
-        widget.destroy()
-
-    used_items.clear()
-
-    global currently_loaded_snapshot
-    currently_loaded_snapshot = None
-
     messagebox.showinfo("Cleared", "Outfit cleared")
 
 
@@ -1911,7 +1899,7 @@ fit_plan_back_button.pack(side="left", padx=10)
 fit_plan_save_button = ttk.Button(fit_plan_button_frame, text="save", width=6, command=lambda: take_snapshot(fit_plan_mini_frame, username))
 fit_plan_save_button.pack(side="left", padx=10)
 
-fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=fit_clear_outfit_frame)
+fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=clear_outfit_frame)
 fit_plan_clear_button.pack(side="left", padx=10)
 
 def delete_edit_outfit_data(json_path="closet.json"):
