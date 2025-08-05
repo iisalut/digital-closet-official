@@ -12,7 +12,12 @@
         "pants",
         "blue",
         "denim",
-        "dark blue"
+        "dark blue",
+        "choose color",
+        "fall",
+        "ribbed",
+        "stripes",
+        "purple"
     ],
     "hi": {
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png": {
@@ -51,7 +56,24 @@
         },
         "outfits": {
             "snapshot_hi_outfit_20250804-160838.png": [],
-            "snapshot_hi_outfit_20250804-163658.png": []
+            "snapshot_hi_outfit_20250804-163658.png": [],
+            "snapshot_hi_outfit_20250805-091758.png": [],
+            "snapshot_hi_outfit_20250805-092914.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
+            "type": "Top",
+            "color": "Choose color",
+            "season": "Fall",
+            "occasion": "Casual",
+            "material": "ribbed",
+            "custom_tags": [
+                "stripes",
+                "purple"
+            ]
         }
     }
 }
