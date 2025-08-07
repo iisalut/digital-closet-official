@@ -1090,9 +1090,9 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
                 frame.grid(row=index // columns, column=index % columns, padx=10, pady=10)
 
                 def on_snapshot_click(key=snapshot_name):
-                    load_outfit(key, display_frame=fit_plan_mini_frame, username=username)
-                    display_clothes_plangrid(fit_plan_frame, fit_plan_mini_frame, username)
-                    display_clothes_plangrid(fit_plan2_frame, fit_plan_mini_frame, username)
+                    load_outfit(key, display_frame=fit_plan_mini_canvas, username=username)
+                    display_clothes_plangrid(fit_plan_frame, fit_plan_mini_canvas, username)
+                    display_clothes_plangrid(fit_plan2_frame, fit_plan_mini_canvas, username)
 
                 btn = ttk.Button(
                     frame,
@@ -1127,7 +1127,7 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
     page10.tkraise()
 
     # ---- Clear current outfit ----
-    for widget in fit_plan_mini_frame.winfo_children():
+    for widget in fit_plan_mini_canvas.winfo_children():
         widget.destroy()
     used_items.clear()
 
@@ -1885,9 +1885,9 @@ fit_plan_center_frame = ttk.Frame(fit_big_frame, width=600, height=900, style="C
 fit_plan_center_frame.pack(pady=1, padx=20, side="left")
 fit_plan_center_frame.pack_propagate(False)
 
-fit_plan_mini_frame = ttk.Frame(fit_plan_center_frame, width=600, height=750)
-fit_plan_mini_frame.pack(pady=1, padx=20)
-fit_plan_mini_frame.pack_propagate(False)
+fit_plan_mini_canvas = ttk.Frame(fit_plan_center_frame, width=600, height=750)
+fit_plan_mini_canvas.pack(pady=1, padx=20)
+fit_plan_mini_canvas_images=[]
 
 fit_plan_button_frame = ttk.Frame(fit_plan_center_frame, style="Custom.TFrame")
 fit_plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is at the bottom
@@ -1896,7 +1896,7 @@ fit_plan_button_frame.pack(side='bottom', pady=1, anchor='s')  # This frame is a
 fit_plan_back_button = ttk.Button(fit_plan_button_frame, text="back", width=6, command=lambda: next_page(page4))
 fit_plan_back_button.pack(side="left", padx=10)
 
-fit_plan_save_button = ttk.Button(fit_plan_button_frame, text="save", width=6, command=lambda: take_snapshot(fit_plan_mini_frame, username))
+fit_plan_save_button = ttk.Button(fit_plan_button_frame, text="save", width=6, command=lambda: take_snapshot(fit_plan_mini_canvas, username))
 fit_plan_save_button.pack(side="left", padx=10)
 
 fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=clear_outfit_frame)
