@@ -1120,16 +1120,16 @@ drag_data = {
 
 
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
-    global currently_loaded_snapshot, used_items
+    global currently_loaded_snapshot, used_items, fit_plan_mini_canvas_images
     currently_loaded_snapshot = snapshot_key
 
     # ---- Switch to page10 ----
     page10.tkraise()
 
     # ---- Clear current outfit ----
-    for widget in fit_plan_mini_canvas.winfo_children():
-        widget.destroy()
+    fit_plan_mini_canvas.delete("all")  # Use delete instead of destroying children
     used_items.clear()
+    fit_plan_mini_canvas_images.clear()
 
     # ---- Load the outfit ----
     try:
@@ -1140,48 +1140,47 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
         print("Error loading outfit:", e)
         return
 
-
-
     for path in outfit_paths:
         try:
-            img = Image.open(path.strip())
+            img = Image.open(path.strip()).convert("RGBA")
             img = img.resize((150, 150), Image.Resampling.LANCZOS)
-            photo = ImageTk.PhotoImage(img)
 
-            label = Label(display_frame, image=photo, bd=0, bg="white")
-            label.image = photo
+            # Create transparent background and paste with alpha
+            transparent_bg = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            transparent_bg.paste(img, (0, 0), img)
+            img_tk = ImageTk.PhotoImage(transparent_bg)
 
-
+            # Random position
             import random
             x = random.randint(100, 300)
             y = random.randint(100, 300)
-            label.place(x=x, y=y)
 
+            # Add image to canvas
+            canvas_id = fit_plan_mini_canvas.create_image(x, y, image=img_tk, anchor="nw")
+            fit_plan_mini_canvas_images.append(img_tk)  # Prevent garbage collection
+            used_items.append(path.strip())
 
-            label.path = path.strip()
-            used_items.append(label.path)
-
-            # Make draggable
-            def on_drag(event, lbl=label):
-                lbl.place(
-                    x=event.x_root - display_frame.winfo_rootx() - 75,
-                    y=event.y_root - display_frame.winfo_rooty() - 75
+            # --- Make draggable ---
+            def on_drag(event, cid=canvas_id):
+                fit_plan_mini_canvas.coords(cid,
+                    event.x - 75,
+                    event.y - 75
                 )
 
-            label.bind("<B1-Motion>", on_drag)
+            fit_plan_mini_canvas.tag_bind(canvas_id, "<B1-Motion>", on_drag)
 
-            # Make deletable
-            def on_right_click(event, lbl=label):
+            # --- Make deletable ---
+            def on_right_click(event, cid=canvas_id, p=path.strip()):
                 if messagebox.askyesno("Delete", "Do you want to delete this item?"):
-                    if lbl.path in used_items:
-                        used_items.remove(lbl.path)
-                    lbl.destroy()
+                    if p in used_items:
+                        used_items.remove(p)
+                    fit_plan_mini_canvas.delete(cid)
 
-            label.bind("<Double-Button-1>", on_right_click)
-
+            fit_plan_mini_canvas.tag_bind(canvas_id, "<Double-Button-1>", on_right_click)
 
         except Exception as e:
             print(f"Error displaying item {path}:", e)
+
 
 
 inventory_search_button= ttk.Button(inventory_search_frame,text="search", width=5, command=search_inventory)
@@ -1795,9 +1794,26 @@ def configure_scroll_region(event):
 
 fit_grid_frame.bind("<Configure>", configure_scroll_region)
 
-#</editor-fold>
+#</editor-fold
 #------------page10(outfit edit)------
 #<editor-fold>
+def add_image_to_fit_canvas(image_path, canvas, image_list, x=100, y=100):
+    try:
+        img = Image.open(image_path).convert("RGBA")
+
+
+        new_size = (150, 150)
+        transparent_img = Image.new("RGBA", new_size, (0, 0, 0, 0))
+        img = img.resize(new_size, Image.LANCZOS)
+        transparent_img.paste(img, (0, 0), img)
+        img_tk = ImageTk.PhotoImage(transparent_img)
+
+        canvas.create_image(x, y, image=img_tk, anchor="nw")
+        image_list.append(img_tk)
+
+    except Exception as e:
+        print(f"[ERROR] Failed to add image: {e}")
+
 page10 = ttk.Frame(window,style="Custom.TFrame")
 page10.grid(row=0, column=0, sticky="nsew")
 page10.grid_propagate(False)
@@ -1885,7 +1901,7 @@ fit_plan_center_frame = ttk.Frame(fit_big_frame, width=600, height=900, style="C
 fit_plan_center_frame.pack(pady=1, padx=20, side="left")
 fit_plan_center_frame.pack_propagate(False)
 
-fit_plan_mini_canvas = ttk.Frame(fit_plan_center_frame, width=600, height=750)
+fit_plan_mini_canvas = Canvas(fit_plan_center_frame, width=600, height=750, bg="white", highlightthickness=1, highlightbackground="gray")
 fit_plan_mini_canvas.pack(pady=1, padx=20)
 fit_plan_mini_canvas_images=[]
 
