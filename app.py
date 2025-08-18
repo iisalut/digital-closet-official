@@ -1374,6 +1374,115 @@ def load_edit_custom_tags(tag_list):
                             command=lambda t=tag, f=tag_frame: remove_edit_custom_tag(t, f))
         remove_btn.pack(side="left", padx=(2, 0))
 
+
+
+def display_filtered_clothes_plan_page8(grid_frame, center_frame, username, selected_tag, json_path="closet.json",
+                                        columns=4):
+    for widget in grid_frame.winfo_children():
+        widget.destroy()
+
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+    except Exception as e:
+        print("Could not load JSON file:", e)
+        return
+
+    if username not in data:
+        print("No clothing data for", username)
+        return
+
+    selected_tag = selected_tag.lower().strip()
+    items = data[username]
+    filtered_items = {}
+
+    for image_path, tags in items.items():
+        tag_list = []
+
+        if isinstance(tags, dict):
+            for key, value in tags.items():
+                if key == "custom_tags" and isinstance(value, list):
+                    tag_list.extend([str(v).lower() for v in value])
+                else:
+                    tag_list.append(str(value).lower())
+        elif isinstance(tags, list):
+            tag_list = [str(value).lower() for value in tags]
+
+        if selected_tag in tag_list:
+            filtered_items[image_path] = tags
+
+    row = 0
+    col = 0
+
+    for image_path, tags in filtered_items.items():
+        try:
+            new_img = image_path.strip()
+            img = Image.open(new_img).convert("RGBA")
+            img = img.resize((150, 150), Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+
+            label = Label(grid_frame, image=photo, cursor="hand2")
+            label.image = photo
+            label.grid(row=row, column=col, padx=10, pady=10)
+
+            def make_clone_function(img_path):
+                def clone_to_planner_on_canvas(event):
+                    try:
+                        img = Image.open(img_path).convert("RGBA")
+                        img = img.resize((150, 150), Image.Resampling.LANCZOS)
+                        photo = ImageTk.PhotoImage(img)
+
+                        plan_mini_canvas_images.append(photo)
+
+                        if img_path.strip() not in used_items:
+                            used_items.append(img_path.strip())
+
+                        width = plan_mini_canvas.winfo_width()
+                        height = plan_mini_canvas.winfo_height()
+
+                        x = random.randint(0, max(0, width - 150))
+                        y = random.randint(0, max(0, height - 150))
+
+                        image_id = plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
+
+                        def start_drag(e, id=image_id):
+                            plan_mini_canvas._drag_data = (id, e.x, e.y)
+
+                        def on_drag(e):
+                            item_id, start_x, start_y = plan_mini_canvas._drag_data
+                            dx = e.x - start_x
+                            dy = e.y - start_y
+                            plan_mini_canvas.move(item_id, dx, dy)
+                            plan_mini_canvas._drag_data = (item_id, e.x, e.y)
+
+                        def on_double_click(e, id=image_id):
+                            plan_mini_canvas.delete(id)
+                            if img_path.strip() in used_items:
+                                used_items.remove(img_path.strip())
+
+                        plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
+                        plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+                        plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+
+                    except Exception as e:
+                        print("Error cloning to canvas:", e)
+
+                return clone_to_planner_on_canvas
+
+            label.bind("<Button-1>", make_clone_function(new_img))
+
+            col += 1
+            if col >= columns:
+                col = 0
+                row += 1
+
+        except Exception as e:
+            print(f"Error displaying filtered item {image_path}:", e)
+
+    if not filtered_items:
+        print("No results found for:", selected_tag)
+
+
 #</editor-fold>
 #-----special exclusive edit page---page7
 #<editor-fold 1">
@@ -1674,9 +1783,10 @@ def select_plan_suggestions():
 def search_outfit_inventory():
     selected_tag = plan_entry.get().strip().lower()
     if selected_tag == "":
-        display_clothes_plangrid(fit_plan_frame, username, fit_plan_mini_canvas, fit_plan_mini_canvas_images)
+        display_clothes_plangrid(plan_frame, username, plan_mini_canvas, plan_mini_canvas_images)
     else:
-        display_filtered_clothes_plan(plan_frame,plan_center_frame ,username=username, selected_tag=selected_tag)
+        display_filtered_clothes_plan_page8(plan_frame, plan_center_frame, username=username, selected_tag=selected_tag)
+
 
 
 # ----- Center Frame -----
@@ -1766,9 +1876,10 @@ def select_plan2_suggestions():
 def search_outfit_inventory2():
     selected_tag = plan2_entry.get().strip().lower()
     if selected_tag == "":
-        display_clothes_plangrid(fit_plan2_frame, username, fit_plan_mini_canvas, fit_plan_mini_canvas_images)
+        display_clothes_plangrid(plan2_frame, username, plan_mini_canvas, plan_mini_canvas_images)
     else:
-        display_filtered_clothes_plan(plan2_frame,plan_center_frame, username=username, selected_tag=selected_tag)
+        display_filtered_clothes_plan_page8(plan2_frame, plan_center_frame, username=username, selected_tag=selected_tag)
+
 
 # ----- Mousewheel binding -----
 def bind_mousewheel_to(canvas):
