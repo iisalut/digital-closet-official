@@ -327,8 +327,14 @@ home_inventory_button = ttk.Button(pack_frame, text="Inventory", bootstyle='prim
 )
 home_inventory_button.pack(side='left', padx=10)
 
-home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page8),display_clothes_plangrid(plan_frame,plan_mini_canvas, username),display_clothes_plangrid(plan2_frame,plan_mini_canvas, username)])
+home_closet_button = ttk.Button(pack_frame, text="Make outfits", bootstyle=PRIMARY, width=15,
+                               command=lambda: [
+                                   next_page(page8),
+                                   display_clothes_plangrid(plan_frame, username, plan_mini_canvas, plan_mini_canvas_images),
+                                   display_clothes_plangrid(plan2_frame, username, plan_mini_canvas, plan_mini_canvas_images)
+                               ])
 home_closet_button.pack(side='left', padx=10)
+
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page9),display_saved_outfits(fit_grid_frame, fit_canvas_frame, username)])
 home_saved_button.pack(side='left', padx=10)
@@ -736,8 +742,8 @@ def search_inventory():
     else:
         display_filtered_clothes(grid_frame, username=username, selected_tag=selected_tag)
 
-def display_clothes_plangrid(grid_frame, center_frame, username, json_path="closet.json", columns=2):
 
+def display_clothes_plangrid(grid_frame, username, target_canvas, target_images_list, json_path="closet.json", columns=2):
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
         widget.destroy()
@@ -776,46 +782,45 @@ def display_clothes_plangrid(grid_frame, center_frame, username, json_path="clos
             inventory_cloth_label.image = photo
             inventory_cloth_label.grid(row=row, column=col, padx=10, pady=10)
 
-            def clone_to_planner_on_canvas(event, img_path):
+            def clone_to_planner_on_canvas(event, img_path, canvas=target_canvas, images_list=target_images_list):
                 try:
                     img = Image.open(img_path).convert("RGBA")
                     img = img.resize((150, 150), Image.Resampling.LANCZOS)
                     photo = ImageTk.PhotoImage(img)
-                    plan_mini_canvas_images.append(photo)
+                    images_list.append(photo)  # Use the passed images list
 
                     if img_path.strip() not in used_items:
                         used_items.append(img_path.strip())
 
-                    width = plan_mini_canvas.winfo_width()
-                    height = plan_mini_canvas.winfo_height()
+                    width = canvas.winfo_width()
+                    height = canvas.winfo_height()
 
                     x = random.randint(0, max(0, width - 150))
                     y = random.randint(0, max(0, height - 150))
 
-                    image_id = plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
+                    image_id = canvas.create_image(x, y, image=photo, anchor="nw")  # Use passed canvas
 
                     def start_drag(e, id=image_id):
-                        plan_mini_canvas._drag_data = (id, e.x, e.y)
+                        canvas._drag_data = (id, e.x, e.y)
 
                     def on_drag(e):
-                        item_id, start_x, start_y = plan_mini_canvas._drag_data
+                        item_id, start_x, start_y = canvas._drag_data
                         dx = e.x - start_x
                         dy = e.y - start_y
-                        plan_mini_canvas.move(item_id, dx, dy)
-                        plan_mini_canvas._drag_data = (item_id, e.x, e.y)
+                        canvas.move(item_id, dx, dy)
+                        canvas._drag_data = (item_id, e.x, e.y)
 
                     def on_double_click(e, id=image_id):
-                        plan_mini_canvas.delete(id)
+                        canvas.delete(id)
 
-                    plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
-                    plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
-                    plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+                    canvas.tag_bind(image_id, "<Button-1>", start_drag)
+                    canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+                    canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
 
                 except Exception as e:
                     print("Error cloning to canvas:", e)
 
-
-            # Bind click event using functools.partial to pass current photo
+            # Bind click event
             inventory_cloth_label.bind("<Button-1>", lambda e, p=new_img: clone_to_planner_on_canvas(e, p))
 
             print("Displayed label for:", new_img)
@@ -1053,7 +1058,6 @@ def clear_outfit_frame():
 
 def display_saved_outfits(grid_frame, display_frame, username, json_path="closet.json", columns=2):
 
-
     # Clear previous widgets
     for widget in grid_frame.winfo_children():
         widget.destroy()
@@ -1091,8 +1095,10 @@ def display_saved_outfits(grid_frame, display_frame, username, json_path="closet
 
                 def on_snapshot_click(key=snapshot_name):
                     load_outfit(key, display_frame=fit_plan_mini_canvas, username=username)
-                    display_clothes_plangrid(fit_plan_frame, fit_plan_mini_canvas, username)
-                    display_clothes_plangrid(fit_plan2_frame, fit_plan_mini_canvas, username)
+                    display_clothes_plangrid(fit_plan_frame, username, fit_plan_mini_canvas,
+                                             fit_plan_mini_canvas_images)
+                    display_clothes_plangrid(fit_plan2_frame, username, fit_plan_mini_canvas,
+                                             fit_plan_mini_canvas_images)
 
                 btn = ttk.Button(
                     frame,
@@ -1653,7 +1659,7 @@ def select_plan_suggestions():
 def search_outfit_inventory():
     selected_tag = plan_entry.get().strip().lower()
     if selected_tag == "":
-        display_clothes_plangrid(plan_frame, username=username)
+        display_clothes_plangrid(fit_plan_frame, username, fit_plan_mini_canvas, fit_plan_mini_canvas_images)
     else:
         display_filtered_clothes_plan(plan_frame,plan_center_frame ,username=username, selected_tag=selected_tag)
 
@@ -1745,7 +1751,7 @@ def select_plan2_suggestions():
 def search_outfit_inventory2():
     selected_tag = plan2_entry.get().strip().lower()
     if selected_tag == "":
-        display_clothes_plangrid(plan2_frame, username=username)
+        display_clothes_plangrid(fit_plan2_frame, username, fit_plan_mini_canvas, fit_plan_mini_canvas_images)
     else:
         display_filtered_clothes_plan(plan2_frame,plan_center_frame, username=username, selected_tag=selected_tag)
 
@@ -2057,5 +2063,4 @@ next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
-
 
