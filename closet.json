@@ -17,7 +17,11 @@
         "fall",
         "ribbed",
         "stripes",
-        "purple"
+        "purple",
+        "jacket",
+        "winter",
+        "wool",
+        "beige"
     ],
     "hi": {
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png": {
@@ -77,6 +81,19 @@
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250818-082712.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250818-090212.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250818-112218.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
             ]
         },
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png": {
@@ -89,6 +106,17 @@
             "custom_tags": [
                 "stripes",
                 "purple"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
+            "type": "jacket",
+            "color": "---",
+            "season": "Winter",
+            "occasion": "Casual",
+            "material": "wool",
+            "custom_tags": [
+                "beige"
             ]
         }
     }
