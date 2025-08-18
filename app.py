@@ -1791,17 +1791,17 @@ def search_outfit_inventory():
 
 # ----- Center Frame -----
 plan_center_frame = ttk.Frame(big_frame, width=600, height=900, style="Custom.TFrame")
-plan_center_frame.pack(pady=1, padx=20, side="left", fill="both")
+plan_center_frame.pack(pady=1, padx=20, side="left")
 plan_center_frame.pack_propagate(False)
 
 
-plan_mini_canvas = Canvas(plan_center_frame, width=480, height=600, bg="white", highlightthickness=1, highlightbackground="gray")
-plan_mini_canvas.pack(pady=10, padx=10)
+plan_mini_canvas = Canvas(plan_center_frame, width=600, height=750, bg="white", highlightthickness=1, highlightbackground="gray")
+plan_mini_canvas.pack(pady=1, padx=20)
 plan_mini_canvas_images = []
 
 
 plan_button_frame = ttk.Frame(plan_center_frame, style="Custom.TFrame")
-plan_button_frame.pack(side='bottom', pady=10, fill="x")  # Frame at the bottom
+plan_button_frame.pack(side='bottom', pady=1,anchor='s')  # Frame at the bottom
 
 
 plan_back_button = ttk.Button(plan_button_frame, text="back", width=6, command=lambda: next_page(page4))
@@ -2050,49 +2050,39 @@ fit_plan_save_button.pack(side="left", padx=10)
 fit_plan_clear_button = ttk.Button(fit_plan_button_frame, text="clear", width=6, command=clear_outfit_frame)
 fit_plan_clear_button.pack(side="left", padx=10)
 
-def delete_edit_outfit_data(json_path="closet.json"):
-    global currently_loaded_snapshot
 
-    print("[DEBUG] Delete function called.")
-    print(f"[DEBUG] currently_loaded_snapshot: {currently_loaded_snapshot}")
+def delete_edit_outfit_data(json_path="closet.json"):
+    global currently_loaded_snapshot, username
 
     if not currently_loaded_snapshot:
-        print("No snapshot loaded to delete.")
+        messagebox.showwarning("Warning", "No outfit selected to delete.")
         return
 
-    answer = messagebox.askyesno("Delete Outfit", "Are you sure you want to delete this entire outfit?")
-    if not answer:
-        print("[DEBUG] User canceled deletion.")
+    if not messagebox.askyesno("Delete Outfit", "Are you sure you want to delete this entire outfit?"):
         return
 
     try:
+        # Load and update JSON
         with open(json_path, 'r') as file:
             data = json.load(file)
 
-        #  i Loop through users to find the snapshot
-        for username in data:
-            outfits = data[username].get("outfits", {})
-            if currently_loaded_snapshot in outfits:
-                del outfits[currently_loaded_snapshot]
-                print(f"[DEBUG] Deleted snapshot {currently_loaded_snapshot} under user {username}")
-                break
+        del data[username]["outfits"][currently_loaded_snapshot]
 
         with open(json_path, 'w') as file:
             json.dump(data, file, indent=4)
 
-        # delete the image file
+        # Delete image file
         if os.path.exists(currently_loaded_snapshot):
             os.remove(currently_loaded_snapshot)
-            print(f"[DEBUG] Snapshot image file {currently_loaded_snapshot} deleted from disk.")
 
-        currently_loaded_snapshot = None  # Reset
-
+        currently_loaded_snapshot = None
         messagebox.showinfo("Success", "Outfit deleted successfully.")
 
     except Exception as e:
-        print("[ERROR] Failed to delete outfit:", e)
         messagebox.showerror("Error", f"Failed to delete outfit: {e}")
-    next_page(page5)
+
+    next_page(page4)
+
 
 fit_plan_delete_button = ttk.Button(fit_plan_button_frame, text="delete outfit", width=10, command=delete_edit_outfit_data)
 fit_plan_delete_button.pack(side="left", padx=10)
