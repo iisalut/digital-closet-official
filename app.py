@@ -897,6 +897,7 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
     if not filtered_items:
         print("No results found for:", selected_tag)
 
+
 def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_tag, json_path="closet.json", columns=4):
     for widget in grid_frame.winfo_children():
         widget.destroy()
@@ -946,42 +947,56 @@ def display_filtered_clothes_plan(grid_frame, center_frame, username, selected_t
             label.image = photo
             label.grid(row=row, column=col, padx=10, pady=10)
 
-            def clone_to_planner_on_canvas(event, img_path=new_img):
-                try:
-                    img = Image.open(img_path).convert("RGBA")
-                    img = img.resize((150, 150), Image.Resampling.LANCZOS)
-                    photo = ImageTk.PhotoImage(img)
-                    plan_mini_canvas_images.append(photo)
+            # FIX: Create a proper closure to capture the image path
+            def make_clone_function(img_path):
+                def clone_to_planner_on_canvas(event):
+                    try:
+                        img = Image.open(img_path).convert("RGBA")
+                        img = img.resize((150, 150), Image.Resampling.LANCZOS)
+                        photo = ImageTk.PhotoImage(img)
 
-                    width = plan_mini_canvas.winfo_width()
-                    height = plan_mini_canvas.winfo_height()
+                        # FIXED: Use the correct canvas reference
+                        fit_plan_mini_canvas_images.append(photo)
 
-                    x = random.randint(0, max(0, width - 150))
-                    y = random.randint(0, max(0, height - 150))
+                        # FIXED: Add to used_items tracking
+                        if img_path.strip() not in used_items:
+                            used_items.append(img_path.strip())
 
-                    image_id = plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
+                        width = fit_plan_mini_canvas.winfo_width()
+                        height = fit_plan_mini_canvas.winfo_height()
 
-                    def start_drag(e, id=image_id):
-                        plan_mini_canvas._drag_data = (id, e.x, e.y)
+                        x = random.randint(0, max(0, width - 150))
+                        y = random.randint(0, max(0, height - 150))
 
-                    def on_drag(e):
-                        item_id, start_x, start_y = plan_mini_canvas._drag_data
-                        dx = e.x - start_x
-                        dy = e.y - start_y
-                        plan_mini_canvas.move(item_id, dx, dy)
-                        plan_mini_canvas._drag_data = (item_id, e.x, e.y)
+                        image_id = fit_plan_mini_canvas.create_image(x, y, image=photo, anchor="nw")
 
-                    def on_double_click(e, id=image_id):
-                        plan_mini_canvas.delete(id)
+                        def start_drag(e, id=image_id):
+                            fit_plan_mini_canvas._drag_data = (id, e.x, e.y)
 
-                    plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
-                    plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
-                    plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+                        def on_drag(e):
+                            item_id, start_x, start_y = fit_plan_mini_canvas._drag_data
+                            dx = e.x - start_x
+                            dy = e.y - start_y
+                            fit_plan_mini_canvas.move(item_id, dx, dy)
+                            fit_plan_mini_canvas._drag_data = (item_id, e.x, e.y)
 
-                except Exception as e:
-                    print("Error cloning to canvas:", e)
+                        def on_double_click(e, id=image_id):
+                            fit_plan_mini_canvas.delete(id)
+                            # FIXED: Remove from used_items when deleted
+                            if img_path.strip() in used_items:
+                                used_items.remove(img_path.strip())
 
-            label.bind("<Button-1>", lambda e, path=new_img: clone_to_planner_on_canvas(e, path))
+                        fit_plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
+                        fit_plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+                        fit_plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+
+                    except Exception as e:
+                        print("Error cloning to canvas:", e)
+
+                return clone_to_planner_on_canvas
+
+            # FIXED: Use the closure function
+            label.bind("<Button-1>", make_clone_function(new_img))
 
             col += 1
             if col >= columns:
