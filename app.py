@@ -817,6 +817,7 @@ def display_clothes_plangrid(grid_frame, username, target_canvas, target_images_
                     canvas.tag_bind(image_id, "<Button-1>", start_drag)
                     canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
                     canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+                    canvas.tag_bind(image_id, "<Command-Button-1>",lambda e, id=image_id, path=img_path: show_resize_options(id, path, canvas,images_list))
 
                 except Exception as e:
                     print("Error cloning to canvas:", e)
@@ -1227,8 +1228,6 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
                     event.y - 75
                 )
 
-            fit_plan_mini_canvas.tag_bind(canvas_id, "<B1-Motion>", on_drag)
-
             # --- Make deletable ---
             def on_right_click(event, cid=canvas_id, p=path.strip()):
                 if messagebox.askyesno("Delete", "Do you want to delete this item?"):
@@ -1236,7 +1235,10 @@ def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
                         used_items.remove(p)
                     fit_plan_mini_canvas.delete(cid)
 
+
+            fit_plan_mini_canvas.tag_bind(canvas_id, "<B1-Motion>", on_drag)
             fit_plan_mini_canvas.tag_bind(canvas_id, "<Double-Button-1>", on_right_click)
+            fit_plan_mini_canvas.tag_bind(canvas_id, "<Command-Button-1>",lambda e, id=canvas_id, p=path.strip(): show_resize_options(id, p,fit_plan_mini_canvas,fit_plan_mini_canvas_images))
 
         except Exception as e:
             print(f"Error displaying item {path}:", e)
@@ -1502,6 +1504,10 @@ def display_filtered_clothes_plan_page8(grid_frame, center_frame, username, sele
                         plan_mini_canvas.tag_bind(image_id, "<Button-1>", start_drag)
                         plan_mini_canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
                         plan_mini_canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+                        plan_mini_canvas.tag_bind(image_id, "<Command-Button-1>",
+                                                  lambda e, id=image_id, path=img_path: show_resize_options(id, path,
+                                                                                                            plan_mini_canvas,
+                                                                                                            plan_mini_canvas_images))
 
                     except Exception as e:
                         print("Error cloning to canvas:", e)
