@@ -1174,6 +1174,30 @@ def show_resize_options(image_id, img_path, canvas, images_list):
         canvas.delete(image_id)
         new_image_id = canvas.create_image(x, y, image=photo, anchor="nw")
 
+
+        def start_drag(e, id=new_image_id):
+            canvas._drag_data = (id, e.x, e.y)
+
+        def on_drag(e):
+            if hasattr(canvas, '_drag_data'):
+                item_id, start_x, start_y = canvas._drag_data
+                dx = e.x - start_x
+                dy = e.y - start_y
+                canvas.move(item_id, dx, dy)
+                canvas._drag_data = (item_id, e.x, e.y)
+
+        def on_double_click(e, id=new_image_id):
+            canvas.delete(id)
+            if img_path.strip() in used_items:
+                used_items.remove(img_path.strip())
+
+
+        canvas.tag_bind(new_image_id, "<Button-1>", start_drag)
+        canvas.tag_bind(new_image_id, "<B1-Motion>", on_drag)
+        canvas.tag_bind(new_image_id, "<Double-Button-1>", on_double_click)
+        canvas.tag_bind(new_image_id, "<Command-Button-1>", lambda e, id=new_image_id, path=img_path: show_resize_options(id, path, canvas, images_list))
+
+
         messagebox.showinfo("Resized", f"Image resized to {new_size[0]}x{new_size[1]}")
 
     except Exception as e:
