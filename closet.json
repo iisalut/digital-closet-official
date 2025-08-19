@@ -1,115 +1,79 @@
 {
     "tag_pool": [
-        "top",
-        "---",
-        "summer",
-        "casual",
-        "cotton",
-        "multicolor",
-        "tie die",
-        "green",
-        "tank top",
         "pants",
-        "blue",
-        "denim",
-        "dark blue",
-        "choose color",
-        "fall",
-        "ribbed",
-        "stripes",
-        "purple",
+        "yellow",
+        "---",
+        "---",
+        "cotton",
+        "pallazzo pant",
+        "pattern",
         "jacket",
+        "white",
         "winter",
+        "casual",
         "wool",
-        "beige"
+        "hoodie",
+        "top",
+        "blue",
+        "formal",
+        "denim",
+        "skirt"
     ],
     "hi": {
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png",
-            "type": "Top",
-            "color": "---",
-            "season": "Summer",
-            "occasion": "Casual",
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2092_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2092_transparent.png",
+            "type": "Pants",
+            "color": "yellow",
+            "season": "---",
+            "occasion": "---",
             "material": "Cotton",
             "custom_tags": [
-                "multicolor",
-                "tie die"
+                "pallazzo pant",
+                "pattern"
             ]
         },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
-            "type": "Top",
-            "color": "Green",
-            "season": "Summer",
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2110_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2110_transparent.png",
+            "type": "jacket",
+            "color": "White",
+            "season": "Winter",
             "occasion": "Casual",
-            "material": "Cotton",
+            "material": "wool",
             "custom_tags": [
-                "tank top"
+                "hoodie"
             ]
         },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png",
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2062_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2062_transparent.png",
+            "type": "Top",
+            "color": "Blue",
+            "season": "Winter",
+            "occasion": "Formal",
+            "material": "wool",
+            "custom_tags": []
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png",
             "type": "Pants",
             "color": "Blue",
             "season": "---",
             "occasion": "---",
             "material": "denim",
-            "custom_tags": [
-                "dark blue"
-            ]
+            "custom_tags": []
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2106_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2106_transparent.png",
+            "type": "Skirt",
+            "color": "Blue",
+            "season": "---",
+            "occasion": "---",
+            "material": "denim",
+            "custom_tags": []
         },
         "outfits": {
-            "snapshot_hi_outfit_20250805-091758.png": [],
-            "snapshot_hi_outfit_20250805-092914.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
-            ],
-            "snapshot_hi_outfit_20250807-182817.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
-            ],
-            "snapshot_hi_outfit_20250807-184252.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2037_transparent.png"
-            ],
-            "snapshot_hi_outfit_20250817-183249.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2042_transparent_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
-            ],
-            "snapshot_hi_outfit_20250818-082712.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
-            ],
-            "snapshot_hi_outfit_20250818-090212.png": [
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
-                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2100_transparent.png"
-            ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2052_transparent.png",
-            "type": "Top",
-            "color": "Choose color",
-            "season": "Fall",
-            "occasion": "Casual",
-            "material": "ribbed",
-            "custom_tags": [
-                "stripes",
-                "purple"
-            ]
-        },
-        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png": {
-            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2111_transparent.png",
-            "type": "jacket",
-            "color": "---",
-            "season": "Winter",
-            "occasion": "Casual",
-            "material": "wool",
-            "custom_tags": [
-                "beige"
+            "snapshot_hi_outfit_20250818-190514.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2110_transparent.png"
             ]
         }
     }

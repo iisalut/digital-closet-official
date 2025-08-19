@@ -14,6 +14,7 @@ import functools
 import random
 import time
 from rembg import remove
+from tkinter import simpledialog
 import pillow_heif
 pillow_heif.register_heif_opener()
 
@@ -1139,6 +1140,44 @@ drag_data = {
 }
 
 
+def show_resize_options(image_id, img_path, canvas, images_list):
+    #trying ouut simpledialog for the first time!
+
+    from tkinter import simpledialog
+
+    # 3 optionsss!
+    choice = simpledialog.askstring(
+        "Resize Image",
+        "Choose size:\n1 = Small (100x100)\n2 = Medium (150x150)\n3 = Large (200x200)\n\nEnter 1, 2, or 3:"
+    )
+
+    # Handle user input
+    if choice == "1":
+        new_size = (100, 100)
+    elif choice == "2":
+        new_size = (150, 150)
+    elif choice == "3":
+        new_size = (200, 200)
+    else:
+        return
+
+    try:
+        img = Image.open(img_path).convert("RGBA")
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
+        photo = ImageTk.PhotoImage(img)
+        images_list.append(photo)
+
+        coords = canvas.coords(image_id)
+        x, y = coords[0], coords[1]
+
+        canvas.delete(image_id)
+        new_image_id = canvas.create_image(x, y, image=photo, anchor="nw")
+
+        messagebox.showinfo("Resized", f"Image resized to {new_size[0]}x{new_size[1]}")
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to resize image: {e}")
+
 
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
     global currently_loaded_snapshot, used_items, fit_plan_mini_canvas_images
@@ -2171,9 +2210,6 @@ def next_page(frame):
 # Configure all frames
 for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
     frame.grid(row=0, column=0, sticky="nsew")
-
-
-
 
 next_page(page1)  # Start by showing the welcome page
 
