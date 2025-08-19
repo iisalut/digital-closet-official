@@ -1142,25 +1142,43 @@ drag_data = {
 
 
 def show_resize_options(image_id, img_path, canvas, images_list):
-    #trying ouut simpledialog for the first time!
+    # no more simple dialog :(
 
-    from tkinter import simpledialog
+    # ---------stylizing the dialog box----------(watched yt tutorial)
+    dialog = Toplevel()
+    dialog.title("Resize options")
+    dialog.geometry("300x300")
+    dialog.resizable(False, False)
+    dialog.transient()  # allows it to stay on top of main window !!
+    dialog.grab_set()  # allows interaction
+    selected_size = None
+    ttk.Label(dialog, text="Choose a size").pack(pady=20)
 
-    # 3 optionsss!
-    choice = simpledialog.askstring(
-        "Resize Image",
-        "Choose size:\n1 = Small (100x100)\n2 = Medium (150x150)\n3 = Large (200x200)\n\nEnter 1, 2, or 3:"
-    )
+    def select_small():
+        nonlocal selected_size  # Use nonlocal instead of global
+        selected_size = (100, 100)
+        dialog.destroy()
 
-    # Handle user input
-    if choice == "1":
-        new_size = (100, 100)
-    elif choice == "2":
-        new_size = (150, 150)
-    elif choice == "3":
-        new_size = (200, 200)
-    else:
+    def select_medium():
+        nonlocal selected_size
+        selected_size = (200, 200)
+        dialog.destroy()
+
+    def select_large():
+        nonlocal selected_size
+        selected_size = (300, 300)
+        dialog.destroy()
+
+    ttk.Button(dialog, text="Small", command=select_small, width=20).pack(pady=5)
+    ttk.Button(dialog, text="Medium", command=select_medium, width=20).pack(pady=5)
+    ttk.Button(dialog, text="Large", command=select_large, width=20).pack(pady=5)
+    ttk.Button(dialog, text="Cancel", command=dialog.destroy, width=20).pack(pady=10)
+
+    dialog.wait_window()
+    if selected_size is None:
         return
+
+    new_size = selected_size
 
     try:
         img = Image.open(img_path).convert("RGBA")
@@ -1174,7 +1192,7 @@ def show_resize_options(image_id, img_path, canvas, images_list):
         canvas.delete(image_id)
         new_image_id = canvas.create_image(x, y, image=photo, anchor="nw")
 
-
+        # Re-bind events
         def start_drag(e, id=new_image_id):
             canvas._drag_data = (id, e.x, e.y)
 
@@ -1191,17 +1209,16 @@ def show_resize_options(image_id, img_path, canvas, images_list):
             if img_path.strip() in used_items:
                 used_items.remove(img_path.strip())
 
-
         canvas.tag_bind(new_image_id, "<Button-1>", start_drag)
         canvas.tag_bind(new_image_id, "<B1-Motion>", on_drag)
         canvas.tag_bind(new_image_id, "<Double-Button-1>", on_double_click)
-        canvas.tag_bind(new_image_id, "<Command-Button-1>", lambda e, id=new_image_id, path=img_path: show_resize_options(id, path, canvas, images_list))
+        canvas.tag_bind(new_image_id, "<Command-Button-1>",
+                        lambda e, id=new_image_id, path=img_path: show_resize_options(id, path, canvas, images_list))
 
-
-        messagebox.showinfo("Resized", f"Image resized to {new_size[0]}x{new_size[1]}")
 
     except Exception as e:
         messagebox.showerror("Error", f"Failed to resize image: {e}")
+
 
 
 def load_outfit(snapshot_key, display_frame, username, json_path="closet.json"):
@@ -2245,4 +2262,6 @@ next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
+
+
 

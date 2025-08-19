@@ -17,7 +17,11 @@
         "blue",
         "formal",
         "denim",
-        "skirt"
+        "skirt",
+        "beige",
+        "sheer",
+        "red",
+        "maroon"
     ],
     "hi": {
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2092_transparent.png": {
@@ -82,6 +86,38 @@
             "snapshot_hi_outfit_20250819-121945.png": [
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2062_transparent.png",
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250819-145801.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2054_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250819-150019.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png",
+            "type": "Top",
+            "color": "---",
+            "season": "---",
+            "occasion": "---",
+            "material": "Cotton",
+            "custom_tags": [
+                "beige",
+                "sheer"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2054_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2054_transparent.png",
+            "type": "Top",
+            "color": "Red",
+            "season": "---",
+            "occasion": "Casual",
+            "material": "Cotton",
+            "custom_tags": [
+                "maroon"
             ]
         }
     }
