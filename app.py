@@ -813,6 +813,25 @@ def display_clothes_plangrid(grid_frame, username, target_canvas, target_images_
 
                     def on_double_click(e, id=image_id):
                         canvas.delete(id)
+                        # Remove from used_items
+                        if img_path.strip() in used_items:
+                            used_items.remove(img_path.strip())
+
+
+                        global currently_loaded_snapshot
+                        if currently_loaded_snapshot:
+                            with open("closet.json", 'r') as file:
+                                data = json.load(file)
+                                if username in data and "outfits" in data[username]:
+                                    if currently_loaded_snapshot in data[username]["outfits"]:
+                                        outfit_items = data[username]["outfits"][currently_loaded_snapshot]
+                                        if img_path.strip() in outfit_items:
+                                            outfit_items.remove(img_path.strip())
+                                        with open("closet.json", 'w') as file:
+                                            json.dump(data, file, indent=4)
+                                        print(f"Removed {img_path.strip()} from outfit")
+
+
 
                     canvas.tag_bind(image_id, "<Button-1>", start_drag)
                     canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
