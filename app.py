@@ -33,7 +33,7 @@ window.grid_columnconfigure(0, weight=1)
 # Create a style
 style = ttk.Style()
 style.configure('Custom.TFrame', background='beige')
-style.configure('test.TFrame', background='blue')
+
 style.configure("Header.TLabel",
                 font=("Pangolin", 34),
                 foreground="brown",
@@ -1588,6 +1588,80 @@ def display_filtered_clothes_plan_page8(grid_frame, center_frame, username, sele
         print("No results found for:", selected_tag)
 
 
+def randomize_outfit(canvas, images_list, username, json_path="closet.json"):
+
+
+    # Clears the current outfit
+    canvas.delete("all")
+    used_items.clear()
+    images_list.clear()
+
+
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+
+    if username not in data:
+        messagebox.showerror("Error", f"User {username} not found")
+        return
+
+    user_data = data[username]
+
+    # Get all clothing items (exclude 'outfits' key)
+    clothes_items = []
+    for key, value in user_data.items():
+        if key != "outfits" and isinstance(value, dict) and "image_path" in value:
+            clothes_items.append(value)
+
+    if not clothes_items:
+        messagebox.showwarning("No Clothes", "No clothing items found!")
+        return
+
+    # Pick 3 random items
+    num_items = min(3, len(clothes_items))
+    random_clothes = random.sample(clothes_items, num_items)
+
+    # Put them on canvas
+    for item in random_clothes:
+        img_path = item["image_path"]
+        img = Image.open(img_path).convert("RGBA")
+        img = img.resize((150, 150), Image.Resampling.LANCZOS)
+        photo = ImageTk.PhotoImage(img)
+        images_list.append(photo)
+        used_items.append(img_path.strip())
+
+        #  position
+        x = random.randint(50, 300)
+        y = random.randint(50, 300)
+
+        image_id = canvas.create_image(x, y, image=photo, anchor="nw")
+
+        # drag and dropp
+        def start_drag(e, id=image_id):
+            canvas._drag_data = (id, e.x, e.y)
+
+        def on_drag(e):
+            if hasattr(canvas, '_drag_data'):
+                item_id, start_x, start_y = canvas._drag_data
+                dx = e.x - start_x
+                dy = e.y - start_y
+                canvas.move(item_id, dx, dy)
+                canvas._drag_data = (item_id, e.x, e.y)
+
+        def on_double_click(e, id=image_id, path=img_path):
+            canvas.delete(id)
+            if path.strip() in used_items:
+                used_items.remove(path.strip())
+
+        canvas.tag_bind(image_id, "<Button-1>", start_drag)
+        canvas.tag_bind(image_id, "<B1-Motion>", on_drag)
+        canvas.tag_bind(image_id, "<Double-Button-1>", on_double_click)
+        canvas.tag_bind(image_id, "<Command-Button-1>",
+                lambda e, id=image_id, path=img_path: show_resize_options(id, path, canvas, images_list))
+
+
+
+
+
 #</editor-fold>
 #-----special exclusive edit page---page7
 #<editor-fold 1">
@@ -1820,6 +1894,9 @@ page8.grid_propagate(False)
 plan_header = ttk.Label(page8, text="Outfit Planner", style="Header.TLabel")
 plan_header.pack(pady=10, padx=10)
 
+plan_sub_header = ttk.Label(page8, text="cmd+click for resize options", style="small.TLabel")
+plan_sub_header.pack(pady=10, padx=10)
+
 big_frame = ttk.Frame(page8, style="Custom.TFrame")
 big_frame.pack(pady=10, padx=0)
 
@@ -1918,6 +1995,8 @@ plan_save_button.pack(side="left", padx=10)
 plan_clear_button = ttk.Button(plan_button_frame, text="clear", width=6, command=lambda: clear_outfit_frame())
 plan_clear_button.pack(side="left", padx=10)
 
+plan_randomize_button=ttk.Button(plan_button_frame, text="randomize", width=8,command=lambda:randomize_outfit(plan_mini_canvas, plan_mini_canvas_images, username))
+plan_randomize_button.pack(side="left", padx=10)
 
 
 # ----- Right Frame -----
