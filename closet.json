@@ -21,7 +21,9 @@
         "beige",
         "sheer",
         "red",
-        "maroon"
+        "maroon",
+        "purple",
+        "shiny"
     ],
     "hi": {
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2092_transparent.png": {
@@ -95,6 +97,17 @@
             "snapshot_hi_outfit_20250819-150019.png": [
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png",
                 "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250819-202602.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2075_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2106_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2101_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2110_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png"
+            ],
+            "snapshot_hi_outfit_20250819-204914.png": [
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2106_transparent.png",
+                "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2054_transparent.png"
             ]
         },
         "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2064_transparent.png": {
@@ -118,6 +131,18 @@
             "material": "Cotton",
             "custom_tags": [
                 "maroon"
+            ]
+        },
+        "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2075_transparent.png": {
+            "image_path": "/Users/tulasii/Documents/apps/digital-closet/Clothes/IMG_2075_transparent.png",
+            "type": "Top",
+            "color": "---",
+            "season": "Winter",
+            "occasion": "---",
+            "material": "wool",
+            "custom_tags": [
+                "purple",
+                "shiny"
             ]
         }
     }
