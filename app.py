@@ -339,6 +339,42 @@ home_closet_button.pack(side='left', padx=10)
 
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page9),display_saved_outfits(fit_grid_frame, fit_canvas_frame, username)])
 home_saved_button.pack(side='left', padx=10)
+
+home_bottom_frame=Frame(page4, bg='red', width=900, height=900)
+home_bottom_frame.pack(pady=10, padx=10)
+home_bottom_frame.pack_propagate(False)
+
+def search_weather ():
+    pass
+weather_frame = ttk.Frame(home_bottom_frame, style="Custom.TFrame",width=450, height=900)
+weather_frame.pack(anchor='w',padx=10,pady=10)
+weather_frame.pack_propagate(False)
+weather_head= ttk.Label(weather_frame, text="Weather Updates", style="mid.TLabel")
+weather_head.pack(padx=10, pady=10)
+
+weather_text1=ttk.Label(weather_frame, text="Enter your city !", style="small.TLabel")
+weather_text1.pack(padx=10, pady=1)
+
+weather_entry_frame=ttk.Frame(weather_frame, style="Custom.TFrame")
+weather_entry_frame.pack(pady=10)
+
+weather_entry= ttk.Entry(weather_entry_frame, width=15)
+weather_entry.pack(padx=10, pady=2, side='left')
+
+weather_search_button=ttk.Button(weather_entry_frame,width=2,text="🔍")
+weather_search_button.pack(pady=10,side='right')
+
+weather_location_text=ttk.Label(weather_frame, text="Location", style="mid.TLabel")
+weather_location_text.pack(padx=10, pady=1)
+
+weather_image= ttk.Label(weather_frame)
+weather_image.pack(padx=10, pady=2)
+
+weather_temperature_text=ttk.Label(weather_frame, text="Temperature", style="mid.TLabel")
+weather_temperature_text.pack(padx=10, pady=1)
+
+weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
+weather_info_text.pack(padx=10, pady=1)
 #</editor-fold>
 
 #--------- upload_photo_page----(page5)
@@ -2356,7 +2392,7 @@ def next_page(frame):
 for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
     frame.grid(row=0, column=0, sticky="nsew")
 
-next_page(page1)  # Start by showing the welcome page
+next_page(page4)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
