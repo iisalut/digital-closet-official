@@ -440,15 +440,15 @@ weather_location_text=ttk.Label(weather_frame, text="Location", style="mid.TLabe
 weather_location_text.pack(padx=10, pady=1)
 
 weather_image= ttk.Label(weather_frame)
-weather_image.pack(padx=10, pady=2)
+weather_image.pack(padx=10, pady=3)
 
 weather_temperature_text=ttk.Label(weather_frame, text="Temperature", style="mid.TLabel")
 weather_temperature_text.pack(padx=10, pady=1)
 
 weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
 weather_info_text.pack(padx=10, pady=1)
+#git push plsss
 
-#please push
 #</editor-fold>
 
 #--------- upload_photo_page----(page5)
