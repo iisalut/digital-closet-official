@@ -36,6 +36,7 @@ window.grid_columnconfigure(0, weight=1)
 # Create a style
 style = ttk.Style()
 style.configure('Custom.TFrame', background='beige')
+style.configure('blue.TFrame', background='#031438')
 
 style.configure("Header.TLabel",
                 font=("Pangolin", 34),
@@ -343,7 +344,7 @@ home_closet_button.pack(side='left', padx=10)
 home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMARY, width=15, command=lambda: [next_page(page9),display_saved_outfits(fit_grid_frame, fit_canvas_frame, username)])
 home_saved_button.pack(side='left', padx=10)
 
-home_bottom_frame=Frame(page4, bg='red', width=900, height=900)
+home_bottom_frame=ttk.Frame(page4, style="blue.TFrame", width=900, height=900)
 home_bottom_frame.pack(pady=10, padx=10)
 home_bottom_frame.pack_propagate(False)
 
@@ -387,9 +388,36 @@ def fetch_weather(lat, lon):
     return resp.json()
 
 def search_weather():
-    pass
+    city = weather_entry.get().strip()
+    if not city:
+        messagebox.showwarning("Missing Input", "Please enter a city.")
+        return
 
-weather_frame = ttk.Frame(home_bottom_frame, style="Custom.TFrame",width=450, height=900)
+    try:
+        #  Get lat/lon from city
+        lat, lon, location_name = get_lat_lon(city)
+
+        # need to Fetch weather data
+        data = fetch_weather(lat, lon)
+        current = data.get("current_weather", {})
+        temperature = current.get("temperature")
+        code = current.get("weathercode")
+
+        # Get description and emoji
+        description, emoji = weather_codes.get(code, ("Unknown", "❓"))
+
+        # Update UI labels
+        weather_location_text.config(text=location_name)
+        weather_temperature_text.config(text=f"{temperature}°C")
+        weather_info_text.config(text=description)
+        weather_image.config(text=emoji, font=("Arial", 48))
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to fetch weather:\n{e}")
+
+
+
+weather_frame = ttk.Frame(home_bottom_frame, style="Custom.TFrame",width=950, height=350)
 weather_frame.pack(anchor='w',padx=10,pady=10)
 weather_frame.pack_propagate(False)
 weather_head= ttk.Label(weather_frame, text="Weather Updates", style="mid.TLabel")
