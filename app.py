@@ -448,6 +448,7 @@ weather_temperature_text.pack(padx=10, pady=1)
 weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
 weather_info_text.pack(padx=10, pady=1)
 
+#please push
 #</editor-fold>
 
 #--------- upload_photo_page----(page5)
@@ -2469,6 +2470,7 @@ next_page(page4)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
+
 
 
 
