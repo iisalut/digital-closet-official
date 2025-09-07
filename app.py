@@ -17,7 +17,10 @@ from rembg import remove
 from tkinter import simpledialog
 import pillow_heif
 pillow_heif.register_heif_opener()
-
+import requests
+from geopy.geocoders import Nominatim
+import ssl
+import certifi
 
 
 
@@ -344,8 +347,48 @@ home_bottom_frame=Frame(page4, bg='red', width=900, height=900)
 home_bottom_frame.pack(pady=10, padx=10)
 home_bottom_frame.pack_propagate(False)
 
-def search_weather ():
+
+# weather icons
+weather_codes = {
+    0: ("Clear sky", "☀️"),
+    1: ("Mainly clear", "🌤️"),
+    2: ("Partly cloudy", "⛅"),
+    3: ("Overcast", "☁️"),
+    45: ("Fog", "🌫️"),
+    48: ("Depositing rime fog", "🌫️"),
+    51: ("Light drizzle", "🌦️"),
+    53: ("Moderate drizzle", "🌦️"),
+    55: ("Dense drizzle", "🌧️"),
+    61: ("Slight rain", "🌧️"),
+    63: ("Moderate rain", "🌧️"),
+    65: ("Heavy rain", "🌧️"),
+    71: ("Slight snow", "🌨️"),
+    73: ("Moderate snow", "🌨️"),
+    75: ("Heavy snow", "❄️"),
+    80: ("Rain showers", "🌧️"),
+    95: ("Thunderstorm", "⛈️"),
+    99: ("Thunderstorm with hail", "⛈️❄️")
+}
+
+def get_lat_lon(city):
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    geolocator = Nominatim(user_agent="weather_app", ssl_context=ssl_context)
+    location = geolocator.geocode(city)
+    if not location:
+        raise ValueError("City not found.")
+    return location.latitude, location.longitude, location.address
+
+def fetch_weather(lat, lon):
+    url = (
+        f"https://api.open-meteo.com/v1/forecast?"
+        f"latitude={lat}&longitude={lon}&current_weather=true"
+    )
+    resp = requests.get(url)
+    return resp.json()
+
+def search_weather():
     pass
+
 weather_frame = ttk.Frame(home_bottom_frame, style="Custom.TFrame",width=450, height=900)
 weather_frame.pack(anchor='w',padx=10,pady=10)
 weather_frame.pack_propagate(False)
@@ -363,6 +406,7 @@ weather_entry.pack(padx=10, pady=2, side='left')
 
 weather_search_button=ttk.Button(weather_entry_frame,width=2,text="🔍")
 weather_search_button.pack(pady=10,side='right')
+weather_search_button.config(command=search_weather)
 
 weather_location_text=ttk.Label(weather_frame, text="Location", style="mid.TLabel")
 weather_location_text.pack(padx=10, pady=1)
@@ -375,6 +419,7 @@ weather_temperature_text.pack(padx=10, pady=1)
 
 weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
 weather_info_text.pack(padx=10, pady=1)
+
 #</editor-fold>
 
 #--------- upload_photo_page----(page5)
