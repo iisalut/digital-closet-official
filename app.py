@@ -1,5 +1,6 @@
 
 import ttkbootstrap as ttk
+import tkinter as tk
 from ttkbootstrap.constants import *
 from tkinter import *
 import json
@@ -461,26 +462,22 @@ def random_color():
 style = ttk.Style()
 
 def generate_palette():
-
     for widget in color_pallete_swatch_frame.winfo_children():
         widget.destroy()
-
 
     for i in range(3):
         color = random_color()
 
-
         style_name = f"Color{i}.TFrame"
         style.configure(style_name, background=color, relief="raised")
 
-
         swatch = ttk.Frame(color_pallete_swatch_frame, style=style_name, width=70, height=150)
-        swatch.grid(row=0, column=i, padx=10, pady=5)
-        swatch.grid_propagate(False)  # keep fixed size
+        swatch.grid(row=0, column=i, padx=2, pady=2)
+        swatch.grid_propagate(False)
 
-        # Hex
         label = ttk.Label(color_pallete_swatch_frame, text=color, style="small.TLabel")
         label.grid(row=1, column=i, pady=3)
+
 
 challenge_frame=ttk.Frame(home_bottom_frame, style="Custom.TFrame", height=350, width=950)
 challenge_frame.pack(anchor='w',padx=10)
