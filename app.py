@@ -471,7 +471,7 @@ def generate_palette():
         style_name = f"Color{i}.TFrame"
         style.configure(style_name, background=color, relief="raised")
 
-        swatch = ttk.Frame(color_pallete_swatch_frame, style=style_name, width=70, height=150)
+        swatch = ttk.Frame(color_pallete_swatch_frame, style=style_name, width=90, height=130)
         swatch.grid(row=0, column=i, padx=2, pady=2)
         swatch.grid_propagate(False)
 
@@ -479,16 +479,19 @@ def generate_palette():
         label.grid(row=1, column=i, pady=3)
 
 
-challenge_frame=ttk.Frame(home_bottom_frame, style="Custom.TFrame", height=350, width=950)
-challenge_frame.pack(anchor='w',padx=10)
-challenge_frame.propagate(False)
+# Challenge frame
+challenge_frame = ttk.Frame(home_bottom_frame, style="Custom.TFrame", height=400, width=950, relief="solid", borderwidth=1)
+challenge_frame.pack(padx=10, fill="x")  # fill horizontal
+
+
 
 challenge_text1=ttk.Label(challenge_frame, text="Fun Challenges !", style="mid.TLabel")
 challenge_text1.pack(padx=10, pady=1)
 
-color_pallete_frame=ttk.Frame(challenge_frame, style="blue.TFrame", height=300, width=300)
-color_pallete_frame.pack(pady=10,padx=10, anchor='w')
-color_pallete_frame.propagate(False)
+# Color palette on the left
+color_pallete_frame = ttk.Frame(challenge_frame, style="blue.TFrame", width=450, height=300, relief="solid", borderwidth=1)
+color_pallete_frame.pack(side="left", padx=10, pady=10)
+color_pallete_frame.pack_propagate(False)  # let it expand to children
 
 color_pallete_text1=ttk.Label(color_pallete_frame, text="pallete generator", style="mid_beige.TLabel")
 color_pallete_text1.pack(padx=10, pady=1)
@@ -497,6 +500,44 @@ color_pallete_swatch_frame.pack(pady=10)
 color_pallete_btn = ttk.Button(color_pallete_frame, text="Generate Colors",command=generate_palette)
 color_pallete_btn.pack(pady=5)
 
+# ---- Aesthetic Generator ----
+
+aesthetic_words = [
+    "Cottage Core", "Dark Acadamia", "Minimalistic", "Maximalistic", "Acubi Style",
+    "Goth Style", "Chic", "Sporty", "Party", "Traditional",
+    "Indie Style", "Dreamscape", "Gossamer", "Radiance", "Enchanted"
+]
+
+
+aesthetic_generator_outer = ttk.Frame(challenge_frame, style="blue.TFrame", width=400, height=300, relief="solid", borderwidth=1)
+aesthetic_generator_outer.pack(side="right", padx=10, pady=10)
+aesthetic_generator_outer.pack_propagate(False)
+
+
+aesthetic_generator_text1 = ttk.Label(aesthetic_generator_outer, text="Aesthetic Generator", style="mid_beige.TLabel")
+aesthetic_generator_text1.pack(pady=5)
+
+
+display_frame = ttk.Frame(aesthetic_generator_outer,style="Custom.TFrame")
+display_frame.pack(expand=True, fill="both", pady=10, padx=10)
+
+button_frame = ttk.Frame(aesthetic_generator_outer)
+button_frame.pack(pady=5)
+
+
+def generate_aesthetic_word():
+
+    for widget in display_frame.winfo_children():
+        widget.destroy()
+
+
+    word = random.choice(aesthetic_words)
+    label = ttk.Label(display_frame, text=word, style="mid.TLabel")
+
+    label.pack(expand=True)
+
+aesthetic_generator_btn = ttk.Button(button_frame, text="Generate Aesthetic", command=generate_aesthetic_word)
+aesthetic_generator_btn.pack()
 
 
 #</editor-fold>
