@@ -48,6 +48,11 @@ style.configure("mid.TLabel",
                 foreground="brown",
                 background="beige",
                 anchor="center")
+style.configure("mid_beige.TLabel",
+                font=("Pangolin", 24),
+                foreground="beige",
+                background="#031438",
+                anchor="center")
 style.configure("small.TLabel",
                 font=("Pangolin", 15),
                 foreground="brown",
@@ -345,7 +350,7 @@ home_saved_button = ttk.Button(pack_frame, text="Saved outfits", bootstyle=PRIMA
 home_saved_button.pack(side='left', padx=10)
 
 home_bottom_frame=ttk.Frame(page4, style="blue.TFrame", width=900, height=900)
-home_bottom_frame.pack(pady=10, padx=10)
+home_bottom_frame.pack( padx=10)
 home_bottom_frame.pack_propagate(False)
 
 
@@ -447,7 +452,55 @@ weather_temperature_text.pack(padx=10, pady=1)
 
 weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
 weather_info_text.pack(padx=10, pady=1)
-#git push plsss
+
+#----color pallete challenge !!-------
+
+def random_color():
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+
+style = ttk.Style()
+
+def generate_palette():
+
+    for widget in color_pallete_swatch_frame.winfo_children():
+        widget.destroy()
+
+
+    for i in range(3):
+        color = random_color()
+
+
+        style_name = f"Color{i}.TFrame"
+        style.configure(style_name, background=color, relief="raised")
+
+
+        swatch = ttk.Frame(color_pallete_swatch_frame, style=style_name, width=70, height=150)
+        swatch.grid(row=0, column=i, padx=10, pady=5)
+        swatch.grid_propagate(False)  # keep fixed size
+
+        # Hex
+        label = ttk.Label(color_pallete_swatch_frame, text=color, style="small.TLabel")
+        label.grid(row=1, column=i, pady=3)
+
+challenge_frame=ttk.Frame(home_bottom_frame, style="Custom.TFrame", height=350, width=950)
+challenge_frame.pack(anchor='w',padx=10)
+challenge_frame.propagate(False)
+
+challenge_text1=ttk.Label(challenge_frame, text="Fun Challenges !", style="mid.TLabel")
+challenge_text1.pack(padx=10, pady=1)
+
+color_pallete_frame=ttk.Frame(challenge_frame, style="blue.TFrame", height=300, width=300)
+color_pallete_frame.pack(pady=10,padx=10, anchor='w')
+color_pallete_frame.propagate(False)
+
+color_pallete_text1=ttk.Label(color_pallete_frame, text="pallete generator", style="mid_beige.TLabel")
+color_pallete_text1.pack(padx=10, pady=1)
+color_pallete_swatch_frame = ttk.Frame(color_pallete_frame)
+color_pallete_swatch_frame.pack(pady=10)
+color_pallete_btn = ttk.Button(color_pallete_frame, text="Generate Colors",command=generate_palette)
+color_pallete_btn.pack(pady=5)
+
+
 
 #</editor-fold>
 
