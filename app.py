@@ -503,11 +503,25 @@ color_pallete_btn.pack(pady=5)
 # ---- Aesthetic Generator ----
 
 aesthetic_words = [
-    "Cottage Core", "Dark Acadamia", "Minimalistic", "Maximalistic", "Acubi Style",
-    "Goth Style", "Chic", "Sporty", "Party", "Traditional",
-    "Indie Style", "Dreamscape", "Gossamer", "Radiance", "Enchanted"
+    "Cottage Core",
+    "Dark Acadamia",
+    "Minimalistic",
+    "Maximalistic",
+    "Acubi Style",
+    "Goth Style",
+    "Sporty"
+
 ]
 
+aesthetic_images=[
+    "build/app/aesthetic_images/cottage_core.jpg",
+    "build/app/aesthetic_images/dark_academia.jpg",
+    "build/app/aesthetic_images/minimalistic.jpg",
+    "build/app/aesthetic_images/maximalistic.jpg",
+    "build/app/aesthetic_images/acubi.jpg",
+    "build/app/aesthetic_images/ goth.jpg",
+    "build/app/aesthetic_images/ sporty.jpg"
+]
 
 aesthetic_generator_outer = ttk.Frame(challenge_frame, style="blue.TFrame", width=400, height=300, relief="solid", borderwidth=1)
 aesthetic_generator_outer.pack(side="right", padx=10, pady=10)
@@ -529,12 +543,19 @@ def generate_aesthetic_word():
 
     for widget in display_frame.winfo_children():
         widget.destroy()
+    index=random.randint(0,len(aesthetic_words)-1)
+    word=aesthetic_words[index]
+    image_path=aesthetic_images[index]
 
+    img= Image.open(image_path)
+    img=img.resize((120,120), Image.Resampling.LANCZOS)
+    photo=ImageTk.PhotoImage(img)
+    image_label=ttk.Label(display_frame, image=photo)
+    image_label.image = photo
+    image_label.pack()
 
-    word = random.choice(aesthetic_words)
-    label = ttk.Label(display_frame, text=word, style="mid.TLabel")
-
-    label.pack(expand=True)
+    label=ttk.Label(display_frame, text=word, style="mid.TLabel")
+    label.pack(pady=5)
 
 aesthetic_generator_btn = ttk.Button(button_frame, text="Generate Aesthetic", command=generate_aesthetic_word)
 aesthetic_generator_btn.pack()
@@ -2557,7 +2578,7 @@ def next_page(frame):
 for frame in (page1, page2, page3, page4, page5, page6, page7, page8, page9):
     frame.grid(row=0, column=0, sticky="nsew")
 
-next_page(page4)  # Start by showing the welcome page
+next_page(page1)  # Start by showing the welcome page
 
 # Run the main loop
 window.mainloop()
