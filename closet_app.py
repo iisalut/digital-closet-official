@@ -525,12 +525,12 @@ aesthetic_words = [
 ]
 
 aesthetic_images=[
-    "build/app/aesthetic_images/cottage_core.jpg",
-    "build/app/aesthetic_images/dark_academia.jpg",
-    "build/app/aesthetic_images/minimalistic.jpg",
-    "build/app/aesthetic_images/maximalistic.jpg",
-    "build/app/aesthetic_images/acubi.jpg",
-    "build/app/aesthetic_images/ goth.jpg",
+    "aesthetic_images/cottage_core.jpg",
+    "aesthetic_images/dark_academia.jpg",
+    "aesthetic_images/minimalistic.jpg",
+    "aesthetic_images/maximalistic.jpg",
+    "aesthetic_images/acubi.jpg",
+    "aesthetic_images/ goth.jpg",
 ]
 
 aesthetic_generator_outer = ttk.Frame(challenge_frame, style="blue.TFrame", width=400, height=300, relief="solid", borderwidth=1)
