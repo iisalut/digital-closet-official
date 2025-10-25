@@ -11,4 +11,4 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-!build/app/aesthetic_images/
+!aesthetic_images/
