@@ -1,6 +1,6 @@
 
 import ttkbootstrap as ttk
-import tkinter as tk
+
 from ttkbootstrap.constants import *
 from tkinter import *
 import json
@@ -11,11 +11,11 @@ pillow_heif.register_heif_opener()
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
 from tkinter import Canvas
-import functools
+
 import random
 import time
 from rembg import remove
-from tkinter import simpledialog
+
 import pillow_heif
 pillow_heif.register_heif_opener()
 import requests
@@ -65,13 +65,12 @@ style.configure("MyCustom.TCombobox",
                 foreground="#333333")
 
 #------definitions------
-global custom_user_tags,edit_custom_user_tags
+
 custom_user_tags=[]
 edit_custom_user_tags=[]
 
-global username
 username= ""
-global password
+
 password=""
 all_custom_tags = set()  # set avoids duplicates but tuples does not
 global search_tags
@@ -2342,7 +2341,7 @@ def add_image_to_fit_canvas(image_path, canvas, image_list, x=100, y=100):
 
         new_size = (150, 150)
         transparent_img = Image.new("RGBA", new_size, (0, 0, 0, 0))
-        img = img.resize(new_size, Image.LANCZOS)
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
         transparent_img.paste(img, (0, 0), img)
         img_tk = ImageTk.PhotoImage(transparent_img)
 
