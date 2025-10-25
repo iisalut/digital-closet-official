@@ -6,3 +6,4 @@ build
 .idea/
 .venv
 localpycs
+__pycache__/

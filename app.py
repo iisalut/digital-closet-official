@@ -1,27 +1,26 @@
-
-import ttkbootstrap as ttk
-import tkinter as tk
+from ttkbootstrap import ttk
 from ttkbootstrap.constants import *
+
+
 from tkinter import *
+from tkinter import messagebox, Canvas
+from tkinter.filedialog import askopenfilename
+
 import json
 import os
-from PIL import Image, ImageTk, UnidentifiedImageError,ImageGrab
-import pillow_heif
-pillow_heif.register_heif_opener()
-from tkinter.filedialog import askopenfilename
-from tkinter import messagebox
-from tkinter import Canvas
-import functools
 import random
 import time
-from rembg import remove
-from tkinter import simpledialog
+
+
+from PIL import Image, ImageTk, UnidentifiedImageError, ImageGrab
 import pillow_heif
 pillow_heif.register_heif_opener()
+
 import requests
 from geopy.geocoders import Nominatim
 import ssl
 import certifi
+from rembg import remove
 
 
 
@@ -65,13 +64,11 @@ style.configure("MyCustom.TCombobox",
                 foreground="#333333")
 
 #------definitions------
-global custom_user_tags,edit_custom_user_tags
 custom_user_tags=[]
 edit_custom_user_tags=[]
 
-global username
 username= ""
-global password
+
 password=""
 all_custom_tags = set()  # set avoids duplicates but tuples does not
 global search_tags
@@ -128,7 +125,7 @@ def login_json():
                     print("User found: " + user['username']+" user password : " +user['password'])#tests
                     check = True
                     break
-            else:  # This else belongs to the for loop - runs if no break occurs
+            else:  # This else belongs to the ,for loop - runs if no break occurs
                 check = False
     else:
         check = False
@@ -244,7 +241,7 @@ welcome_login_button = ttk.Button(page1, text="Login",
                                   width=20,
                                   command=lambda: next_page(page3))
 welcome_login_button.pack(pady=10)
-#</editor-foldl
+#</editor-fold
 
 # Page 2 - Sign Up page
 # <editor-fold desc="Description">
@@ -400,14 +397,14 @@ def search_weather():
         return
 
     try:
-        #  Get lat/lon from city
+        #  Get lat/lon from the city
         lat, lon, location_name = get_lat_lon(city)
 
         # need to Fetch weather data
         data = fetch_weather(lat, lon)
         current = data.get("current_weather", {})
         temperature = current.get("temperature")
-        code = current.get("weathercode")
+        code = current.get("weather code")
 
         # Get description and emoji
         description, emoji = weather_codes.get(code, ("Unknown", "❓"))
@@ -454,7 +451,7 @@ weather_temperature_text.pack(padx=10, pady=1)
 weather_info_text=ttk.Label(weather_frame, text="weather Info", style="mid.TLabel")
 weather_info_text.pack(padx=10, pady=1)
 
-#----color pallete challenge !!-------
+#----color palette challenge !!-------
 
 def random_color():
     return "#{:06x}".format(random.randint(0, 0xFFFFFF))
@@ -462,7 +459,7 @@ def random_color():
 style = ttk.Style()
 
 def generate_palette():
-    for widget in color_pallete_swatch_frame.winfo_children():
+    for widget in color_palette_swatch_frame.winfo_children():
         widget.destroy()
 
     for i in range(3):
@@ -471,11 +468,11 @@ def generate_palette():
         style_name = f"Color{i}.TFrame"
         style.configure(style_name, background=color, relief="raised")
 
-        swatch = ttk.Frame(color_pallete_swatch_frame, style=style_name, width=90, height=130)
+        swatch = ttk.Frame(color_palette_swatch_frame, style=style_name, width=90, height=130)
         swatch.grid(row=0, column=i, padx=2, pady=2)
         swatch.grid_propagate(False)
 
-        label = ttk.Label(color_pallete_swatch_frame, text=color, style="small.TLabel")
+        label = ttk.Label(color_palette_swatch_frame, text=color, style="small.TLabel")
         label.grid(row=1, column=i, pady=3)
 
 
@@ -489,16 +486,16 @@ challenge_text1=ttk.Label(challenge_frame, text="Fun Challenges !", style="mid.T
 challenge_text1.pack(padx=10, pady=1)
 
 # Color palette on the left
-color_pallete_frame = ttk.Frame(challenge_frame, style="blue.TFrame", width=450, height=300, relief="solid", borderwidth=1)
-color_pallete_frame.pack(side="left", padx=10, pady=10)
-color_pallete_frame.pack_propagate(False)  # let it expand to children
+color_palette_frame = ttk.Frame(challenge_frame, style="blue.TFrame", width=450, height=300, relief="solid", borderwidth=1)
+color_palette_frame.pack(side="left", padx=10, pady=10)
+color_palette_frame.pack_propagate(False)  # let it expand to children
 
-color_pallete_text1=ttk.Label(color_pallete_frame, text="pallete generator", style="mid_beige.TLabel")
-color_pallete_text1.pack(padx=10, pady=1)
-color_pallete_swatch_frame = ttk.Frame(color_pallete_frame)
-color_pallete_swatch_frame.pack(pady=10)
-color_pallete_btn = ttk.Button(color_pallete_frame, text="Generate Colors",command=generate_palette)
-color_pallete_btn.pack(pady=5)
+color_palette_text1=ttk.Label(color_palette_frame, text="palette generator", style="mid_beige.TLabel")
+color_palette_text1.pack(padx=10, pady=1)
+color_palette_swatch_frame = ttk.Frame(color_palette_frame)
+color_palette_swatch_frame.pack(pady=10)
+color_palette_btn = ttk.Button(color_palette_frame, text="Generate Colors",command=generate_palette)
+color_palette_btn.pack(pady=5)
 
 # ---- Aesthetic Generator ----
 
@@ -601,7 +598,7 @@ def upload_img():
         img = Image.open(img_path)
 
 
-        # 1. Remove bg ( used Hoverboard Cube's code as referance)
+        # 1. Remove bg (used Hoverboard Cube's code as reference)
         with open(img_path, "rb") as f:
             input_img = f.read()
         output_img_bytes = remove(input_img)
@@ -721,7 +718,7 @@ q4_label = ttk.Label(upload_tags_frame, text=" Occasion ?", style="small.TLabel"
 q4_label.pack(pady=10)
 
 attribute_occasion = StringVar(value="Choose occasion")
-dress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+dress_occasion_menu = OptionMenu(upload_tags_frame, attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Home wear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
 
 dress_occasion_menu.pack(pady=10)
 dress_occasion_menu.pack(pady=10)
@@ -827,7 +824,7 @@ custom_tags_display.pack(pady=5)
 def remove_custom_tag(tag, tag_frame):
     if tag in custom_user_tags:
         custom_user_tags.remove(tag)
-    tag_frame.destroy()  # Remove the UI for this tagsearcg
+    tag_frame.destroy()  # Removes the UI for this tag search
 
 def save_clothing_data():
     selected_image_path = img_path
@@ -1112,7 +1109,7 @@ def display_filtered_clothes(grid_frame, username, selected_tag, json_path="clos
         else:
             tag_list = []
 
-        # Check if selected tag exists in any tag
+        # Check if the selected tag exists in any tag
         if selected_tag in tag_list:
             filtered_items[image_path] = tags
 
@@ -1857,7 +1854,7 @@ def randomize_outfit(canvas, images_list, username, json_path="closet.json"):
 
         image_id = canvas.create_image(x, y, image=photo, anchor="nw")
 
-        # drag and dropp
+        # drag and drop
         def start_drag(e, id=image_id):
             canvas._drag_data = (id, e.x, e.y)
 
@@ -1959,7 +1956,7 @@ edit_q4_label = ttk.Label(edit_tags_frame, text=" Occasion ?", style="small.TLab
 edit_q4_label.pack(pady=10)
 
 edit_attribute_occasion = StringVar(value="Choose occasion")
-edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Homewear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
+edit_occasion_menu = OptionMenu(edit_tags_frame, edit_attribute_occasion, "---","Casual", "Work/Office", "Formal", "Party","Lounge/ Home wear", command=lambda occasion_value: print("occasion chosen ; "+occasion_value))
 
 edit_occasion_menu.pack(pady=10)
 edit_occasion_menu.pack(pady=10)
@@ -2342,7 +2339,7 @@ def add_image_to_fit_canvas(image_path, canvas, image_list, x=100, y=100):
 
         new_size = (150, 150)
         transparent_img = Image.new("RGBA", new_size, (0, 0, 0, 0))
-        img = img.resize(new_size, Image.LANCZOS)
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
         transparent_img.paste(img, (0, 0), img)
         img_tk = ImageTk.PhotoImage(transparent_img)
 
@@ -2386,7 +2383,7 @@ fit_plan_autocomplete_Listbox = Listbox(fit_plan_left_frame, height=3)
 fit_plan_autocomplete_Listbox.place_forget()
 fit_plan_autocomplete_Listbox.bind("<<ListboxSelect>>", lambda e: fit_select_plan_suggestions())
 
-# --- Scrollable canvas for clothing it  ems ---
+# --- Scrollable canvas for clothing items ---
 fit_plan_canvas = Canvas(fit_plan_left_frame, bg="beige", width=350, height=800)
 fit_plan_scrollbar = ttk.Scrollbar(fit_plan_left_frame, orient="vertical", command=fit_plan_canvas.yview)
 fit_plan_frame = ttk.Frame(fit_plan_canvas, style="Custom.TFrame")
