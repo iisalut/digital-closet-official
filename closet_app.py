@@ -519,8 +519,7 @@ aesthetic_words = [
     "Minimalistic",
     "Maximalistic",
     "Acubi Style",
-    "Goth Style",
-    "Sporty"
+    "Goth Style"
 
 ]
 
@@ -2126,7 +2125,7 @@ page8.grid_propagate(False)
 plan_header = ttk.Label(page8, text="Outfit Planner", style="Header.TLabel")
 plan_header.pack(pady=10, padx=10)
 
-plan_sub_header = ttk.Label(page8, text="cmd+click for resize options", style="small.TLabel")
+plan_sub_header = ttk.Label(page8, text="cmd+click for resize options and double click to delete ", style="small.TLabel")
 plan_sub_header.pack(pady=10, padx=10)
 
 big_frame = ttk.Frame(page8, style="Custom.TFrame")
