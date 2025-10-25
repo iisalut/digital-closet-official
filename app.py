@@ -24,6 +24,13 @@ import ssl
 import certifi
 
 
+if not os.path.exists("users.json"):
+    with open("users.json", "w") as f:
+        json.dump({}, f, indent=4)
+
+if not os.path.exists("closet.json"):
+    with open("closet.json", "w") as f:
+        json.dump({}, f, indent=4)
 
 #themed window using ttkbootstrap
 window = ttk.Window(themename="flatly")
@@ -80,9 +87,13 @@ def json_save():
     # Check if file exists, if not create empty list
     if os.path.exists(file):
         with open(file, 'r', newline='') as json_file:
-            if json_file.read().strip():  # Check if file is not empty
-                json_file.seek(0)  # Go back to start of file
+            content = json_file.read().strip()
+            if content:
+                json_file.seek(0)
                 data = json.load(json_file)
+
+                if isinstance(data, dict):
+                    data = [data]
             else:
                 data = []
     else:
@@ -93,6 +104,7 @@ def json_save():
     with open(file, 'w', newline='') as json_file:
         json.dump(data, json_file, indent=4)
     print("Saved username and password")
+
 def save_username_password():
     global username
     global password
@@ -519,7 +531,6 @@ aesthetic_images=[
     "build/app/aesthetic_images/maximalistic.jpg",
     "build/app/aesthetic_images/acubi.jpg",
     "build/app/aesthetic_images/ goth.jpg",
-    "build/app/aesthetic_images/ sporty.jpg"
 ]
 
 aesthetic_generator_outer = ttk.Frame(challenge_frame, style="blue.TFrame", width=400, height=300, relief="solid", borderwidth=1)
